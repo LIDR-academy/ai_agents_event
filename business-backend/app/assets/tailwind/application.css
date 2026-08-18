@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand:        #F6DE82;
+  --color-brand-soft:   #FBEFC0;
+  --color-brand-strong: #DCB210;
+
+  --color-ink:          #1A1A1A;
+  --color-ink-dark:     #232A31;
+  --color-ink-soft:     #3C4854;
+  --color-ink-muted:    #5A6D7F;
+
+  --color-success:       #1FC16B;
+  --color-success-light: #84EBB4;
+
+  --color-danger:        #E5484D;
+  --color-danger-light:  #FF9592;
+
+  /* Used by the Session 14 supervisor views (deferred/awaiting states); it had no
+     token, so six views were rendering those chips unstyled. */
+  --color-warning:       #F5A524;
+  --color-warning-light: #FFCB70;
+
+  --font-sans: "Helvetica", "Arial", sans-serif;
+
+  --tracking-tight:   -0.02em;
+  --tracking-tighter: -0.04em;
+}

@@ -1,0 +1,15 @@
+{
+  "budget_id": "BUDGET-2024-0005",
+  "client_name": "Industrias Toledo",
+  "client_code": "CLI-0288",
+  "currency": "EUR",
+  "total_amount": 30000,
+  "signed_at": "2024-04-10",
+  "phases": [
+    {"name": "Discovery", "weeks": 2, "amount": 6000},
+    {"name": "Implementación", "weeks": 6, "amount": 24000}
+  ],
+  "contact": "Carmen Vidal",
+  "contact_email": "carmen.vidal@toledo-ind.es",
+  "notes": "Versión inicial del presupuesto."
+}

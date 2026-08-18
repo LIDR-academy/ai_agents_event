@@ -1,0 +1,44 @@
+{
+  "description": "Session 11 golden GENERATION set. Extends the Session 10 retrieval golden set (evals/golden_retrieval.json, queries Q1-Q5, budget-only) with an expert reference estimate (ground_truth) per query, so RAGAS can score the generated estimate against a reference. question = the estimation request; transcript = the meeting notes fed to the pipeline; ground_truth = the reference estimate (engineer-days, ~8h/day) an expert would produce from the relevant historical budgets. Engineer-days are derived from the recorded estimated_hours of the relevant budgets in data/budgets_sample.json.",
+  "source": "evals/golden_retrieval.json (Q1-Q5)",
+  "corpus": "data/budgets_sample.json",
+  "judge_model": "gpt-4o-mini",
+  "embedding_model": "text-embedding-3-small",
+  "queries": [
+    {
+      "id": "Q1",
+      "query": "Mobile banking application with OAuth2 authentication, PSD2 open banking compliance, strong customer authentication and a transaction ledger.",
+      "transcript": "Client kickoff call. They are a neobank and want a mobile banking application. Must-haves: OAuth 2.0 authentication backend, PSD2 open banking connectors to third-party banks, strong customer authentication (SCA) on logins and payments, and a transaction ledger service that records every movement. They also want push and email notifications for transactions. Stack is a Python backend with a React Native app. Compliance with PSD2 is non-negotiable; this is the regulated EU financial sector.",
+      "relevant_budget_ids": ["BUD-2024-001", "BUD-2024-003"],
+      "ground_truth": "Reference estimate ~60 engineer-days, grounded mainly in BUD-2024-001 (mobile banking API, 480h). Modules: Authentication & SCA — OAuth 2.0 backend plus strong customer authentication, ~15 engineer-days (AUTH-001, 120h). PSD2 & Open Banking — open banking connectors, ~20 engineer-days (PSD2-002, 160h). Transaction Ledger — ledger service, ~18 engineer-days (TXN-003, 140h). Notifications — push and email, ~8 engineer-days (NOTIF-004, 60h). Fraud/payments hardening can be informed by BUD-2024-003 as a supporting source. Confidence high: the project maps almost one-to-one to a historical banking budget."
+    },
+    {
+      "id": "Q2",
+      "query": "Headless e-commerce storefront with a product catalog, shopping cart checkout and personalized product recommendations.",
+      "transcript": "Retail client wants a headless e-commerce storefront. Scope: a product catalog API, a cart and checkout service, and personalized product recommendations on the storefront. The front end is a PWA storefront. They are explicitly not building a marketplace and not handling multi-vendor payouts. Medium scale, B2C, EU. Stack is a Node backend with a React PWA.",
+      "relevant_budget_ids": ["BUD-2024-005", "BUD-2024-006", "BUD-2024-007", "BUD-2024-017"],
+      "ground_truth": "Reference estimate ~59 engineer-days, grounded mainly in BUD-2024-005 (headless e-commerce storefront, 460h). Modules: Catalog — product catalog API, ~19 engineer-days (CATALOG-001, 150h). Cart & Checkout — cart and checkout service, ~18 engineer-days (CART-002, 140h). Recommendations — personalized recommendations, ~14 engineer-days (RECO-003, 110h). Storefront — storefront PWA, ~8 engineer-days (STORE-004, 60h). BUD-2024-006/007/017 are supporting analogs for catalog/checkout patterns. Confidence high. Vendor payouts and dispute handling from BUD-2024-006 are out of scope and must NOT be added."
+    },
+    {
+      "id": "Q3",
+      "query": "Telemedicine platform for patient appointment scheduling and video consultations with HL7/FHIR integration and clinical records.",
+      "transcript": "Healthcare provider wants a telemedicine platform. Requirements: patient appointment scheduling, video consultations between patients and clinicians, HL7/FHIR integration with their existing hospital systems, and clinical records with consent and audit logging. Regulated healthcare sector, EU, GDPR plus clinical data handling. Stack is a Python backend.",
+      "relevant_budget_ids": ["BUD-2024-009", "BUD-2024-010"],
+      "ground_truth": "Reference estimate ~70 engineer-days, grounded mainly in BUD-2024-009 (telemedicine platform with HL7/FHIR, 560h). Modules: FHIR Integration — integration layer, ~24 engineer-days (FHIR-001, 190h). Scheduling — appointment scheduling, ~19 engineer-days (APPT-002, 150h). Telemedicine Video — video consultation sessions, ~20 engineer-days (VIDEO-003, 160h). Consent & Audit — consent and audit module for clinical records, ~8 engineer-days (CONSENT-004, 60h). BUD-2024-010 (remote patient monitoring) is a supporting source. Confidence high."
+    },
+    {
+      "id": "Q4",
+      "query": "Industrial IoT platform ingesting sensor telemetry for predictive maintenance and real-time equipment monitoring in a factory.",
+      "transcript": "Manufacturing client wants an industrial IoT platform for a factory. Scope: ingest sensor telemetry from equipment, predictive maintenance models that flag failures before they happen, and real-time equipment monitoring dashboards integrated with their SCADA system. Industrial sector, on-premise plus cloud. High data volume.",
+      "relevant_budget_ids": ["BUD-2024-013", "BUD-2024-015"],
+      "ground_truth": "Reference estimate ~62 engineer-days, grounded mainly in BUD-2024-013 (factory IoT telemetry and predictive maintenance, 500h). Modules: Telemetry Ingestion — sensor telemetry ingestion, ~21 engineer-days (TELE-001, 170h). Predictive Maintenance — predictive maintenance models, ~25 engineer-days (PRED-002, 200h). SCADA Dashboard — SCADA dashboard integration for real-time monitoring, ~16 engineer-days (SCADA-003, 130h). BUD-2024-015 (energy grid monitoring and demand-response) is a supporting analog for the data-pipeline and forecasting parts. Confidence high/medium."
+    },
+    {
+      "id": "Q5",
+      "query": "Real-time payments gateway with fraud detection, transaction reconciliation and a double-entry ledger.",
+      "transcript": "Fintech client wants a real-time payments gateway. Requirements: a payment gateway core processing transactions in real time, a real-time fraud detection engine, settlement and transaction reconciliation, and a double-entry ledger for accounting integrity. They also want a merchant dashboard. Regulated EU financial sector. Stack is a Python backend.",
+      "relevant_budget_ids": ["BUD-2024-003", "BUD-2024-001"],
+      "ground_truth": "Reference estimate ~76 engineer-days, grounded mainly in BUD-2024-003 (real-time payments gateway with fraud detection and reconciliation, 600h). Modules: Gateway Core — payment gateway core, ~28 engineer-days (GATE-001, 220h). Fraud Detection — real-time fraud detection, ~25 engineer-days (FRAUD-002, 200h). Reconciliation & Ledger — settlement reconciliation and the double-entry ledger, ~15 engineer-days (RECON-003, 120h). Merchant Dashboard — ~8 engineer-days (DASH-004, 60h). BUD-2024-001 (mobile banking API with a transaction ledger) is a supporting source for the ledger. Confidence high."
+    }
+  ]
+}

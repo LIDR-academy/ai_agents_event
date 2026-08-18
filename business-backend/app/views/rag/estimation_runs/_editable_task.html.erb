@@ -1,0 +1,55 @@
+<%#
+  One editable task row. locals:
+    m (module index), t (task index), task (TaskItemView | nil),
+    mode (:structure → name/desc/sources only · :cost → + hours/rate/cost/reliability)
+  Reused for server-rendered rows and (with __MIDX__/__TIDX__ placeholders) inside
+  the <template> the Stimulus editor clones.
+%>
+<% mode ||= :cost %>
+<% flagged = mode == :cost && task&.flagged? %>
+<tr data-task data-task-index="<%= t %>"
+    class="align-top <%= "bg-danger/10" if flagged %>">
+  <td class="p-2">
+    <input type="text" name="modules[<%= m %>][tasks][<%= t %>][name]" value="<%= task&.name %>"
+           placeholder="Tarea"
+           class="w-full border border-white/15 rounded p-2 text-white bg-ink/40 focus:outline-none focus:border-brand">
+  </td>
+  <td class="p-2">
+    <input type="text" name="modules[<%= m %>][tasks][<%= t %>][description]" value="<%= task&.description %>"
+           placeholder="Descripción"
+           class="w-full border border-white/15 rounded p-2 text-white/90 bg-ink/40 text-xs focus:outline-none focus:border-brand">
+  </td>
+
+  <% if mode == :cost %>
+    <td class="p-2 w-24">
+      <% if flagged %>
+        <div class="text-danger text-xs font-bold mb-1" title="Sin tarea histórica similar">🔴 sin dato</div>
+      <% end %>
+      <input type="number" min="0" name="modules[<%= m %>][tasks][<%= t %>][estimated_hours]"
+             value="<%= format_hours(task&.estimated_hours) %>" placeholder="—"
+             data-estimate-hours data-action="input->estimate-modules-editor#recompute"
+             class="w-full border <%= flagged ? "border-danger/60" : "border-white/15" %> rounded p-2 text-right text-white bg-ink/40 tabular-nums focus:outline-none focus:border-brand">
+    </td>
+    <td class="p-2 w-24">
+      <input type="number" min="0" name="modules[<%= m %>][tasks][<%= t %>][rate_eur_per_hour]"
+             value="<%= task&.rate_eur_per_hour %>" placeholder="€/h"
+             data-estimate-rate data-action="input->estimate-modules-editor#recompute"
+             class="w-full border border-white/15 rounded p-2 text-right text-white bg-ink/40 tabular-nums focus:outline-none focus:border-brand">
+    </td>
+    <td class="p-2 w-24 text-right">
+      <div class="text-white tabular-nums font-bold"><span data-task-cost>0</span> €</div>
+      <% if task && !task.flagged? && task.reliability_pct %>
+        <% band = task.reliability_band %>
+        <span class="inline-block mt-1 text-xs font-bold px-1.5 py-0.5 rounded
+              <%= band == :green ? "bg-success/20 text-success-light" : "bg-brand/20 text-brand-soft" %>">
+          <%= task.reliability_pct %>%
+        </span>
+      <% end %>
+    </td>
+  <% end %>
+
+  <td class="p-2 text-center w-10">
+    <button type="button" data-action="estimate-modules-editor#deleteTask"
+            class="text-white/40 hover:text-brand cursor-pointer font-bold" title="Eliminar tarea">✕</button>
+  </td>
+</tr>

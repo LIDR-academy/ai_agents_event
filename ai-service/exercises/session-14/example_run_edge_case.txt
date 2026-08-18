@@ -1,0 +1,62 @@
+==============================================================================
+SESSION 14 — SUPERVISOR MULTI-AGENT RUN
+==============================================================================
+
+ROUTING (supervisor decisions)
+------------------------------------------------------------------------------
+  1. supervisor → requirements_extractor   [llm]  The state has a raw transcript but no requirements or components extracted yet; the requir
+  2. supervisor → budget_searcher          [llm]  The state has components classified, but no budget matches found yet, so the budget_search
+  3. supervisor → estimate_generator       [llm]  The state contains budget_matches covering 6 out of 7 components, and we need an estimate 
+  4. supervisor → coherence_validator      [llm]  The state contains an estimate but lacks validation; the coherence_validator is needed to 
+  5. supervisor → finish                   [llm]  The estimate has been produced and validated, completing the estimation process.
+
+TOOL PRIVILEGE (declared allowlists)
+------------------------------------------------------------------------------
+  supervisor               : (no tools)
+  requirements_extractor   : (no tools)
+  budget_searcher          : search_budgets
+  estimate_generator       : derive_task_hours
+  coherence_validator      : validate_estimate
+
+AUDIT TRAIL (agent_contributions)
+------------------------------------------------------------------------------
+  [  ok  ] requirements_extractor   extract_requirements         10 requirements extracted from the transcript                (-, 3323ms)
+  [  ok  ] requirements_extractor   classify_components          7 components: Telemetry Collection and Distribution, Quantum (-, 2115ms)
+  [  ok  ] budget_searcher          tool:search_budgets          2 historical items for 'Telemetry Collection and Distributio (e39ddb4ec175, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          1 historical items for 'Quantum Key Distribution (integratio (d5290271d851, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          1 historical items for 'Status Display Panel (frontend)'; ho (b6387b5f56aa, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          2 historical items for 'User Management System (backend)'; h (2286c5316dee, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          4 historical items for 'Biometric Authentication (integratio (42360888f7d5, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          2 historical items for 'Reporting Module (analytics)'; hours (1eb4f03a6030, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          no historical items for 'Key Management System (infrastructu (b06f3d18ec98, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Telemetry Collection and Distribution': 1045h (reliability  (2ba0a92b75a2, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Quantum Key Distribution': 860h (reliability 0.5) from 1 an (764ecc82559c, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Status Display Panel': 560h (reliability 0.5) from 1 analog (6f5790586aa3, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'User Management System': 1045h (reliability 0.45) from 2 an (d1ca8451a9a3, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Biometric Authentication': 522h (reliability 0.313) from 4  (7d9b0b45e311, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Reporting Module': 488h (reliability 0.483) from 2 analogs  (913a2f349a78, 0ms)
+  [  ok  ] estimate_generator       consolidate_estimate         total 579d over 7 components (confidence medium)             (-, 4979ms)
+  [  ok  ] coherence_validator      tool:validate_estimate       1 issue(s) found                                             (8299fb050768, 0ms)
+  [  ok  ] human                    review_decision              human approve: auto-approved by the S14 runner               (-, -)
+
+HUMAN REVIEW
+------------------------------------------------------------------------------
+  triggered: YES
+    - confidence 0.41 is below the 0.60 threshold
+  decision : approve
+
+ESTIMATE
+------------------------------------------------------------------------------
+  Telemetry Collection and Distribution [backend]             143d
+  Quantum Key Distribution [integration]               108d
+  Status Display Panel [frontend]                       70d
+  User Management System [backend]                     143d
+  Biometric Authentication [integration]                54d
+  Reporting Module [analytics]                          61d
+  Key Management System [infrastructure]     — (unbudgeted)
+  TOTAL                                                579d
+  status = validated · model confidence = medium
+
+ISSUES
+------------------------------------------------------------------------------
+  - 'Key Management System [infrastructure]' has no historical reference (unbudgeted).

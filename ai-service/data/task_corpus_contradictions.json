@@ -1,0 +1,70 @@
+[
+  {
+    "budget_id": "TASK-2023-9001",
+    "client_metadata": {
+      "name": "Mercado Fresco S.L.",
+      "sector": "ecommerce",
+      "country": "ES"
+    },
+    "project_summary": "Lean storefront where notifications were a thin email-only afterthought",
+    "main_technology": "Node.js",
+    "year": 2023,
+    "total_estimated_hours": 88,
+    "components": [
+      {
+        "component_id": "NOTIF-001",
+        "name": "Real-time notifications delivery service",
+        "description": "Transactional email notifications on order events via a single provider (SendGrid). No push, no SMS, no retry/queue: fire-and-forget from the order service.",
+        "module": "Notifications",
+        "tech_stack": ["Node.js", "SendGrid"],
+        "estimated_hours": 40,
+        "complexity": "low",
+        "dependencies": []
+      },
+      {
+        "component_id": "RECON-001",
+        "name": "Payment reconciliation job",
+        "description": "Nightly batch matching Stripe payouts against orders. Single currency, single processor, CSV export.",
+        "module": "Payments & Billing",
+        "tech_stack": ["Node.js", "Stripe"],
+        "estimated_hours": 32,
+        "complexity": "low",
+        "dependencies": []
+      }
+    ]
+  },
+  {
+    "budget_id": "TASK-2024-9002",
+    "client_metadata": {
+      "name": "NeoPagos Bank Inc.",
+      "sector": "finance",
+      "country": "DE"
+    },
+    "project_summary": "Regulated fintech where notifications were a multi-channel delivery platform",
+    "main_technology": "Python",
+    "year": 2024,
+    "total_estimated_hours": 178,
+    "components": [
+      {
+        "component_id": "NOTIF-002",
+        "name": "Real-time notifications delivery service",
+        "description": "Multi-channel delivery (push, email, SMS) with a durable queue, per-channel retry/backoff, delivery receipts, user preferences and an audit trail for regulated events.",
+        "module": "Notifications",
+        "tech_stack": ["Python", "Kafka", "FCM", "Twilio"],
+        "estimated_hours": 90,
+        "complexity": "high",
+        "dependencies": []
+      },
+      {
+        "component_id": "RECON-002",
+        "name": "Payment reconciliation job",
+        "description": "Real-time reconciliation across multiple processors and currencies, double-entry ledger, dispute handling and a regulator-facing report.",
+        "module": "Payments & Billing",
+        "tech_stack": ["Python", "PostgreSQL"],
+        "estimated_hours": 88,
+        "complexity": "high",
+        "dependencies": []
+      }
+    ]
+  }
+]

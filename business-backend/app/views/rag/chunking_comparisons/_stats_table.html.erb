@@ -1,0 +1,58 @@
+<div>
+  <h2 class="text-xs uppercase tracking-tight text-white/50 font-bold mb-2">Estadísticas por estrategia</h2>
+  <div class="rounded-md border border-white/10 overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-ink/40 text-white/70">
+        <tr>
+          <th class="text-left p-3 font-bold tracking-tight">Estrategia</th>
+          <th class="text-right p-3 font-bold tracking-tight">Chunks</th>
+          <th class="text-right p-3 font-bold tracking-tight">min</th>
+          <th class="text-right p-3 font-bold tracking-tight">p50</th>
+          <th class="text-right p-3 font-bold tracking-tight">p95</th>
+          <th class="text-right p-3 font-bold tracking-tight">max</th>
+          <th class="text-right p-3 font-bold tracking-tight">Huérfanos</th>
+          <th class="text-right p-3 font-bold tracking-tight">Obesos</th>
+          <th class="text-right p-3 font-bold tracking-tight">Coste $</th>
+          <th class="text-right p-3 font-bold tracking-tight">Segundos</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-white/10">
+        <% response.strategy_names.each do |name| %>
+          <% stats = response.stats_for(name) %>
+          <tr>
+            <td class="p-3 align-top">
+              <div class="font-bold text-white"><%= Rag::Strategy.label_for(name) %></div>
+              <div class="text-white/50 text-xs font-mono"><%= name %></div>
+            </td>
+            <td class="p-3 text-right align-top text-white/90 tabular-nums"><%= stats.n_chunks %></td>
+            <td class="p-3 text-right align-top text-white/70 tabular-nums"><%= stats.token_distribution.min %></td>
+            <td class="p-3 text-right align-top text-white/70 tabular-nums"><%= stats.token_distribution.p50 %></td>
+            <td class="p-3 text-right align-top text-white/70 tabular-nums"><%= stats.token_distribution.p95 %></td>
+            <td class="p-3 text-right align-top text-white/70 tabular-nums"><%= stats.token_distribution.max %></td>
+            <td class="p-3 text-right align-top tabular-nums">
+              <% if stats.orphans? %>
+                <span class="text-xs font-bold uppercase bg-brand/20 text-brand px-1.5 py-0.5 rounded"><%= stats.n_orphan_chunks %></span>
+              <% else %>
+                <span class="text-white/40">0</span>
+              <% end %>
+            </td>
+            <td class="p-3 text-right align-top tabular-nums">
+              <% if stats.obese? %>
+                <span class="text-xs font-bold uppercase bg-brand-strong/30 text-brand px-1.5 py-0.5 rounded"><%= stats.n_obese_chunks %></span>
+              <% else %>
+                <span class="text-white/40">0</span>
+              <% end %>
+            </td>
+            <td class="p-3 text-right align-top text-white/90 tabular-nums">
+              <%= stats.free? ? "0" : sprintf("%.4f", stats.ingestion_cost_usd) %>
+            </td>
+            <td class="p-3 text-right align-top text-white/70 tabular-nums"><%= sprintf("%.1f", stats.ingestion_seconds) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-xs text-white/40 mt-2">
+    Huérfanos: chunks &lt; 20 tokens · Obesos: chunks &gt; 800 tokens — los dos extremos que degradan el retrieval.
+  </p>
+</div>

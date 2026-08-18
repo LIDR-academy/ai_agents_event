@@ -1,0 +1,124 @@
+REUNION DE ARRANQUE — Proyecto "Clininet" (red de clinicas privadas Salud+)
+Fecha: 12 de marzo. Duracion: 1h20. Modalidad: presencial + remoto.
+Participantes:
+- Dra. Elena Reyes — Directora medica de la red (cliente)
+- Javier Ortín — Director de operaciones / COO (cliente)
+- Marta Colomer — Responsable de sistemas de Salud+ (cliente)
+- Antonio — CTO consultora (proveedor)
+- Lucia — Product manager consultora (proveedor)
+
+---
+
+ANTONIO: Bueno, gracias por recibirnos. La idea de hoy es entender bien el alcance antes de daros nada por escrito. Elena, si te parece, empieza tú contándonos el problema desde el lado clínico y ya iremos aterrizando.
+
+DRA. ELENA: Vale. Somos catorce centros ahora mismo, vamos a ser dieciocho antes de fin de año. El problema es que cada centro funciona un poco a su aire. Tenemos una agenda que compramos hace años, un software de citas que se llama... Marta, ¿cómo era?
+
+MARTA: CitaSalud. Es una instalación on-premise en cada centro, versión distinta en casi cada sitio, y no hay forma de ver la ocupación de manera global. Los datos no salen de ahí fácilmente, hay una base de datos SQL Server a la que accedemos a mano cuando hace falta un informe.
+
+DRA. ELENA: Exacto. Entonces el paciente hoy llama por teléfono, o viene, y no puede hacer casi nada online. Queremos un portal del paciente de verdad: que pida cita, que vea sus resultados, que tenga su historial, que pueda hacer una videoconsulta con el médico. Y una app, porque la mayoría de nuestros pacientes son gente mayor pero cada vez más usan el móvil.
+
+LUCIA: Cuando dices historial, ¿te refieres a la historia clínica completa, con diagnósticos y demás, o a un resumen de visitas y resultados?
+
+DRA. ELENA: Buena pregunta. La historia clínica completa la lleva el médico en otro sistema, que es un HIS que tenemos parcialmente. El paciente no debería ver todo, hay cosas sensibles. Pero sí resultados de analíticas, informes de alta, la medicación activa, las próximas citas. Eso sí.
+
+JAVIER: Y aquí hay un tema gordo, Antonio, que es la receta electrónica. Estamos obligados a integrarnos con el sistema de receta electrónica autonómico, y eso va por un estándar que creo que es HL7 o FHIR, no lo tengo claro. Marta lo sabrá mejor.
+
+MARTA: Es FHIR para la parte nueva, pero el sistema autonómico todavía tiene endpoints antiguos en HL7 v2 para algunas cosas. O sea que probablemente haya que hablar los dos. Y la receta electrónica tiene su propia certificación, no es solo llamar a una API.
+
+ANTONIO: Vale, eso me lo apunto como un riesgo grande. La integración con receta electrónica y con el sistema autonómico normalmente es donde se va la mitad del esfuerzo, porque hay certificación, entornos de pruebas que tardan en darte, y mucho ida y vuelta. ¿Tenéis ya acceso a ese entorno de pruebas?
+
+MARTA: Lo estamos pidiendo. Nos han dicho que tardan entre uno y tres meses en habilitarlo.
+
+JAVIER: Eso no puede bloquear todo el proyecto, ¿eh? El portal del paciente y la agenda tienen que salir antes.
+
+ANTONIO: Sí, se puede desacoplar. Lo dejamos como un módulo aparte que se conecta cuando esté el entorno. Seguid, que hay más cosa.
+
+DRA. ELENA: Sí. La agenda es lo primero de verdad. Necesitamos una agenda unificada de todos los centros: que un profesional pueda tener consulta en dos centros, que se gestionen las salas, los equipos... porque tenemos equipos que se comparten, un ecógrafo que va rotando. Y que desde central se vea la ocupación de todo.
+
+LUCIA: ¿La agenda nueva sustituye a CitaSalud del todo, o convive?
+
+MARTA: La idea es sustituirlo. Pero hay años de citas históricas ahí dentro que no queremos perder. Habría que migrar. Y mientras migramos, seguramente convivan un tiempo, lo cual da miedo porque son la misma cita en dos sitios.
+
+JAVIER: Y hay una cosa más de la agenda que es importante: reglas. Cada tipo de cita tiene una duración distinta, hay médicos que solo ven ciertos tipos, hay huecos que se reservan para urgencias, hay sobrecarga los lunes... Todo eso hoy lo hacen las administrativas a mano y es un caos. Queremos que el sistema aplique esas reglas solo.
+
+ANTONIO: Eso es un motor de reglas de agendado, que tiene su miga. No es imposible, pero cada regla que añadís es más complejidad. Lo iremos acotando. Elena, has mencionado videoconsulta, cuéntame.
+
+DRA. ELENA: Sí, la teleconsulta la usamos ya con una herramienta externa, un Zoom básicamente, pero es horrible porque el paciente tiene que salir de nuestro sistema, entrar en otro sitio... Queremos que sea todo dentro: el paciente entra a su cita, le sale un botón, y ya está en la videollamada con el médico, con la posibilidad de compartir un documento o una imagen.
+
+ANTONIO: ¿Grabáis las consultas?
+
+DRA. ELENA: No, no queremos grabar, por temas legales. Solo la llamada en vivo. Pero sí queremos que quede registrado que la consulta se hizo, para facturarla.
+
+JAVIER: Y ahí entramos en facturación, que es otro mundo. Nosotros trabajamos con mutuas, con seguros privados, con pago directo del paciente, con copagos... Cada mutua tiene sus tarifas, sus autorizaciones. Hoy eso lo lleva administración con un ERP que tenemos, que es un Business Central.
+
+MARTA: Sí, Dynamics Business Central. La facturación final tiene que acabar ahí sí o sí, porque es donde está la contabilidad. Lo que hagamos nuevo tiene que volcar a Business Central, no sustituirlo.
+
+ANTONIO: Entendido, o sea la facturación de verdad vive en el ERP y nosotros le alimentamos los actos médicos y los pagos. ¿El paciente paga online?
+
+JAVIER: Queremos que pueda, sí. El copago de la consulta, con tarjeta, antes o después de la cita. Con una pasarela normal, Redsys o Stripe, lo que sea más fácil.
+
+LUCIA: Vale. Voy recopilando: portal del paciente web y app, agenda unificada con reglas y recursos, teleconsulta integrada, facturación que conecta con Business Central, pagos online, integración con receta electrónica y sistema autonómico. Me quedan dos cosas que quiero preguntaros. Una: ¿profesionales? ¿Los médicos van a tener su propia interfaz?
+
+DRA. ELENA: Sí, claro. El médico necesita ver su agenda del día, acceder al resumen del paciente antes de la consulta, y sobre todo — esto es importante — poder registrar la visita: qué ha hecho, qué prescribe, si pide pruebas. Ahora mismo eso lo meten en el HIS después, con retraso, y se pierden cosas.
+
+ANTONIO: ¿El HIS es propio o comprado?
+
+MARTA: Comprado, es de un proveedor externo. Tiene una API, regular pero la tiene. Habría que sincronizar con él: lo que el médico registre en el sistema nuevo tiene que acabar en el HIS.
+
+ANTONIO: Otra integración más, y esta con un proveedor que no controlamos. Me la apunto también en rojo, porque depende de que ellos nos den soporte.
+
+LUCIA: Y la segunda cosa: mencionasteis visitas a domicilio antes de empezar, ¿no? Javier lo dijo por el pasillo.
+
+JAVIER: Ah, sí. Tenemos un servicio de enfermería a domicilio que está creciendo. Las enfermeras van a casa del paciente, muchas veces sin cobertura, en pueblos. Necesitan una app que funcione sin conexión: que se descarguen su ruta del día, los datos del paciente, que puedan registrar lo que hacen allí, firmar, y que cuando vuelvan a tener conexión se sincronice todo.
+
+ANTONIO: Eso es una app offline con sincronización, que es de las cosas más delicadas de hacer bien. La resolución de conflictos, qué pasa si dos personas tocan el mismo dato... Lo menciono porque suele subestimarse muchísimo.
+
+DRA. ELENA: Ya me imagino. Pero lo necesitamos, es donde más problemas tenemos ahora.
+
+JAVIER: Y encima ahí van datos de salud, con lo cual todo el tema de RGPD y protección de datos es crítico. Datos de categoría especial. Consentimientos, cifrado, registro de accesos, quién ha visto qué. Eso no es opcional, nos jugamos multas.
+
+ANTONIO: Correcto, y eso atraviesa todo el proyecto, no es un módulo. Cifrado en reposo y en tránsito, control de accesos por rol muy fino, trazabilidad de accesos a la historia, gestión de consentimientos del paciente. Lo tratamos como un requisito transversal desde el día uno.
+
+DRA. ELENA: Perfecto. Ah, y necesitamos notificaciones. Recordatorios de cita por SMS y por email, porque tenemos un absentismo brutal, gente que no aparece. Y avisar cuando hay un resultado disponible. Y a los médicos avisarles si les cambian la agenda.
+
+LUCIA: SMS, email y push en la app. Anotado.
+
+JAVIER: Y para la dirección, un panel. Yo necesito ver ocupación por centro, por profesional, tasa de absentismo, ingresos por tipo de acto, tiempos de espera. Ahora mismo eso lo saco a mano con Excel una vez al mes y llega tarde. Quiero un cuadro de mando que se actualice solo.
+
+ANTONIO: Vale. Antes de la fecha, ¿hay algo más que se me escape? Porque quiero que el desglose esté completo.
+
+DRA. ELENA: Sí, dos cosas que me vienen ahora. Una, los resultados de laboratorio. Muchas analíticas las hace un laboratorio externo con el que trabajamos, y hoy nos mandan los resultados en PDF por correo, que alguien sube a mano al historial. Eso es de locos. Querríamos que el resultado entrara solo desde el laboratorio y le llegara al paciente y al médico sin que nadie toque nada.
+
+MARTA: El laboratorio tiene un sistema propio, y creo que puede mandar resultados en un formato estándar, otra vez algo de HL7. Pero es otro tercero más con el que coordinarse.
+
+ANTONIO: Integración con el laboratorio externo, la anoto. Van ya unas cuantas integraciones con sistemas que no controlamos, y eso es lo que más peso tiene en el riesgo: el HIS, la receta electrónica, el sistema autonómico, y ahora el laboratorio. Cada una depende de que un tercero nos dé especificaciones y soporte a tiempo.
+
+DRA. ELENA: Y la segunda cosa: accesibilidad e idiomas. Tenemos muchos pacientes mayores, y también bastante población extranjera en algunos centros. La app y el portal tienen que ser muy sencillos de usar, con letra grande, accesibles de verdad para gente con poca vista, y al menos en castellano, catalán e inglés.
+
+LUCIA: Accesibilidad real, cumpliendo estándares, y multi-idioma desde el diseño. Eso condiciona toda la parte de front, mejor tenerlo claro desde el principio que parchearlo luego.
+
+JAVIER: Y una idea que llevo tiempo dándole vueltas, aunque igual es para más adelante: un pequeño asistente, un chat, que ayude al paciente a orientar su consulta. Que le pregunte qué le pasa y le sugiera a qué especialidad pedir cita, o le diga si eso es más de urgencias. No que diagnostique, ojo, solo que oriente y descargue el teléfono.
+
+ANTONIO: Un asistente de triaje-orientación. Es atractivo, pero es de lo más delicado que hay, porque en salud una orientación mal hecha es un problema serio, y hay que acotar muchísimo qué puede y qué no puede decir. Yo lo dejaría fuera de la primera entrega y lo trataría aparte, con mucho cuidado, casi como un proyecto en sí. Lo menciono en el desglose pero marcado como algo a validar clínica y legalmente antes de tocar una línea.
+
+DRA. ELENA: De acuerdo, como fase muy posterior.
+
+MARTA: Y no nos olvidemos de una parte aburrida pero obligatoria: hay reportes que tenemos que mandar a la administración sanitaria, estadísticas de actividad, ciertos registros. Hoy los sacamos a mano. Si el sistema tiene los datos, debería poder generarlos, aunque los formatos oficiales cambian y son un incordio.
+
+ANTONIO: Reporting regulatorio a la administración, con formatos oficiales que cambian. Lo anoto como módulo, avisando de que ese tipo de informe siempre pica más de lo que parece por lo específico del formato.
+
+ANTONIO: Vale. ¿Tenéis una fecha objetivo?
+
+JAVIER: La agenda unificada y el portal básico los necesitamos para septiembre, porque abrimos los centros nuevos y no quiero replicar el caos. El resto puede ir escalonado. La receta electrónica cuando esté el entorno, la asumo más tarde.
+
+ANTONIO: Es ambicioso para septiembre con todo lo que hay, pero si priorizamos agenda y portal y dejamos teleconsulta, domiciliaria, facturación y receta en fases siguientes, es manejable. Nosotros ahora vamos a coger toda esta conversación, la vamos a estructurar en módulos y tareas, le vamos a poner una estimación de horas a cada cosa apoyándonos en proyectos parecidos que hemos hecho, y os pasamos un desglose para que lo reviséis vosotros antes de cerrar nada.
+
+DRA. ELENA: Me parece bien. ¿Y las cosas raras, la receta electrónica y eso, cómo las estimáis si no las habéis hecho antes?
+
+ANTONIO: Con honestidad. Donde tenemos experiencia previa, la estimación es fiable. Donde es novedoso — la receta electrónica, el HIS de terceros, el offline de la domiciliaria — os lo marcaremos como incertidumbre alta, con un rango, y os diremos de qué depende. No os vamos a vender una cifra falsa de precisión en lo que nadie puede saber todavía.
+
+JAVIER: Eso es justo lo que necesito para defenderlo internamente. Prefiero un rango honesto a un número redondo mentiroso.
+
+MARTA: Yo os paso hoy mismo la documentación de la API del HIS y lo que tengamos de CitaSalud para la migración.
+
+ANTONIO: Genial. Con eso montamos el primer desglose. Gracias a todos.

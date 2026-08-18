@@ -1,0 +1,56 @@
+<% content_for :title, "RAG Wizard · histórico" %>
+
+<div class="max-w-4xl mx-auto px-4 py-10">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold tracking-tighter text-white">Estimaciones guiadas</h1>
+    <%= link_to "Nueva ejecución", new_rag_estimation_run_path,
+          class: "inline-flex items-center px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+  </div>
+
+  <% if @runs.empty? %>
+    <p class="text-white/50">Aún no hay ejecuciones. Empieza una nueva.</p>
+  <% else %>
+    <%# Session 11 · monitor ligero de calidad: el embudo del pipeline sobre las
+        últimas ejecuciones. Sin coste de LLM — sólo lee el estado persistido. %>
+    <% by_status = @runs.group_by(&:status).transform_values(&:size) %>
+    <div class="flex flex-wrap gap-2 mb-6 text-xs">
+      <span class="text-white/50 uppercase tracking-tight font-bold py-1.5">Calidad (últimas <%= @runs.size %>):</span>
+      <span class="px-3 py-1.5 rounded-md bg-success/15 border border-success/40 text-success-light font-bold">
+        <%= by_status.fetch("confirmed", 0) %> confirmadas
+      </span>
+      <span class="px-3 py-1.5 rounded-md bg-ink/40 border border-white/10 text-white/70">
+        <%= by_status.fetch("hours_estimated", 0) %> con horas
+      </span>
+      <span class="px-3 py-1.5 rounded-md bg-ink/40 border border-white/10 text-white/70">
+        <%= by_status.fetch("generated", 0) + by_status.fetch("reformulated", 0) %> en curso
+      </span>
+    </div>
+
+    <div class="rounded-md border border-white/10 overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-ink/40 text-white/70">
+          <tr>
+            <th class="text-left p-3 font-bold tracking-tight">#</th>
+            <th class="text-left p-3 font-bold tracking-tight">Transcripción</th>
+            <th class="text-left p-3 font-bold tracking-tight">Estado</th>
+            <th class="text-right p-3 font-bold tracking-tight">Creada</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/10">
+          <% @runs.each do |run| %>
+            <tr class="hover:bg-white/5">
+              <td class="p-3 font-mono text-white/60">
+                <%= link_to "##{run.id}", rag_estimation_run_path(run), class: "text-brand font-bold hover:text-brand-soft" %>
+              </td>
+              <td class="p-3 text-white/80"><%= truncate(run.transcript, length: 80) %></td>
+              <td class="p-3">
+                <span class="inline-block bg-ink/60 text-white/80 rounded px-2 py-0.5 text-xs"><%= run.status %></span>
+              </td>
+              <td class="p-3 text-right text-white/50 tabular-nums"><%= run.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

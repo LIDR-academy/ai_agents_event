@@ -1,0 +1,32 @@
+<%# locals: collections (array of hashes), title (String) %>
+<div class="rounded-md border border-white/10 overflow-hidden">
+  <div class="bg-ink/40 px-3 py-2 text-xs uppercase tracking-tight text-white/60 font-bold">
+    <%= title %>
+  </div>
+  <table class="w-full text-sm">
+    <thead class="text-white/50">
+      <tr>
+        <th class="text-left p-3 font-bold tracking-tight">Colección</th>
+        <th class="text-right p-3 font-bold tracking-tight">Documentos</th>
+        <th class="text-right p-3 font-bold tracking-tight">Chunks</th>
+        <th class="text-right p-3 font-bold tracking-tight">Índice HNSW</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-white/10">
+      <% Array(collections).each do |c| %>
+        <tr>
+          <td class="p-3 text-white/90 font-mono"><%= c["collection"] %></td>
+          <td class="p-3 text-right tabular-nums text-white/80"><%= c["documents"] %></td>
+          <td class="p-3 text-right tabular-nums text-white font-bold"><%= c["chunks"] %></td>
+          <td class="p-3 text-right">
+            <% if c["hnsw_indexed"] %>
+              <span class="text-success-light font-bold">✓ indexado</span>
+            <% else %>
+              <span class="text-danger font-bold">seq scan</span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

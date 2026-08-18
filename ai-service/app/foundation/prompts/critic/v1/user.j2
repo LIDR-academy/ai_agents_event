@@ -1,0 +1,27 @@
+<original_transcript>
+{{ transcript }}
+</original_transcript>
+
+<project_metadata>
+- project_name: {{ metadata.project_name or "unknown" }}
+- assumed_team_size: {{ metadata.assumed_team_size or "unknown" }}
+{% if metadata.mentioned_technologies %}- mentioned_technologies: {{ metadata.mentioned_technologies | join(", ") }}
+{% else %}- mentioned_technologies: none
+{% endif %}- agreed_scope: {{ metadata.agreed_scope or "not yet agreed" }}
+</project_metadata>
+
+<resolved_tier>{{ tier }}</resolved_tier>
+
+<estimation_under_review>
+summary: {{ result.summary }}
+confidence_pct: {{ result.confidence_pct }}
+total_duration_weeks: {{ result.total_duration_weeks }}
+total_cost_eur: {{ result.total_cost_eur }}
+phases:
+{% for phase in result.phases %}
+- index {{ loop.index0 }}: {{ phase.name }} | {{ phase.duration_weeks }}w | {{ phase.cost_eur }} EUR
+  summary: {{ phase.summary }}
+{% endfor %}
+</estimation_under_review>
+
+Audit this estimation. Return a structured ``CriticFeedback`` per the schema. Be specific in ``field_path``.

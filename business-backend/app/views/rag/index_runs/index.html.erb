@@ -1,0 +1,53 @@
+<% content_for :title, "Corpus / Índice" %>
+
+<div class="max-w-4xl mx-auto px-4 py-10">
+  <div class="flex items-center justify-between mb-2">
+    <h1 class="text-3xl font-bold tracking-tighter text-white">Corpus / Índice</h1>
+    <%= link_to "Añadir información", new_rag_index_run_path,
+          class: "inline-flex items-center px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+  </div>
+  <p class="text-white/50 text-sm mb-6">
+    Amplía la BBDD vectorial con información nueva. Cada documento se trocea, se embede con el
+    modelo del corpus y se indexa (HNSW incremental). Re-embeder lo ya existente queda fuera.
+  </p>
+
+  <% if @stats %>
+    <div class="mb-8">
+      <%= render "stats_panel", collections: @stats["collections"], title: "Estado del corpus (#{@stats["total_chunks"]} chunks)" %>
+    </div>
+  <% end %>
+
+  <h2 class="text-lg font-bold tracking-tight text-white mb-3">Ejecuciones recientes</h2>
+  <% if @runs.empty? %>
+    <p class="text-white/50">Aún no hay ampliaciones. Empieza una nueva.</p>
+  <% else %>
+    <div class="rounded-md border border-white/10 overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-ink/40 text-white/70">
+          <tr>
+            <th class="text-left p-3 font-bold tracking-tight">#</th>
+            <th class="text-left p-3 font-bold tracking-tight">chunk_type</th>
+            <th class="text-right p-3 font-bold tracking-tight">Docs</th>
+            <th class="text-left p-3 font-bold tracking-tight">Estado</th>
+            <th class="text-right p-3 font-bold tracking-tight">Creada</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/10">
+          <% @runs.each do |run| %>
+            <tr class="hover:bg-white/5">
+              <td class="p-3 font-mono text-white/60">
+                <%= link_to "##{run.id}", rag_index_run_path(run), class: "text-brand font-bold hover:text-brand-soft" %>
+              </td>
+              <td class="p-3 font-mono text-white/70"><%= run.chunk_type %></td>
+              <td class="p-3 text-right tabular-nums text-white/80"><%= run.submitted_count %></td>
+              <td class="p-3">
+                <span class="inline-block bg-ink/60 text-white/80 rounded px-2 py-0.5 text-xs"><%= run.status %></span>
+              </td>
+              <td class="p-3 text-right text-white/50 tabular-nums"><%= run.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

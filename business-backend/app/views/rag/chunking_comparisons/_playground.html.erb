@@ -1,0 +1,49 @@
+<div>
+  <h2 class="text-xs uppercase tracking-tight text-white/50 font-bold mb-2">Playground · retrieval por consulta</h2>
+  <div class="space-y-3">
+    <% response.queries.each_with_index do |query, index| %>
+      <details class="rounded-md border border-white/10 bg-ink/30 p-3" <%= "open" if index.zero? %>>
+        <summary class="cursor-pointer text-sm text-white font-bold tracking-tight">
+          “<%= query %>”
+        </summary>
+
+        <div class="mt-3 grid gap-4 <%= response.strategy_names.size > 1 ? "md:grid-cols-2" : "" %>">
+          <% response.results_by_strategy_for(query).each do |strategy_name, query_result| %>
+            <div class="rounded-md bg-ink/40 border border-white/10 p-3">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="font-bold text-white text-sm"><%= Rag::Strategy.label_for(strategy_name) %></span>
+                <span class="text-white/40 text-xs font-mono"><%= strategy_name %></span>
+              </div>
+              <ol class="space-y-2">
+                <% query_result.top_k.each do |chunk| %>
+                  <li class="text-xs">
+                    <div class="flex items-center gap-2">
+                      <span class="font-mono text-white/70 truncate"><%= chunk.chunk_id %></span>
+                      <% if strategy_name == "hierarchical" && chunk.level %>
+                        <span class="shrink-0 text-[10px] font-bold uppercase px-1.5 py-0.5 rounded <%= chunk.level == :parent ? "bg-brand text-ink-dark" : "bg-white/10 text-white/70" %>">
+                          <%= chunk.level %>
+                        </span>
+                      <% end %>
+                      <span class="ml-auto shrink-0 text-white/90 font-bold tabular-nums"><%= sprintf("%.4f", chunk.cosine) %></span>
+                    </div>
+                    <div class="mt-1 h-1.5 rounded bg-ink/60 overflow-hidden">
+                      <div class="h-full bg-brand/80 rounded" style="width: <%= chunk.cosine_pct %>%"></div>
+                    </div>
+                    <p class="mt-1 text-white/60 leading-snug"><%= chunk.text_preview %></p>
+                  </li>
+                <% end %>
+              </ol>
+            </div>
+          <% end %>
+        </div>
+      </details>
+    <% end %>
+  </div>
+  <% if response.strategy_names.include?("hierarchical") %>
+    <p class="text-xs text-white/40 mt-2">
+      Los badges parent/child de <span class="font-mono">hierarchical</span> se derivan del formato del
+      <span class="font-mono">chunk_id</span> (la respuesta de comparación no incluye metadata);
+      el árbol completo padre↔hijos lo reconstruye el retriever.
+    </p>
+  <% end %>
+</div>

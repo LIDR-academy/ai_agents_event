@@ -1,0 +1,18 @@
+<%# Read-only: which agent(s) run this step. No selection — each step has a fixed
+    agent from the Matrix cast (Agents::GraphFlow::CHARACTERS). Locals: `keys` (array
+    of character keys) + optional `note`. %>
+<div class="flex flex-wrap items-center gap-2 mb-5">
+  <span class="text-xs uppercase tracking-tight text-white/40 font-bold">Este paso lo ejecuta</span>
+  <% Array(keys).each do |key| %>
+    <% ch = Agents::GraphFlow.character_for(key) %>
+    <% next unless ch %>
+    <span class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs <%= ch.classes %>"
+          title="<%= ch.tagline %>">
+      <span class="text-base leading-none"><%= ch.avatar %></span>
+      <span class="font-bold"><%= ch.name %></span>
+    </span>
+  <% end %>
+  <% if local_assigns[:note].present? %>
+    <span class="text-white/40 text-xs"><%= note %></span>
+  <% end %>
+</div>

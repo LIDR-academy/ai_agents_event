@@ -1,0 +1,42 @@
+<%#
+  Wizard progress bar. Completed stages are links (free back-navigation); the
+  current stage is highlighted in brand; not-yet-reached stages are muted.
+%>
+<% wizard = [
+     ["reformulation", "Reformulación"],
+     ["generation",    "Estructura"],
+     ["review",        "Revisión"],
+     ["hours",         "Horas"],
+     ["verification",  "Validación"]
+   ] %>
+<% current_index = wizard.index { |name, _| name == step } || 0 %>
+
+<ol class="flex items-center gap-2 text-xs font-bold tracking-tight">
+  <% wizard.each_with_index do |(name, label), idx| %>
+    <% done = run.step_complete?(name) && idx < current_index %>
+    <% active = idx == current_index %>
+    <% reachable = done || active || run.step_complete?(name) %>
+    <li class="flex items-center gap-2">
+      <% classes = if active
+             "bg-brand text-ink-dark"
+           elsif done
+             "bg-success/20 text-success-light"
+           else
+             "bg-ink/40 text-white/40"
+           end %>
+      <% if reachable && !active %>
+        <%= link_to rag_estimation_run_path(run, step: name),
+              class: "px-3 py-1.5 rounded-md #{classes} hover:opacity-90" do %>
+          <span class="opacity-60 mr-1"><%= idx + 1 %></span><%= label %>
+        <% end %>
+      <% else %>
+        <span class="px-3 py-1.5 rounded-md <%= classes %>">
+          <span class="opacity-60 mr-1"><%= idx + 1 %></span><%= label %>
+        </span>
+      <% end %>
+      <% unless idx == wizard.length - 1 %>
+        <span class="text-white/20">→</span>
+      <% end %>
+    </li>
+  <% end %>
+</ol>

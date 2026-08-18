@@ -1,0 +1,83 @@
+==============================================================================
+SESSION 14 — SUPERVISOR MULTI-AGENT RUN
+==============================================================================
+
+ROUTING (supervisor decisions)
+------------------------------------------------------------------------------
+  1. supervisor → requirements_extractor   [llm]  The state has a transcript but no extracted requirements or classified components; the req
+  2. supervisor → budget_searcher          [llm]  The state has components classified (9), but no budget matches yet, so the budget_searcher
+  3. supervisor → estimate_generator       [llm]  The state contains budget_matches, which is necessary for the estimate_generator to produc
+  4. supervisor → coherence_validator      [llm]  The state has an estimate produced but the validation has not been run yet, so the coheren
+  5. supervisor → finish                   [llm]  The estimate has been produced and validated, so the process is complete.
+
+TOOL PRIVILEGE (declared allowlists)
+------------------------------------------------------------------------------
+  supervisor               : (no tools)
+  requirements_extractor   : (no tools)
+  budget_searcher          : search_budgets
+  estimate_generator       : derive_task_hours
+  coherence_validator      : validate_estimate
+
+COMPETITION (conservative vs aggressive)
+------------------------------------------------------------------------------
+  aggressive         705d  risks: The unique requirements for SOC2 compliance could introduce unforeseen complexities., Key management with HSM lacks historical data, potentially leading to underestimated effort., Natural variance in engineering estimates could cause deviations.
+  conservative      1250d  risks: Undocumented interfaces or protocols (COBOL via FTP) could require reverse engineering, significantly increasing integration time., New compliance requirements like SOC2 may attract unforeseen audit and security demands., Quantum key distribution and key management involve cutting-edge technology with few internal precedents, potentially leading to bottlenecks.
+  divergence   : ratio 0.558 (high), spread 545d
+  synthesized  : 750..1250d (confidence low)
+    open question: How reusable are the existing solutions for telemetry collection and libraries?
+    open question: What specific compliance and documentation tasks are needed for SOC2?
+    open question: What are the actual complexities in key management with HSM and QKD?
+    open question: What level of undocumented legacy system integration is truly necessary?
+
+AUDIT TRAIL (agent_contributions)
+------------------------------------------------------------------------------
+  [  ok  ] requirements_extractor   extract_requirements         9 requirements extracted from the transcript                 (-, 7097ms)
+  [  ok  ] requirements_extractor   classify_components          9 components: Telemetry collection and distribution, Quantum (-, 1927ms)
+  [  ok  ] budget_searcher          tool:search_budgets          2 historical items for 'Telemetry collection and distributio (fffe9f92c672, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          2 historical items for 'Quantum key distribution (QKD) imple (84edcb494eb6, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          1 historical items for 'COBOL integration via FTP (integrati (b1568f459cb1, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          1 historical items for 'Status display panel (frontend)'; ho (2431379ba88d, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          no historical items for 'SOC2 compliance mechanisms (infrast (de01cafaa67f, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          1 historical items for 'Multilingual support for the panel ( (e992ba70ac51, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          3 historical items for 'Login screen with biometric authenti (2d5aa3dcff69, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          3 historical items for 'User management and reporting (backe (135eccc4672d, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          no historical items for 'Key management with HSM (infrastruc (fc7fa18d9c85, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Telemetry collection and distribution': 1045h (reliability  (1f5d80235f25, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Quantum key distribution (QKD) implementation': 1045h (reli (bde0899fc700, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'COBOL integration via FTP': 860h (reliability 0.5) from 1 a (f8906877422a, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Status display panel': 560h (reliability 0.5) from 1 analog (ab573c1d5446, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Multilingual support for the panel': 560h (reliability 0.5) (9466ac4472ef, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Login screen with biometric authentication': 411h (reliabil (15d7012e297b, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'User management and reporting': 840h (reliability 0.32) fro (960e2c77f2a4, 0ms)
+  [  ok  ] estimate_generator       consolidate_estimate         total 705d over 9 components (confidence medium)             (-, 3719ms)
+  [  ok  ] estimate_generator       competition_aggressive       aggressive total = 705d                                      (-, -)
+  [  ok  ] estimate_generator       competition_conservative     conservative total = 1250d                                   (-, -)
+  [  ok  ] estimate_generator       competition_synthesis        range 750..1250d, divergence 0.558 (high)                    (-, -)
+  [  ok  ] coherence_validator      tool:validate_estimate       2 issue(s) found                                             (c9b2f9bc53a4, 0ms)
+  [  ok  ] human                    review_decision              human approve: auto-approved by the S14 runner               (-, -)
+
+HUMAN REVIEW
+------------------------------------------------------------------------------
+  triggered: YES
+    - confidence 0.04 is below the 0.60 threshold
+  decision : approve
+
+ESTIMATE
+------------------------------------------------------------------------------
+  Telemetry collection and distribution [backend]             144d
+  Quantum key distribution (QKD) implementation [backend]             144d
+  COBOL integration via FTP [integration]              108d
+  Status display panel [frontend]                       70d
+  SOC2 compliance mechanisms [infrastructure]   — (unbudgeted)
+  Multilingual support for the panel [frontend]              70d
+  Login screen with biometric authentication [frontend]              51d
+  User management and reporting [backend]              118d
+  Key management with HSM [infrastructure]   — (unbudgeted)
+  TOTAL                                                705d
+  RANGE (competition)                            750..1250d
+  status = validated · model confidence = medium
+
+ISSUES
+------------------------------------------------------------------------------
+  - 'SOC2 compliance mechanisms [infrastructure]' has no historical reference (unbudgeted).
+  - 'Key management with HSM [infrastructure]' has no historical reference (unbudgeted).

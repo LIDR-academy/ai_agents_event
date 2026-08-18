@@ -1,0 +1,40 @@
+<% content_for :title, "Comparativa ##{@comparison.id} · Chunking Lab" %>
+
+<div class="max-w-5xl mx-auto px-4 py-8 space-y-8">
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tighter text-white">
+        Comparativa #<%= @comparison.id %>
+      </h1>
+      <p class="text-white/60 mt-1 text-sm">
+        <%= @comparison.corpus_label %> · <%= @comparison.corpus_count %> presupuestos ·
+        <%= l @comparison.created_at, format: :short %> ·
+        <%= @comparison.duration_seconds %> s ·
+        coste de ingesta <span class="text-white font-bold">$<%= sprintf("%.4f", @comparison.cost_total_usd) %></span>
+      </p>
+      <div class="flex flex-wrap gap-1 mt-2">
+        <% @comparison.strategy_labels.each do |label| %>
+          <span class="px-2 py-0.5 rounded bg-brand/20 text-brand text-xs font-bold tracking-tight"><%= label %></span>
+        <% end %>
+      </div>
+    </div>
+    <div class="flex items-center gap-3 shrink-0">
+      <%= link_to "Nueva comparativa", new_rag_chunking_comparison_path,
+            class: "inline-flex items-center px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+      <%= link_to "Histórico", rag_chunking_comparisons_path,
+            class: "text-sm font-bold tracking-tight text-white/70 hover:text-white" %>
+    </div>
+  </div>
+
+  <%= render "stats_table", response: @response %>
+  <%= render "cost_bars", response: @response %>
+
+  <% if @response.any_queries? %>
+    <%= render "playground", response: @response %>
+  <% else %>
+    <div class="p-4 rounded-md bg-ink/30 border border-white/10 text-sm text-white/60">
+      Run sin consultas: solo estadísticas de corpus. Lanza una nueva comparativa con consultas
+      para ver el playground de retrieval.
+    </div>
+  <% end %>
+</div>

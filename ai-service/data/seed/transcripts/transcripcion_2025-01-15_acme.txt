@@ -1,0 +1,7 @@
+[10:00:12] Laura Fernández: Buenos días, gracias por la reunión. Vengo a comentar la fase final del presupuesto BUDGET-2024-0001 que firmamos en febrero.
+[10:00:48] Diego Marín: Hola Laura. Tengo el código de cliente CLI-0042 abierto. Recuérdame el estado del despliegue.
+[10:01:30] Laura Fernández: Está en pre-producción. El piloto arranca con un equipo de quince personas la semana que viene. El contacto operativo en nuestro lado será Javier Romero pero todavía no le he dado de alta.
+[10:02:10] Diego Marín: Necesito un email donde mandar las credenciales. ¿laura.fernandez@acme.es sigue siendo el correcto?
+[10:02:32] Laura Fernández: Sí, ese mismo. Y para los avisos automáticos crea un alias soporte-acme@acme.es. No quiero notificaciones a mi cuenta personal.
+[10:03:15] Diego Marín: Hecho. Última cosa: necesito que confirmes la dirección fiscal porque la factura proforma todavía no tiene calle. La oficina principal está en Madrid, pero la entrega era para el centro de Bilbao, ¿verdad?
+[10:03:48] Laura Fernández: Correcto, entrega Bilbao. La dirección fiscal te la paso por escrito mañana. Cerramos aquí.

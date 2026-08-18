@@ -1,0 +1,73 @@
+<%# Every action each agent took, including any DENIED by the privilege check (Level 3).
+    A tool-free agent still shows up here, with tool = "—": if it did not, the trail
+    would have holes and "reconstruct the run from the log" would stop being true. %>
+<section class="rounded-md border border-white/10 p-5 mb-6">
+  <h2 class="text-sm font-bold tracking-tight text-white/70 uppercase mb-1">
+    Auditoría de acciones
+  </h2>
+  <p class="text-white/40 text-xs mb-4">
+    Qué agente, qué herramienta, con qué resultado. Una fila
+    <span class="text-danger font-bold">DENEGADA</span> es un agente que intentó una herramienta
+    fuera de su privilegio declarado: se rechazó <em>antes</em> de ejecutarla. Una fila
+    <span class="text-warning font-bold">DIFERIDA</span> es una acción irreversible
+    (<span class="font-mono">irreversible</span>) que esperaba la aprobación humana del gate.
+  </p>
+
+  <% if run.agent_contributions.blank? %>
+    <p class="text-white/40 text-sm">Sin acciones registradas.</p>
+  <% else %>
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead class="text-white/50">
+          <tr>
+            <th class="text-left py-2 pr-3 font-bold">Agente</th>
+            <th class="text-left py-2 pr-3 font-bold">Acción</th>
+            <th class="text-left py-2 pr-3 font-bold">Herramienta</th>
+            <th class="text-left py-2 pr-3 font-bold">Resultado</th>
+            <th class="text-right py-2 font-bold">ms</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          <% run.agent_contributions.each do |row| %>
+            <%
+              denied = row["outcome"] == "denied"
+              deferred = row["outcome"] == "deferred"
+              errored = row["outcome"] == "error"
+              # The one irreversible tool this flow can call — flagged so a reviewer sees
+              # the no-undo write at a glance, whatever its outcome.
+              irreversible = row["tool"] == "save_estimate"
+              outcome_classes =
+                if denied then "bg-danger/15 border border-danger/40 text-danger"
+                elsif deferred then "bg-warning/15 border border-warning/40 text-warning"
+                elsif errored then "bg-warning/15 border border-warning/40 text-warning"
+                else "bg-success/15 border border-success/40 text-success-light"
+                end
+              outcome_label =
+                if denied then "DENEGADA"
+                elsif deferred then "DIFERIDA"
+                else row["outcome"]
+                end
+            %>
+            <tr class="<%= "bg-danger/5" if denied %><%= "bg-warning/5" if deferred %>">
+              <td class="py-2 pr-3 font-mono text-white/80"><%= row["agent"] %></td>
+              <td class="py-2 pr-3 font-mono text-white/60"><%= row["action"] %></td>
+              <td class="py-2 pr-3 font-mono text-white/60">
+                <%= row["tool"] || "—" %>
+                <% if irreversible %>
+                  <span class="ml-1 px-1 py-0.5 rounded text-[9px] font-bold bg-danger/15 border border-danger/40 text-danger">IRREVERSIBLE</span>
+                <% end %>
+              </td>
+              <td class="py-2 pr-3">
+                <span class="px-1.5 py-0.5 rounded text-[10px] font-bold <%= outcome_classes %>">
+                  <%= outcome_label %>
+                </span>
+                <span class="text-white/50 ml-2"><%= truncate(row["summary"].to_s, length: 70) %></span>
+              </td>
+              <td class="py-2 text-right text-white/40 font-mono"><%= row["duration_ms"] || "—" %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</section>

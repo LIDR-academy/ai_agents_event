@@ -1,0 +1,59 @@
+<%#
+  One editable module block. locals: m (module index), mod (WorkModuleView | nil),
+  tasks (array of [t, TaskItemView]), mode (:structure | :cost). Reused for
+  server-rendered modules and (with __MIDX__) inside the cloned <template>.
+%>
+<% mode ||= :cost %>
+<div data-module data-module-index="<%= m %>"
+     class="rounded-md border border-white/10 bg-ink/20 mb-4">
+  <div class="flex items-start gap-3 p-3 border-b border-white/10">
+    <div class="flex-1 space-y-2">
+      <input type="text" name="modules[<%= m %>][name]" value="<%= mod&.name %>"
+             placeholder="Módulo / bloque funcional"
+             class="w-full border border-white/15 rounded p-2 text-white font-bold bg-ink/40 focus:outline-none focus:border-brand">
+      <input type="text" name="modules[<%= m %>][description]" value="<%= mod&.description %>"
+             placeholder="Descripción del bloque (opcional)"
+             class="w-full border border-white/15 rounded p-2 text-white/80 bg-ink/40 text-xs focus:outline-none focus:border-brand">
+    </div>
+    <% if mode == :cost %>
+      <div class="text-right shrink-0">
+        <div class="text-xs uppercase tracking-tight text-white/50 font-bold">Subtotal</div>
+        <div class="text-lg font-bold tabular-nums text-white"><span data-module-subtotal>0</span> <span class="text-xs text-white/50">€</span></div>
+        <button type="button" data-action="estimate-modules-editor#deleteModule"
+                class="mt-1 text-xs text-white/40 hover:text-brand cursor-pointer font-bold">Eliminar módulo</button>
+      </div>
+    <% else %>
+      <button type="button" data-action="estimate-modules-editor#deleteModule"
+              class="shrink-0 text-xs text-white/40 hover:text-brand cursor-pointer font-bold">Eliminar módulo</button>
+    <% end %>
+  </div>
+
+  <table class="w-full text-sm">
+    <thead class="bg-ink/30 text-white/50">
+      <tr>
+        <th class="text-left p-2 font-bold tracking-tight">Tarea</th>
+        <th class="text-left p-2 font-bold tracking-tight">Descripción</th>
+        <% if mode == :cost %>
+          <th class="text-right p-2 font-bold tracking-tight">Horas</th>
+          <th class="text-right p-2 font-bold tracking-tight">€/h</th>
+          <th class="text-right p-2 font-bold tracking-tight">Coste · fiab.</th>
+        <% end %>
+        <th class="p-2"></th>
+      </tr>
+    </thead>
+    <tbody data-tasks-container class="divide-y divide-white/10">
+      <% Array(tasks).each do |t, task| %>
+        <%# Explicit path: this partial is shared by the graph wizard too, where a
+            relative "editable_task" would resolve under rag/graph_estimation_runs. %>
+        <%= render "rag/estimation_runs/editable_task", m: m, t: t, task: task, mode: mode %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="p-2 border-t border-white/10">
+    <button type="button" data-action="estimate-modules-editor#addTask"
+            class="text-brand font-bold hover:text-brand-soft tracking-tight text-sm cursor-pointer">
+      + Añadir tarea
+    </button>
+  </div>
+</div>

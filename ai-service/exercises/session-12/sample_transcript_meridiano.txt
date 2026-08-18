@@ -1,0 +1,100 @@
+Reunión de descubrimiento — Proyecto "Plataforma agroalimentaria MERIDIANO"
+Cliente: Rosa Company (Directora General), Íñigo Barral (Director de Sistemas) y Marta Cela (Responsable de Calidad y Trazabilidad), Cooperativa Agrícola Valle del Ebro
+Consultor: equipo de estimación (Diego, Laura)
+Fecha: reunión inicial de alcance
+
+[00:00:05] Diego (Consultor): Gracias por hacernos hueco. La idea de hoy es entender la foto completa y luego bajar al detalle de cada pieza. No hace falta que traigáis nada cerrado; con que nos contéis qué queréis conseguir nos vale. Grabamos la sesión, ¿os parece bien?
+
+[00:00:22] Rosa: Sin problema. Os pongo en contexto. Somos una cooperativa de unos ochocientos socios, sobre todo cereal, viña y algo de fruta de hueso. Facturamos por encima de los cuarenta millones. El problema es que trabajamos con herramientas de hace veinte años: un Access que montó un sobrino de un socio, hojas de Excel por todas partes, y para lo comercial un programa a medida que ya ni el que lo hizo sabe tocar. Queremos dar el salto y montar algo serio de una vez.
+
+[00:01:10] Diego: Perfecto. Cuando dices "algo serio", ¿hablamos de sustituir todo o de piezas concretas?
+
+[00:01:18] Rosa: De montar una plataforma nueva, MERIDIANO, que unifique lo que hoy tenemos disperso. Os aviso desde ya: es grande, y son cosas que no tienen nada que ver unas con otras. No es un único programa, son varios mundos.
+
+[00:01:40] Íñigo: Yo lo veo en bloques muy distintos. Si os parece los voy enumerando y luego entramos uno a uno.
+
+[00:01:48] Diego: Ideal, así lo troceamos.
+
+[00:01:52] Íñigo: El primer bloque es el corazón: un backend de gestión agronómica. Ahí va el maestro de explotaciones, parcelas y recintos SIGPAC, los cultivos por campaña, el calendario de labores, y el cuaderno de campo digital de cada socio. Es de cero, hoy eso vive en el Access. Y tiene que exponer una API porque todo lo demás va a beber de ahí. Esto es el núcleo, si esto no está el resto no se sostiene.
+
+[00:02:45] Diego: Anotado, backend agronómico con API como componente central. Sigue.
+
+[00:02:52] Íñigo: El segundo bloque no tiene nada que ver: es una plataforma de telemetría IoT. Hemos ido poniendo sensores en el campo — sondas de humedad de suelo, estaciones meteorológicas, y contadores en los hidrantes de riego. Ahora mismo cada uno manda datos a su propia web del fabricante y es un caos. Queremos ingerir toda esa telemetría nosotros: los sensores hablan MQTT casi todos, hay que montar el broker, almacenar series temporales, y sobre eso construir reglas de alerta. Por ejemplo, si una sonda baja de cierto umbral de humedad, que avise al técnico de esa zona.
+
+[00:03:55] Laura (Consultora): ¿Cuántos dispositivos hablamos, más o menos? Lo pregunto por el volumen de datos.
+
+[00:04:02] Íñigo: Ahora unos trescientos, pero la idea es llegar a un par de miles en dos años. Y algunos mandan lectura cada cinco minutos, así que series temporales sí o sí.
+
+[00:04:18] Marta: Perdona que corte, pero enlazo con lo mío porque va a salir varias veces. Todo lo que sea tratamientos y aplicaciones al campo tiene que quedar registrado por normativa. Luego lo detallo, pero que lo tengáis en la cabeza desde el principio.
+
+[00:04:35] Diego: Lo tenemos. Volvemos a ello como bloque propio. Íñigo, ¿qué más?
+
+[00:04:42] Íñigo: El tercer bloque es puramente comercial y también es un mundo aparte: un marketplace B2B. Queremos vender los excedentes y los insumos entre socios y a terceros compradores — cooperativas vecinas, bodegas, distribuidores. Catálogo de productos, gestión de pedidos, una pasarela de pagos de verdad con conciliación, y facturación. Esto es como montar un pequeño ecommerce, pero entre empresas: precios negociados por cliente, pedidos a crédito, descuentos por volumen. Nada que ver con el campo, es tienda.
+
+[00:05:50] Rosa: Y ojo, que la pasarela de pagos nos importa mucho. Movemos importes grandes y necesitamos que la conciliación con el banco sea automática. Ya nos hemos comido sustos con cobros que no cuadraban.
+
+[00:06:10] Laura: ¿Tenéis algún proveedor de pagos en mente o lo dejamos abierto?
+
+[00:06:16] Rosa: Abierto, lo que recomendéis. Pero que soporte pago aplazado y remesas SEPA, eso es innegociable aquí.
+
+[00:06:28] Íñigo: El cuarto bloque es una app móvil para la gente de campo. Los tractoristas y los técnicos de campo. Tienen que ver las labores del día, registrar qué han hecho en cada parcela — siembra, tratamiento, riego, cosecha —, hacer fotos, y sobre todo funcionar sin cobertura. En medio del secano no hay red, así que modo offline con sincronización cuando vuelven al pueblo. Android sobre todo, algún iPhone hay. Y la gente de campo no es técnica, así que muy sencilla, botones grandes, poco texto.
+
+[00:07:35] Diego: Entendido: app móvil de campo, offline-first, Android e iOS, con registro de labores y fotos. ¿Geolocaliza la parcela?
+
+[00:07:44] Íñigo: Sí, que el operario vea en un mapa en qué recinto está y que el parte se asocie solo a esa parcela. Eso nos ahorraría muchísimos errores.
+
+[00:08:00] Marta: Ahora sí entro yo, que es el bloque que más quebraderos nos da. Trazabilidad y cumplimiento normativo. Por ley, cada tratamiento fitosanitario que aplicamos hay que registrarlo: producto, dosis, plazo de seguridad, quién lo aplicó y con qué carné. Eso alimenta el cuaderno de explotación oficial. Y cuando viene una inspección, o cuando un cliente nos pide la trazabilidad de un lote, tenemos que poder decir: este palé de uva viene de esta parcela, se trató con esto en esta fecha, y lo recogió esta cuadrilla. Hoy eso es una pesadilla de papeles.
+
+[00:09:20] Diego: O sea, un módulo de trazabilidad de lote a parcela y de generación de informes regulatorios.
+
+[00:09:30] Marta: Exacto. Y los informes tienen un formato oficial, no me vale un PDF cualquiera; hay modelos concretos que exige la administración autonómica. Cambian cada poco además, así que tiene que ser fácil de actualizar.
+
+[00:09:52] Rosa: Y ya lo último, que para el consejo rector es lo más vistoso: un panel de analítica. Cuadros de mando con rendimiento por parcela y por cultivo, costes por hectárea, comparativa entre campañas. Y una cosa que nos haría mucha ilusión: previsión de cosecha. Cruzar los datos históricos con los del clima y los sensores para estimar cuánto vamos a recoger. Si eso lo clavamos, negociamos mucho mejor los contratos de venta con antelación.
+
+[00:10:45] Laura: La previsión de cosecha es un componente con enjundia, porque ahí entra un modelo predictivo, no es solo pintar gráficas. ¿Es imprescindible para la primera versión o es un "nos gustaría"?
+
+[00:11:00] Rosa: Nos gustaría de verdad, pero entiendo que es lo más incierto. Ponedlo en el alcance pero marcadlo como lo más arriesgado. Los cuadros de mando normales sí los queremos sí o sí.
+
+[00:11:18] Diego: Perfecto. Recapitulo los bloques para asegurarme: uno, backend agronómico con API; dos, plataforma IoT de telemetría con alertas; tres, marketplace B2B con pagos y facturación; cuatro, app móvil de campo offline; cinco, trazabilidad y cumplimiento normativo; y seis, analítica con previsión de cosecha. ¿Me dejo algo?
+
+[00:12:00] Íñigo: Te dejas lo aburrido pero necesario. Todo esto necesita usuarios y permisos serios. Tenemos perfiles muy distintos: el socio, el técnico de campo, el administrativo, el del consejo rector, y nosotros de sistemas. Cada uno ve una cosa. Y hay que meter los ochocientos socios sin volvernos locos, así que algún tipo de alta masiva o migración desde el Access.
+
+[00:12:40] Diego: Muy importante, sí. Gestión de usuarios, roles y permisos, más migración de los datos históricos del Access y de los Excel. ¿Sabéis en qué estado están esos datos?
+
+[00:12:55] Íñigo: Regulares. El maestro de socios está decente. Las parcelas tienen duplicados y referencias SIGPAC mal metidas. Los históricos de campaña están en veinte Excel distintos, cada técnico con el suyo. Va a haber trabajo de limpieza, os aviso.
+
+[00:13:30] Laura: ¿Y de integraciones con sistemas externos, además de los sensores? ¿Contabilidad, banco, algo de la administración?
+
+[00:13:42] Íñigo: Sí. La contabilidad la llevamos con un software local, un A3, y de momento no lo tocamos, pero la facturación del marketplace tendrá que exportar asientos hacia ahí, aunque sea un fichero. Con el banco, lo de las remesas SEPA y la conciliación que decía Rosa. Y para la meteo, tiramos de una API pública de la agencia estatal, que ya la usamos.
+
+[00:14:20] Rosa: Del banco me preocupa la seguridad, que manejamos datos de pago y datos personales de ochocientas familias. No quiero un disgusto con protección de datos.
+
+[00:14:35] Diego: Totalmente. Seguridad y protección de datos como algo transversal a todo, no como un extra. Lo dejamos anotado como requisito de base.
+
+[00:14:50] Laura: Hablemos un momento de dónde va a vivir esto. ¿Cloud, servidores vuestros?
+
+[00:14:58] Íñigo: No tenemos sitio ni gente para mantener servidores. Cloud, lo que propongáis. Eso sí, la telemetría manda mucho dato, y en campaña la cosa se dispara, así que algo que aguante picos. Y quiero poder dormir tranquilo con las copias de seguridad.
+
+[00:15:30] Diego: Cloud gestionado, con infraestructura que escale y con copias. Lo incluimos como parte del proyecto, no como algo que ya tengáis montado.
+
+[00:15:38] Marta: Se me olvidaba una cosa que da mucho trabajo cada campaña: las comunicaciones a los socios. Ahora avisamos por WhatsApp del grupo y por carta, imaginaos. Necesitamos que la plataforma mande avisos — que se acerca el plazo de un tratamiento, que hay una alerta de helada, que tienen un pedido listo en el marketplace. Correo y SMS mínimo, y si puede ser notificación push en la app, mejor.
+
+[00:16:05] Íñigo: Y ligado a eso, un portal web de autoservicio para el socio. Que entre desde casa, vea sus parcelas, sus cuadernos de campo, sus facturas y sus liquidaciones, y se descargue lo que necesite sin llamarnos por teléfono. Eso nos quitaría un montón de trabajo administrativo.
+
+[00:16:30] Diego: Muy bien: un módulo de notificaciones multicanal — correo, SMS y push — y un portal de autoservicio para el socio. Los anoto como piezas propias, porque tienen su miga. ¿Algo más antes de hablar de plazos?
+
+[00:16:48] Rosa: Creo que ya está todo lo gordo. Entonces sí, la pregunta de las que no os van a gustar: ¿esto en cuánto tiempo lo tenemos y cuánto nos va a costar? No espero número cerrado hoy, pero necesito llevar algo al consejo rector.
+
+[00:17:00] Diego: No os voy a dar número hoy, sería mentiros. Justo para eso hacemos esta reunión: para descomponer el proyecto en piezas y estimar cada una con datos de proyectos parecidos. Lo que sí os adelanto es que todos estos bloques son muy distintos entre sí, y eso es bueno de estimar por separado. La campaña que viene empieza en primavera, así que me imagino que el backend, la app de campo y la trazabilidad los querréis operativos para entonces.
+
+[00:17:20] Marta: La trazabilidad para antes de la campaña de tratamientos, imprescindible. Si no, seguimos con papeles otro año y no puede ser.
+
+[00:17:45] Rosa: El marketplace y la analítica pueden ir en una segunda fase, unos meses después. Pero quiero que la estimación cubra todo el alcance, para saber a qué nos enfrentamos en total.
+
+[00:18:05] Íñigo: Y el IoT me gustaría tenerlo pronto también, porque los sensores ya están puestos y ahora mismo no aprovechamos nada. Pero entiendo que depende de que el backend esté.
+
+[00:18:25] Diego: Clarísimo. Dependencias: casi todo cuelga del backend agronómico, que va primero. El resto se puede paralelizar una vez esté la API. Bien. Con esto tenemos una foto muy completa. Dejadme que os resuma el alcance para la estimación y en unos días os traemos el desglose por bloques con horas.
+
+[00:18:45] Rosa: Estupendo. Cualquier cosa que os falte, nos escribís. Y gracias por no venderme humo, que estoy escarmentada.
+
+[00:18:58] Diego: Ese es justo el objetivo. Gracias a vosotros por el detalle, así la estimación sale honesta.

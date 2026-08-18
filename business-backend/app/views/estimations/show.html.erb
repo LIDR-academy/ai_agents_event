@@ -1,0 +1,74 @@
+<% result = @response.result %>
+<div class="max-w-3xl mx-auto py-12 px-4">
+
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold tracking-tighter text-white">Estimation</h1>
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-bold tracking-tight uppercase bg-brand text-ink-dark px-2 py-1 rounded">
+        prompt <%= @response.prompt_version %>
+      </span>
+      <% if @response.cached %>
+        <span class="text-xs font-bold tracking-tight uppercase bg-success-light text-ink-dark px-2 py-1 rounded">
+          cached
+        </span>
+      <% end %>
+    </div>
+  </div>
+
+  <% if result.out_of_scope? %>
+    <div class="p-5 rounded-md bg-brand/15 border border-brand text-white mb-8">
+      <p class="font-bold text-brand mb-2">Out of scope</p>
+      <p class="text-sm text-white/90"><%= result.summary %></p>
+    </div>
+  <% else %>
+    <p class="text-white/90 leading-relaxed mb-8"><%= result.summary %></p>
+
+    <div class="grid grid-cols-3 gap-4 mb-8">
+      <div class="p-4 rounded-md bg-ink/30 border border-white/10">
+        <div class="text-xs uppercase tracking-tight text-white/50 font-bold">Duration</div>
+        <div class="text-2xl font-bold tracking-tighter text-white mt-1"><%= result.total_duration_weeks %> wk</div>
+      </div>
+      <div class="p-4 rounded-md bg-ink/30 border border-white/10">
+        <div class="text-xs uppercase tracking-tight text-white/50 font-bold">Cost</div>
+        <div class="text-2xl font-bold tracking-tighter text-white mt-1">
+          <%= number_with_delimiter(result.total_cost_eur) %> €
+        </div>
+      </div>
+      <div class="p-4 rounded-md bg-ink/30 border border-white/10">
+        <div class="text-xs uppercase tracking-tight text-white/50 font-bold">Confidence</div>
+        <div class="text-2xl font-bold tracking-tighter text-white mt-1"><%= result.confidence_pct %>%</div>
+      </div>
+    </div>
+
+    <div class="rounded-md border border-white/10 overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-ink/40 text-white/70">
+          <tr>
+            <th class="text-left p-3 font-bold tracking-tight">Phase</th>
+            <th class="text-right p-3 font-bold tracking-tight">Weeks</th>
+            <th class="text-right p-3 font-bold tracking-tight">Cost</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/10">
+          <% result.phases.each do |phase| %>
+            <tr>
+              <td class="p-3 align-top">
+                <div class="font-bold text-white"><%= phase.name %></div>
+                <div class="text-white/60 text-xs mt-0.5"><%= phase.summary %></div>
+              </td>
+              <td class="p-3 text-right align-top text-white/90 tabular-nums"><%= phase.duration_weeks %></td>
+              <td class="p-3 text-right align-top text-white/90 tabular-nums">
+                <%= number_with_delimiter(phase.cost_eur) %> €
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <div class="mt-10 pt-6 border-t border-white/10">
+    <%= link_to "← New estimation", new_estimation_path,
+          class: "text-brand font-bold hover:text-brand-soft tracking-tight" %>
+  </div>
+</div>

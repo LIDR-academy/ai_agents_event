@@ -1,0 +1,6 @@
+# Query-embedding cache: derived, regenerable, and large. The reports are NOT ignored —
+# they are the before/after evidence the demo script cites.
+cache/
+# Scratch export of the structure being calibrated at the gate-1 pause; rewritten on
+# every run, so it is never worth committing. The frozen fixtures next to it are.
+live_structure.json

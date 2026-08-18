@@ -1,0 +1,35 @@
+<% content_for :title, "Añadir información al corpus" %>
+
+<div class="max-w-3xl mx-auto px-4 py-10">
+  <h1 class="text-2xl font-bold tracking-tighter text-white mb-1">Añadir información al corpus</h1>
+  <p class="text-white/50 text-sm mb-5">
+    Pega un presupuesto/proyecto nuevo (objeto JSON) o varios (array de objetos). Se indexará de
+    forma asíncrona; verás el progreso y el corpus crecer. Un documento ya presente se salta.
+  </p>
+
+  <% if flash[:alert] %>
+    <div class="p-3 rounded-md bg-danger/15 border border-danger/40 text-danger text-sm mb-5"><%= flash[:alert] %></div>
+  <% end %>
+
+  <%= form_with url: rag_index_runs_path, method: :post, local: true do %>
+    <div class="mb-4">
+      <label class="block text-xs uppercase tracking-tight text-white/50 font-bold mb-1">chunk_type</label>
+      <select name="chunk_type" class="bg-ink/40 border border-white/10 rounded-md text-white text-sm px-3 py-2">
+        <option value="budget_component" <%= "selected" if @chunk_type == "budget_component" %>>budget_component</option>
+        <option value="historical_task" <%= "selected" if @chunk_type == "historical_task" %>>historical_task</option>
+      </select>
+    </div>
+
+    <div class="mb-5">
+      <label class="block text-xs uppercase tracking-tight text-white/50 font-bold mb-1">Documento(s) JSON</label>
+      <textarea name="documents_json" rows="18"
+                class="w-full bg-ink/40 border border-white/10 rounded-md text-white/90 text-xs font-mono px-3 py-2 leading-relaxed"><%= @documents_json %></textarea>
+    </div>
+
+    <button type="submit"
+            class="inline-flex items-center px-5 py-2.5 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors text-sm">
+      Indexar en el corpus →
+    </button>
+    <%= link_to "Cancelar", rag_index_runs_path, class: "ml-3 text-white/60 font-bold hover:text-white text-sm" %>
+  <% end %>
+</div>

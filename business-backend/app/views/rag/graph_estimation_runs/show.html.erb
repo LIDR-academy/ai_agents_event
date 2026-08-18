@@ -1,0 +1,46 @@
+<% content_for :title, "Grafo de agentes · ejecución" %>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="flex items-center justify-between mb-2">
+    <h1 class="text-2xl font-bold tracking-tighter text-white">Estimación por grafo de agentes</h1>
+    <span class="text-xs font-mono text-white/40">run #<%= @run.id %> · <%= @run.estimation_id.first(8) %></span>
+  </div>
+
+  <%# The flow at a glance: two handovers, two human gates. %>
+  <div class="flex flex-wrap items-center gap-1.5 text-xs mb-6">
+    <% stages = [
+         ["classifier", true],
+         ["structure", true],
+         ["🧑 gate 1", @run.at_structure_gate? || @run.completed? || @run.at_final_gate?],
+         ["hours", @run.at_final_gate? || @run.completed?],
+         ["analysis", @run.at_final_gate? || @run.completed?],
+         ["🧑 gate 2", @run.completed?],
+         ["proposal", @run.proposal?]
+       ] %>
+    <% stages.each_with_index do |(label, done), i| %>
+      <% if i.positive? %><span class="text-white/30">→</span><% end %>
+      <span class="px-2.5 py-1 rounded-md font-bold <%= done ? "bg-success/15 border border-success/40 text-success-light" : "bg-ink/40 border border-white/10 text-white/50" %>">
+        <%= label %>
+      </span>
+    <% end %>
+  </div>
+
+  <div class="mt-6">
+    <% if @run.running? %>
+      <%= render "live_flow", run: @run %>
+    <% elsif @run.completed? %>
+      <%= render "completed", run: @run %>
+    <% elsif @run.at_final_gate? %>
+      <%= render "gate_final", run: @run %>
+    <% else %>
+      <%= render "gate_structure", run: @run %>
+    <% end %>
+  </div>
+
+  <div class="mt-10 pt-6 border-t border-white/10 flex items-center gap-4">
+    <%= link_to "← Nueva ejecución", new_rag_graph_estimation_run_path,
+          class: "text-brand font-bold hover:text-brand-soft tracking-tight text-sm" %>
+    <%= link_to "Histórico", rag_graph_estimation_runs_path,
+          class: "text-white/60 font-bold hover:text-white tracking-tight text-sm" %>
+  </div>
+</div>

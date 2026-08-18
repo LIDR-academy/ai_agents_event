@@ -1,0 +1,77 @@
+<% report = run.analysis_report %>
+
+<h2 class="text-lg font-bold tracking-tight text-white mb-1">🧑 Puerta humana 2 · Revisión final</h2>
+<p class="text-white/50 text-sm mb-5">
+  El grafo recuperó las horas por tarea (con recuperación agéntica de los casos dudosos) y el
+  agente de análisis redactó el informe de fiabilidad. Revisa, completa lo que falte y valida. Al
+  reanudar, el grafo puede redactar además una propuesta comercial.
+</p>
+
+<%# --- reliability report (analysis_agent) --- %>
+<% if run.analysis_report? %>
+  <div class="mb-6"><%= render "reliability_report", report: report %></div>
+<% end %>
+
+<%# --- the estimate (hours agent) — EDITABLE: complete/adjust per-task hours --- %>
+<%= form_with url: resume_final_rag_graph_estimation_run_path(run), method: :post, local: true,
+      data: { controller: "graph-hours-editor form-loading", action: "submit->form-loading#start" } do %>
+  <div class="rounded-md border border-white/10 overflow-hidden mb-4">
+    <div class="bg-ink/40 px-4 py-2 flex items-center justify-between gap-3 flex-wrap">
+      <span class="text-sm font-bold text-white/80">Estimación · completa o ajusta las horas por tarea</span>
+      <span class="text-sm font-mono text-white/70">
+        <span data-graph-hours-editor-target="totalDays">0</span> días ·
+        <span data-graph-hours-editor-target="totalHours">0</span> h
+      </span>
+    </div>
+
+    <div data-missing-banner class="hidden px-4 py-2 bg-brand/10 border-b border-brand/30 text-brand-soft text-xs">
+      Quedan <span data-graph-hours-editor-target="missing">0</span> tareas sin horas — complétalas antes de validar.
+    </div>
+
+    <div class="divide-y divide-white/10">
+      <% run.estimate_modules.each_with_index do |mod, m| %>
+        <div class="px-4 py-3">
+          <div class="text-sm font-bold text-white/90 mb-2"><%= mod.name %></div>
+          <%= hidden_field_tag "modules[#{m}][name]", mod.name %>
+          <ul class="space-y-1.5">
+            <% mod.tasks.each_with_index do |task, t| %>
+              <li data-task-row class="flex items-center justify-between gap-3 text-xs">
+                <div class="min-w-0">
+                  <div class="text-white/80 truncate"><%= task.name %></div>
+                  <span data-missing-hint class="text-danger text-xs <%= "hidden" if task.estimated_hours.present? %>">sin horas — complétalas</span>
+                </div>
+                <div class="flex items-center gap-1 shrink-0">
+                  <input type="number" min="0" step="0.5"
+                         name="modules[<%= m %>][tasks][<%= t %>][estimated_hours]"
+                         value="<%= format_hours(task.estimated_hours) %>" placeholder="—"
+                         data-graph-hours-editor-target="hours"
+                         data-action="input->graph-hours-editor#recompute"
+                         class="w-24 border <%= task.estimated_hours.present? ? "border-white/15" : "border-danger/60" %> rounded p-1.5 text-right text-white bg-ink/40 tabular-nums focus:outline-none focus:border-brand">
+                  <span class="text-white/40">h</span>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <p class="text-white/40 text-xs mb-4">
+    La estructura ya la aprobaste en la puerta 1; aquí solo completas/ajustas las horas. Al validar, el
+    servicio recalcula totales y fiabilidad con tus cifras.
+  </p>
+
+  <label class="flex items-center gap-2 mb-4 text-sm text-white/80">
+    <%= check_box_tag :want_proposal, "1", true, class: "rounded border-white/30 bg-ink/40 text-brand focus:ring-brand" %>
+    Redactar además una propuesta comercial (agente de propuesta · bonus)
+  </label>
+  <button type="submit" data-form-loading-target="submit" data-disable-with="false"
+          class="inline-flex items-center px-5 py-2.5 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors text-sm">
+    <span data-form-loading-target="label">Validar y finalizar →</span>
+    <svg data-form-loading-target="spinner" class="hidden ml-2 h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+    </svg>
+  </button>
+<% end %>

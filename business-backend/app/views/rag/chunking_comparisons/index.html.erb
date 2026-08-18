@@ -1,0 +1,54 @@
+<% content_for :title, "Histórico · Chunking Lab" %>
+
+<div class="max-w-5xl mx-auto px-4 py-8">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold tracking-tighter text-white">Histórico de comparativas</h1>
+    <%= link_to "Nueva comparativa", new_rag_chunking_comparison_path,
+          class: "inline-flex items-center px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+  </div>
+
+  <% if @comparisons.empty? %>
+    <div class="p-6 rounded-md bg-ink/30 border border-white/10 text-white/60 text-sm">
+      Aún no hay comparativas. Lanza la primera desde el Chunking Lab — los runs se guardan
+      aquí para revisitarlos sin re-pagar las estrategias LLM.
+    </div>
+  <% else %>
+    <div class="rounded-md border border-white/10 overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-ink/40 text-white/70">
+          <tr>
+            <th class="text-left p-3 font-bold tracking-tight">Fecha</th>
+            <th class="text-left p-3 font-bold tracking-tight">Estrategias</th>
+            <th class="text-right p-3 font-bold tracking-tight">Consultas</th>
+            <th class="text-right p-3 font-bold tracking-tight">top_k</th>
+            <th class="text-right p-3 font-bold tracking-tight">Coste $</th>
+            <th class="text-right p-3 font-bold tracking-tight">Duración</th>
+            <th class="p-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/10">
+          <% @comparisons.each do |comparison| %>
+            <tr>
+              <td class="p-3 align-top text-white/70 whitespace-nowrap"><%= l comparison.created_at, format: :short %></td>
+              <td class="p-3 align-top">
+                <div class="flex flex-wrap gap-1">
+                  <% comparison.strategy_labels.each do |label| %>
+                    <span class="px-2 py-0.5 rounded bg-brand/20 text-brand text-xs font-bold tracking-tight"><%= label %></span>
+                  <% end %>
+                </div>
+              </td>
+              <td class="p-3 text-right align-top text-white/90 tabular-nums"><%= comparison.queries.size %></td>
+              <td class="p-3 text-right align-top text-white/70 tabular-nums"><%= comparison.top_k %></td>
+              <td class="p-3 text-right align-top text-white/90 tabular-nums">$<%= sprintf("%.4f", comparison.cost_total_usd) %></td>
+              <td class="p-3 text-right align-top text-white/70 tabular-nums"><%= comparison.duration_seconds %> s</td>
+              <td class="p-3 text-right align-top">
+                <%= link_to "Ver →", rag_chunking_comparison_path(comparison),
+                      class: "font-bold tracking-tight text-brand hover:text-brand-soft" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

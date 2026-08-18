@@ -1,0 +1,71 @@
+==============================================================================
+SESSION 14 — SUPERVISOR MULTI-AGENT RUN
+==============================================================================
+
+ROUTING (supervisor decisions)
+------------------------------------------------------------------------------
+  1. supervisor → requirements_extractor   [llm]  The state has a transcript but lacks extracted requirements and components, making the req
+  2. supervisor → budget_searcher          [llm]  The state has components classified and needs budget matches, so the budget_searcher can n
+  3. supervisor → estimate_generator       [llm]  The state has the budget_matches but not the estimate; the estimate_generator is needed to
+  4. supervisor → coherence_validator      [llm]  The estimate has been produced but not yet validated, making the coherence_validator the n
+  5. supervisor → finish                   [llm]  The estimate has been produced and validated; no further actions are needed.
+
+TOOL PRIVILEGE (declared allowlists)
+------------------------------------------------------------------------------
+  supervisor               : (no tools)
+  requirements_extractor   : (no tools)
+  budget_searcher          : search_budgets
+  estimate_generator       : derive_task_hours
+  coherence_validator      : validate_estimate
+
+AUDIT TRAIL (agent_contributions)
+------------------------------------------------------------------------------
+  [  ok  ] requirements_extractor   extract_requirements         10 requirements extracted from the transcript                (-, 2861ms)
+  [  ok  ] requirements_extractor   classify_components          9 components: Telemetry Data Collection, End-to-End Encrypti (-, 1659ms)
+  [  ok  ] budget_searcher          tool:search_budgets          2 historical items for 'Telemetry Data Collection (backend)' (0b9c8325b9a6, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          2 historical items for 'End-to-End Encryption with QKD (back (f594f5bd354b, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          1 historical items for 'Customs Reporting Interface (fronten (055f560908ac, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          1 historical items for 'Antenna Status Display Panel (fronte (fad9e602b5eb, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          no historical items for 'System Certification Management (in (23cf51a0718d, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          no historical items for 'User Interface Localization (fronte (019fabda11f9, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          4 historical items for 'Biometric Authentication System (int (5bef69ef18d4, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          2 historical items for 'User and Role Management (backend)'; (4eb5acb9540d, 0ms)
+  [  ok  ] budget_searcher          tool:search_budgets          2 historical items for 'Reporting Functionality (analytics)' (51904b46efaa, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Telemetry Data Collection': 1045h (reliability 0.45) from 2 (591516911e18, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'End-to-End Encryption with QKD': 1045h (reliability 0.45) f (dae99e88270c, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Customs Reporting Interface': 430h (reliability 0.5) from 1 (462317e8e363, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Antenna Status Display Panel': 560h (reliability 0.5) from  (db1a866e61f5, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Biometric Authentication System': 522h (reliability 0.313)  (ec994feb6a27, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'User and Role Management': 1045h (reliability 0.45) from 2  (a51a4096edc4, 0ms)
+  [  ok  ] estimate_generator       tool:derive_task_hours       'Reporting Functionality': 488h (reliability 0.483) from 2 a (d18404a21bca, 0ms)
+  [  ok  ] estimate_generator       consolidate_estimate         total 675d over 9 components (confidence medium)             (-, 3785ms)
+  [  ok  ] coherence_validator      tool:validate_estimate       2 issue(s) found                                             (f1f4c6703e8f, 0ms)
+  [  ok  ] human                    review_decision              human approve: auto-approved by the S14 runner               (-, -)
+  [  ok  ] persistence_agent        tool:save_estimate           estimate persisted (guarded, human-authorised)               (7d44687aaf1b, 0ms)
+
+HUMAN REVIEW
+------------------------------------------------------------------------------
+  triggered: YES
+    - confidence 0.27 is below the 0.60 threshold
+    - an irreversible save_estimate is queued; the human pause authorises the write
+  decision : approve
+
+ESTIMATE
+------------------------------------------------------------------------------
+  Telemetry Data Collection [backend]                  145d
+  End-to-End Encryption with QKD [backend]             145d
+  Customs Reporting Interface [frontend]                54d
+  Antenna Status Display Panel [frontend]               70d
+  System Certification Management [infrastructure]   — (unbudgeted)
+  User Interface Localization [frontend]     — (unbudgeted)
+  Biometric Authentication System [integration]              54d
+  User and Role Management [backend]                   145d
+  Reporting Functionality [analytics]                   62d
+  TOTAL                                                675d
+  status = validated · model confidence = medium
+  persistence = persisted
+
+ISSUES
+------------------------------------------------------------------------------
+  - 'System Certification Management [infrastructure]' has no historical reference (unbudgeted).
+  - 'User Interface Localization [frontend]' has no historical reference (unbudgeted).

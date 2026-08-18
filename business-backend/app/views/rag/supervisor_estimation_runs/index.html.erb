@@ -1,0 +1,91 @@
+<% content_for :title, "Supervisor · bandeja de revisión" %>
+
+<div class="max-w-5xl mx-auto px-4 py-10">
+  <div class="flex items-center justify-between mb-2">
+    <h1 class="text-3xl font-bold tracking-tighter text-white">Bandeja de revisión</h1>
+    <%= link_to "Nueva estimación", new_rag_supervisor_estimation_run_path,
+          class: "inline-flex items-center px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+  </div>
+  <p class="text-white/50 text-sm mb-8">
+    El supervisor enruta solo. La mayoría de las estimaciones se completan sin pausar; aquí caen
+    únicamente las que no son lo bastante fiables como para ir solas.
+  </p>
+
+  <h2 class="text-sm font-bold tracking-tight text-white/70 uppercase mb-3">
+    Esperando revisión (<%= @awaiting.size %>)
+  </h2>
+
+  <% if @awaiting.empty? %>
+    <p class="text-white/40 text-sm mb-10 rounded-md border border-white/10 p-4">
+      Nada pendiente. Todas las estimaciones pasaron los guardarraíles.
+    </p>
+  <% else %>
+    <div class="rounded-md border border-warning/30 overflow-hidden mb-10">
+      <table class="w-full text-sm">
+        <thead class="bg-ink/40 text-white/70">
+          <tr>
+            <th class="text-left p-3 font-bold tracking-tight">#</th>
+            <th class="text-left p-3 font-bold tracking-tight">Motivo</th>
+            <th class="text-left p-3 font-bold tracking-tight">Confianza</th>
+            <th class="text-right p-3 font-bold tracking-tight">Esperando desde</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/10">
+          <% @awaiting.each do |run| %>
+            <tr class="hover:bg-white/5">
+              <td class="p-3 font-mono">
+                <%= link_to "##{run.id}", rag_supervisor_estimation_run_path(run),
+                      class: "text-brand hover:text-brand-soft font-bold" %>
+              </td>
+              <td class="p-3 text-white/70"><%= run.review_reasons.first || "—" %></td>
+              <td class="p-3">
+                <% if run.confidence_pct %>
+                  <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-warning/15 border border-warning/40 text-warning">
+                    <%= run.confidence_pct %>%
+                  </span>
+                <% else %>
+                  <span class="text-white/40">—</span>
+                <% end %>
+              </td>
+              <td class="p-3 text-right text-white/50"><%= time_ago_in_words(run.created_at) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <h2 class="text-sm font-bold tracking-tight text-white/70 uppercase mb-3">Últimas ejecuciones</h2>
+
+  <% if @recent.empty? %>
+    <p class="text-white/50">Aún no hay ejecuciones. Empieza una nueva.</p>
+  <% else %>
+    <div class="rounded-md border border-white/10 overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-ink/40 text-white/70">
+          <tr>
+            <th class="text-left p-3 font-bold tracking-tight">#</th>
+            <th class="text-left p-3 font-bold tracking-tight">Estado</th>
+            <th class="text-left p-3 font-bold tracking-tight">Total</th>
+            <th class="text-right p-3 font-bold tracking-tight">Creada</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/10">
+          <% @recent.each do |run| %>
+            <tr class="hover:bg-white/5">
+              <td class="p-3 font-mono">
+                <%= link_to "##{run.id}", rag_supervisor_estimation_run_path(run),
+                      class: "text-brand hover:text-brand-soft font-bold" %>
+              </td>
+              <td class="p-3"><%= render "status_badge", run: run %></td>
+              <td class="p-3 text-white/70">
+                <%= run.estimate? ? "#{run.total_engineer_days}d" : "—" %>
+              </td>
+              <td class="p-3 text-right text-white/50"><%= run.created_at&.strftime("%d/%m %H:%M") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

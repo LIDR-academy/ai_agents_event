@@ -1,0 +1,14 @@
+<%# One badge for the run's status, shared by the inbox and the detail screen. %>
+<%
+  classes, label =
+    if run.awaiting_review?
+      [ "bg-warning/15 border border-warning/40 text-warning", "esperando revisión" ]
+    elsif run.rejected?
+      [ "bg-danger/15 border border-danger/40 text-danger", "rechazada" ]
+    elsif run.validated?
+      [ "bg-success/15 border border-success/40 text-success-light", "validada" ]
+    else
+      [ "bg-ink/40 border border-white/10 text-white/70", run.status || run.run_state ]
+    end
+%>
+<span class="px-2.5 py-0.5 rounded-md text-xs font-bold <%= classes %>"><%= label %></span>

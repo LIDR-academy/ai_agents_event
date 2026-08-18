@@ -1,0 +1,35 @@
+<div class="max-w-6xl mx-auto py-10 px-4">
+  <div class="flex items-baseline justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold tracking-tighter text-white">Conversational estimation</h1>
+      <p class="text-sm text-white/60 mt-1">Refine scope across turns. Upload PDFs or Word docs as supporting material.</p>
+    </div>
+    <%= link_to "Transactional mode", new_estimation_path,
+          class: "text-xs font-bold tracking-tight text-white/60 hover:text-brand" %>
+  </div>
+
+  <% if flash[:alert].present? %>
+    <div class="mb-6 p-4 rounded-md bg-brand/15 border border-brand text-brand-soft">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+  <% if flash[:notice].present? %>
+    <div class="mb-6 p-4 rounded-md bg-success-light/15 border border-success-light text-white">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-8">
+      <%= render "form", request: @request, chat_session: @chat_session %>
+
+      <% if @latest_estimation.present? %>
+        <%= render "estimation_result", estimation: @latest_estimation %>
+      <% end %>
+    </div>
+
+    <div>
+      <%= render "metadata_panel", chat_session: @chat_session, metadata: @latest_metadata %>
+    </div>
+  </div>
+</div>

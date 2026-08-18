@@ -1,0 +1,52 @@
+Estimator API: http://ai-service:8000
+Corpus: 17 budgets — 17 ingested, 0 already present.
+
+[1/5] Componente directo conocido (sanity check)
+    query: "REST API development with JWT authentication for financial sector"
+    search_time_ms: 243
+    chunk_id  distance  chunk_type          content
+           5    0.4108  budget_component    [Project: Mobile banking API with OAuth 2.0 authentication and PSD2 compliance] [Client sector: finance | Year: 2024 | M
+           6    0.4760  budget_component    [Project: Mobile banking API with OAuth 2.0 authentication and PSD2 compliance] [Client sector: finance | Year: 2024 | M
+           7    0.4982  budget_component    [Project: Mobile banking API with OAuth 2.0 authentication and PSD2 compliance] [Client sector: finance | Year: 2024 | M
+           8    0.5122  budget_component    [Project: Mobile banking API with OAuth 2.0 authentication and PSD2 compliance] [Client sector: finance | Year: 2024 | M
+          13    0.5257  budget_component    [Project: Real-time payments gateway with fraud detection and reconciliation] [Client sector: finance | Year: 2023 | Mai
+
+[2/5] Reformulación semántica (mismo concepto, otro vocabulario)
+    query: "secure backend service with token-based access control for banking applications"
+    search_time_ms: 166
+    chunk_id  distance  chunk_type          content
+           5    0.4075  budget_component    [Project: Mobile banking API with OAuth 2.0 authentication and PSD2 compliance] [Client sector: finance | Year: 2024 | M
+           6    0.4557  budget_component    [Project: Mobile banking API with OAuth 2.0 authentication and PSD2 compliance] [Client sector: finance | Year: 2024 | M
+           7    0.4774  budget_component    [Project: Mobile banking API with OAuth 2.0 authentication and PSD2 compliance] [Client sector: finance | Year: 2024 | M
+           8    0.5353  budget_component    [Project: Mobile banking API with OAuth 2.0 authentication and PSD2 compliance] [Client sector: finance | Year: 2024 | M
+          13    0.5363  budget_component    [Project: Real-time payments gateway with fraud detection and reconciliation] [Client sector: finance | Year: 2023 | Mai
+
+[3/5] Dominio distinto (no debería estar en el corpus)
+    query: "mobile application for restaurant reservations"
+    search_time_ms: 302
+    chunk_id  distance  chunk_type          content
+          28    0.5690  budget_component    [Project: Grocery delivery app with slot booking and route optimization] [Client sector: ecommerce | Year: 2024 | Main t
+          35    0.5810  budget_component    [Project: Patient appointment and telemedicine platform with HL7/FHIR integration] [Client sector: healthcare | Year: 20
+          30    0.5861  budget_component    [Project: Grocery delivery app with slot booking and route optimization] [Client sector: ecommerce | Year: 2024 | Main t
+          29    0.6048  budget_component    [Project: Grocery delivery app with slot booking and route optimization] [Client sector: ecommerce | Year: 2024 | Main t
+           8    0.6514  budget_component    [Project: Mobile banking API with OAuth 2.0 authentication and PSD2 compliance] [Client sector: finance | Year: 2024 | M
+
+[4/5] Consulta ambigua (sin match dominante)
+    query: "integration with external system"
+    search_time_ms: 314
+    chunk_id  distance  chunk_type          content
+          49    0.5979  budget_component    [Project: Factory IoT telemetry and predictive maintenance system] [Client sector: industrial | Year: 2024 | Main tech: 
+          41    0.5980  budget_component    [Project: Pharmacy inventory and prescription fulfillment system] [Client sector: healthcare | Year: 2023 | Main tech: j
+          58    0.6021  budget_component    [Project: Decomposition of a monolithic core banking platform into domain services] [Client sector: finance | Year: 2024
+          15    0.6029  budget_component    [Project: Real-time payments gateway with fraud detection and reconciliation] [Client sector: finance | Year: 2023 | Mai
+          54    0.6151  budget_component    [Project: Energy grid monitoring and demand-response platform] [Client sector: industrial | Year: 2024 | Main tech: java
+
+[5/5] Consulta muy específica (vocabulario técnico preciso)
+    query: "migration from monolith to microservices architecture using Kubernetes"
+    search_time_ms: 269
+    chunk_id  distance  chunk_type          content
+          58    0.5617  budget_component    [Project: Decomposition of a monolithic core banking platform into domain services] [Client sector: finance | Year: 2024
+          57    0.6221  budget_component    [Project: Decomposition of a monolithic core banking platform into domain services] [Client sector: finance | Year: 2024
+          54    0.6678  budget_component    [Project: Energy grid monitoring and demand-response platform] [Client sector: industrial | Year: 2024 | Main tech: java
+          52    0.6820  budget_component    [Project: Warehouse management system with automated guided vehicle coordination] [Client sector: industrial | Year: 202
+          38    0.6888  budget_component    [Project: Remote patient monitoring with wearable data ingestion and alerts] [Client sector: healthcare | Year: 2024 | M

@@ -1,0 +1,202 @@
+# =============================================================================
+# Proyecto 2 — orquestación completa (Sesión 15)
+# =============================================================================
+# Un solo comando levanta el sistema entero:
+#
+#     cp .env.example .env      # rellena OPENAI_API_KEY y AI_SERVICE_TOKEN
+#     docker compose up --build
+#
+# Topología y frontera de seguridad:
+#
+#     host :3000
+#        │
+#        ▼
+#   business-backend ──────► ai-service ──────► vector-db   (pgvector)
+#     (Rails)          red     (FastAPI)   red      │
+#        │           interna               └────────► redis  (cachés CAG)
+#        ▼
+#     postgres  (relacional)
+#
+# **business-backend es el ÚNICO servicio con `ports:`.** El servicio IA y las
+# dos bases de datos no publican nada al host: solo son alcanzables por nombre
+# de servicio dentro de la red interna de compose. Si necesitas depurar contra
+# el 8000 desde el host, usa el override de desarrollo:
+#
+#     docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+#
+# Antes de la S15 este fichero era solo un `include:` de dos compose de
+# subproyecto. Se aplanó a propósito: `include:` obligaba a nombres únicos entre
+# ficheros y, sobre todo, arrancar desde una subcarpeta creaba OTRO proyecto de
+# compose con volúmenes distintos. Con un único fichero en la raíz esa trampa
+# desaparece.
+
+services:
+  # ---------------------------------------------------------------------------
+  # Backend de negocio (Rails) — único punto de entrada público
+  # ---------------------------------------------------------------------------
+  business-backend:
+    build: ./business-backend
+    container_name: business-backend
+    ports:
+      - "3000:3000"
+
+    env_file:
+      - .env
+
+    environment:
+      # Base de datos relacional (servicio `postgres` de esta misma red).
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USER: ${POSTGRES_USER:-postgres}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      RAILS_ENV: development
+      # El servicio IA se resuelve por NOMBRE DE SERVICIO, nunca por localhost:
+      # dentro de la red de compose cada contenedor es su propio localhost.
+      ESTIMATOR_API_BASE_URL: http://ai-service:8000
+      # Las llamadas con transcripciones largas tardan 1-2 min.
+      ESTIMATOR_AI_TIMEOUT: "180"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      ai-service:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/up"]
+      interval: 30s
+      timeout: 5s
+      start_period: 90s
+      retries: 5
+
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Servicio IA (FastAPI) — SIN `ports:` A PROPÓSITO
+  # ---------------------------------------------------------------------------
+  # No añadas `ports:` aquí. Que el 8000 no esté publicado es justamente la
+  # propiedad que se verifica en docs/deployment-local.md (comprobación 3): el
+  # servicio IA solo se alcanza desde dentro de la red, y además exige el
+  # X-Service-Token en todo salvo /health.
+  ai-service:
+    build: ./ai-service
+    container_name: ai-service
+
+    env_file:
+      - .env
+
+    environment:
+      # Sobrescriben lo que traiga el .env: esos valores están pensados para
+      # ejecutar uvicorn en el host, no dentro de la red de compose.
+      REDIS_URL: redis://redis:6379
+      DATABASE_URL: postgresql+psycopg://${VECTOR_DB_USER:-estimator}:${VECTOR_DB_PASSWORD:-estimator}@vector-db:5432/${VECTOR_DB_NAME:-estimator}
+
+    depends_on:
+      redis:
+        condition: service_healthy
+      vector-db:
+        condition: service_healthy
+
+    # curl no viene en las imágenes slim; se usa la stdlib de Python.
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 40s
+      retries: 3
+
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Base de datos relacional — datastore del backend de negocio
+  # ---------------------------------------------------------------------------
+  postgres:
+    image: postgres:16-alpine
+    container_name: business-backend-postgres
+
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      # La BD de desarrollo se crea en el primer arranque; la de test la crea
+      # `bin/rails db:prepare` desde el entrypoint.
+      POSTGRES_DB: ${POSTGRES_DB:-estimator_web_development}
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Base de datos vectorial (pgvector) — datastore del servicio IA
+  # ---------------------------------------------------------------------------
+  # Aquí la BBDD vectorial y la relacional del servicio IA son el MISMO motor:
+  # pgvector es una extensión de Postgres, así que los embeddings viven en una
+  # columna `vector` junto a los datos normales. No hace falta un Qdrant aparte.
+  vector-db:
+    image: pgvector/pgvector:pg16
+    container_name: vector-db
+
+    environment:
+      POSTGRES_USER: ${VECTOR_DB_USER:-estimator}
+      POSTGRES_PASSWORD: ${VECTOR_DB_PASSWORD:-estimator}
+      POSTGRES_DB: ${VECTOR_DB_NAME:-estimator}
+
+    # Tuning para construir índices HNSW (S08). Las construcciones paralelas
+    # usan memoria compartida, de ahí el shm_size. Valores conservadores para
+    # que funcionen en cualquier portátil; en producción escalan con la RAM.
+    shm_size: 1gb
+    command: >
+      postgres
+      -c shared_buffers=512MB
+      -c effective_cache_size=1536MB
+      -c work_mem=64MB
+      -c maintenance_work_mem=512MB
+      -c max_parallel_maintenance_workers=2
+
+    volumes:
+      # OJO: la clave del volumen sigue siendo `estimator_postgres_data` aunque
+      # el servicio se llame ahora vector-db. Renombrarla crearía un volumen
+      # VACÍO y habría que re-ingestar el corpus (embeddings ya pagados).
+      - estimator_postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${VECTOR_DB_USER:-estimator} -d ${VECTOR_DB_NAME:-estimator}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: unless-stopped
+
+  # ---------------------------------------------------------------------------
+  # Redis Stack — cachés CAG (exacta + semántica) e idempotencia
+  # ---------------------------------------------------------------------------
+  # Tiene que ser redis-stack, no el redis normal: la caché semántica usa
+  # RediSearch para las consultas vectoriales y la imagen `redis:7-alpine` no
+  # trae ese módulo.
+  redis:
+    image: redis/redis-stack:7.4.0-v0
+    container_name: redis
+
+    volumes:
+      - redis_data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+    restart: unless-stopped
+
+volumes:
+  # Se conservan los nombres previos a la S15 para no perder los datos ya
+  # existentes (el corpus ingestado en pgvector, sobre todo).
+  postgres_data:
+  estimator_postgres_data:
+  redis_data:

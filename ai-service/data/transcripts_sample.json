@@ -1,0 +1,108 @@
+[
+  {
+    "transcript_id": "TR-2024-001",
+    "project": "FintechCorp mobile banking",
+    "meeting_date": "2024-02-14",
+    "participants": ["Ana (PM)", "Client CTO", "Backend Lead"],
+    "segments": [
+      {
+        "segment_id": "S1",
+        "topic": "Authentication scope",
+        "speakers": ["Client CTO", "Backend Lead"],
+        "text": "The client confirmed they need OAuth 2.0 authentication for the mobile banking app, with PSD2 strong customer authentication (SCA) for every payment initiation. Backend Lead noted that token rotation and refresh-token revocation must be in scope from day one."
+      },
+      {
+        "segment_id": "S2",
+        "topic": "Transaction ledger",
+        "speakers": ["Client CTO", "Ana (PM)"],
+        "text": "We discussed a double-entry transaction ledger as the source of truth for balances. The client wants an immutable audit trail and reconciliation jobs. Ana flagged this is similar to the ledger we built for a previous payments gateway project."
+      },
+      {
+        "segment_id": "S3",
+        "topic": "Timeline and constraints",
+        "speakers": ["Client CTO"],
+        "text": "The CTO asked how much the authentication and ledger work would cost and how many engineer-days it usually takes. They are targeting a regulated launch in Spain under BdE supervision."
+      }
+    ]
+  },
+  {
+    "transcript_id": "TR-2024-002",
+    "project": "ShopFlow headless commerce",
+    "meeting_date": "2024-03-20",
+    "participants": ["Marc (PM)", "Client Product Owner", "Frontend Lead"],
+    "segments": [
+      {
+        "segment_id": "S1",
+        "topic": "Checkout and payments",
+        "speakers": ["Client Product Owner", "Frontend Lead"],
+        "text": "The client wants a headless storefront with a Stripe Connect checkout for marketplace vendor payouts. They explicitly named Stripe as the payment processor and asked about split payments and KYC onboarding for sellers."
+      },
+      {
+        "segment_id": "S2",
+        "topic": "Catalog and recommendations",
+        "speakers": ["Client Product Owner"],
+        "text": "Discussion covered a faceted product catalog, shopping cart, and personalized product recommendations. The Product Owner wants recommendations based on browsing history, not just best-sellers."
+      },
+      {
+        "segment_id": "S3",
+        "topic": "Tech stack",
+        "speakers": ["Frontend Lead"],
+        "text": "Frontend Lead proposed a Node backend with a React storefront. The client mentioned their current site is an old AngularJS app they want to retire."
+      }
+    ]
+  },
+  {
+    "transcript_id": "TR-2023-003",
+    "project": "MedConnect telemedicine",
+    "meeting_date": "2023-09-10",
+    "participants": ["Lucia (PM)", "Clinical Director", "Integration Engineer"],
+    "segments": [
+      {
+        "segment_id": "S1",
+        "topic": "Clinical integration",
+        "speakers": ["Clinical Director", "Integration Engineer"],
+        "text": "The telemedicine platform must integrate with hospital systems over HL7 and FHIR. The Clinical Director stressed that clinical records and appointment scheduling have to stay in sync with the existing EHR."
+      },
+      {
+        "segment_id": "S2",
+        "topic": "Video consultations",
+        "speakers": ["Clinical Director"],
+        "text": "Patients need video consultations with waiting rooms and a scheduling calendar. The client asked whether we had estimated a similar appointment scheduling and video consultation system before."
+      }
+    ]
+  },
+  {
+    "transcript_id": "TR-2022-004",
+    "project": "FactoryOps industrial IoT",
+    "meeting_date": "2022-05-05",
+    "participants": ["Pablo (PM)", "Plant Manager", "Data Engineer"],
+    "segments": [
+      {
+        "segment_id": "S1",
+        "topic": "SAP integration",
+        "speakers": ["Plant Manager", "Data Engineer"],
+        "text": "The factory wants sensor telemetry ingestion feeding predictive maintenance, with results pushed back into SAP for work-order creation. The Plant Manager was specific that the integration with SAP must use IDoc/BAPI, not a custom flat-file export."
+      },
+      {
+        "segment_id": "S2",
+        "topic": "Real-time monitoring",
+        "speakers": ["Data Engineer"],
+        "text": "Real-time equipment monitoring dashboards over a time-series store. The Data Engineer asked how much the SAP integration component had cost on past industrial projects."
+      }
+    ]
+  },
+  {
+    "transcript_id": "TR-2019-005",
+    "project": "LegacyBank frontend modernization",
+    "meeting_date": "2019-06-01",
+    "participants": ["Sara (PM)", "Client Architect"],
+    "segments": [
+      {
+        "segment_id": "S1",
+        "topic": "AngularJS migration",
+        "speakers": ["Client Architect"],
+        "text": "The bank's customer portal is built on AngularJS 1.x and needs modernization. The Architect wants a phased migration to a modern component framework. This is an old engagement kept for historical reference."
+      }
+    ]
+  }
+]

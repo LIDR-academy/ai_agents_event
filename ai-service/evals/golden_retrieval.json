@@ -1,0 +1,64 @@
+{
+  "description": "Session 10 golden set for retrieval evaluation. Project descriptions and cross-collection questions, each hand-annotated with the documents that are genuinely relevant. Q1–Q5 are budget-only (graded over data/budgets_sample.json) and keep the original relevant_budget_ids; Q6–Q8 span the multi-index corpus (budgets + transcripts + technical docs) and use relevant_source_ids. A retrieved chunk counts as relevant iff its source_id (budget_id / transcript_id / doc_id) is in the relevant set. The distractors are deliberately cross-sector or cross-collection 'similar but irrelevant' documents — the exact failure modes this session attacks (averaged multi-topic queries, the dominant collection flooding the top-k, lexical identifiers diluted by embeddings). Annotation criterion: a document is relevant when it directly addresses the asked-for functionality/topic, not merely shares sector or vocabulary.",
+  "corpus": "data/budgets_sample.json + data/transcripts_sample.json + data/technical_docs_sample.json",
+  "chunk_types": null,
+  "k": 5,
+  "queries": [
+    {
+      "id": "Q1",
+      "query": "Mobile banking application with OAuth2 authentication, PSD2 open banking compliance, strong customer authentication and a transaction ledger.",
+      "relevant_budget_ids": ["BUD-2024-001", "BUD-2024-003"],
+      "relevant_source_ids": ["BUD-2024-001", "BUD-2024-003"],
+      "note": "Fintech auth + payments. Trap: BUD-2024-006 (e-commerce marketplace vendor payouts) is 'payments-like' but irrelevant for a banking auth project."
+    },
+    {
+      "id": "Q2",
+      "query": "Headless e-commerce storefront with a product catalog, shopping cart checkout and personalized product recommendations.",
+      "relevant_budget_ids": ["BUD-2024-005", "BUD-2024-006", "BUD-2024-007", "BUD-2024-017"],
+      "relevant_source_ids": ["BUD-2024-005", "BUD-2024-006", "BUD-2024-007", "BUD-2024-017"],
+      "note": "E-commerce storefront/catalog/checkout. Trap: finance payment budgets (BUD-2024-003) and healthcare scheduling are close in topic words but wrong domain."
+    },
+    {
+      "id": "Q3",
+      "query": "Telemedicine platform for patient appointment scheduling and video consultations with HL7/FHIR integration and clinical records.",
+      "relevant_budget_ids": ["BUD-2024-009", "BUD-2024-010"],
+      "relevant_source_ids": ["BUD-2024-009", "BUD-2024-010"],
+      "note": "Healthcare telemedicine. Trap: BUD-2024-011 (pharmacy inventory) and BUD-2024-012 (clinical trials) share the healthcare sector but cover different functionality."
+    },
+    {
+      "id": "Q4",
+      "query": "Industrial IoT platform ingesting sensor telemetry for predictive maintenance and real-time equipment monitoring in a factory.",
+      "relevant_budget_ids": ["BUD-2024-013", "BUD-2024-015"],
+      "relevant_source_ids": ["BUD-2024-013", "BUD-2024-015"],
+      "note": "Industrial telemetry/monitoring. Trap: BUD-2024-014 (warehouse AGV coordination) is industrial but logistics, not telemetry-driven maintenance."
+    },
+    {
+      "id": "Q5",
+      "query": "Real-time payments gateway with fraud detection, transaction reconciliation and a double-entry ledger.",
+      "relevant_budget_ids": ["BUD-2024-003", "BUD-2024-001"],
+      "relevant_source_ids": ["BUD-2024-003", "BUD-2024-001"],
+      "note": "Fintech payments. Trap: BUD-2024-006 (e-commerce vendor payouts) and BUD-2024-007 (grocery delivery payments) are lexically near but wrong domain."
+    },
+    {
+      "id": "Q6",
+      "query": "What did the client say about the Stripe Connect checkout, and how much did marketplace vendor payouts cost?",
+      "relevant_budget_ids": ["BUD-2024-006"],
+      "relevant_source_ids": ["TR-2024-002", "BUD-2024-006", "DOC-PAYMENTS-API"],
+      "note": "Cross-collection: a meeting (transcript) + a budget + the payments doc all answer this. Routing should hit transcript + budget (+ technical_doc). Trap: a single budgets index would miss the transcript discussion entirely."
+    },
+    {
+      "id": "Q7",
+      "query": "How do we integrate predictive maintenance with SAP using IDoc/BAPI, and what was discussed about it?",
+      "relevant_budget_ids": ["BUD-2024-013", "BUD-2024-015"],
+      "relevant_source_ids": ["DOC-SAP-INTEGRATION", "TR-2022-004", "BUD-2024-013"],
+      "note": "Lexical identifiers (SAP, IDoc, BAPI) the embeddings dilute — hybrid search should lift the exact-match doc/transcript. Routing should span technical_doc + transcript + budget."
+    },
+    {
+      "id": "Q8",
+      "query": "Reference for OAuth 2.0 authorization-code flow with PKCE and PSD2 strong customer authentication.",
+      "relevant_budget_ids": [],
+      "relevant_source_ids": ["DOC-AUTH-RUNBOOK", "TR-2024-001"],
+      "note": "Documentation-shaped query: should route to technical_doc (and the auth meeting). Trap: budget components mention auth but do not answer a 'how-to/reference' question."
+    }
+  ]
+}

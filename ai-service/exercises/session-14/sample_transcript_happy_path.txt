@@ -1,0 +1,47 @@
+Reunión de descubrimiento — Proyecto "Portal de Proveedores"
+Cliente: Marta Iribarne (Directora de Compras) y Sergio Cuadrado (IT), Distribuciones Almenar
+Consultor: equipo de estimación
+Fecha: reunión inicial
+
+[00:00:05] Consultor: Buenos días. Contadnos qué necesitáis.
+
+[00:00:14] Marta: Es un proyecto acotado, no os asustéis. Queremos un portal donde nuestros
+proveedores puedan consultar sus pedidos y subir facturas. Hoy va todo por correo electrónico y se
+nos pierden cosas.
+
+[00:00:48] Consultor: ¿Cuántos proveedores?
+
+[00:00:52] Marta: Unos ciento cincuenta activos. Entran dos o tres veces por semana cada uno. No es
+un volumen alto.
+
+[00:01:20] Sergio: La primera pieza es un backend de negocio estándar: alta de proveedores, listado
+de pedidos, estados, y el flujo de subida y validación de facturas. Una API REST y una base de
+datos relacional. Nada exótico.
+
+[00:02:05] Consultor: ¿Y la parte visual?
+
+[00:02:10] Sergio: Un frontend web sencillo. Listados, filtros, formularios y la subida de ficheros.
+Responsive, porque algunos proveedores entran desde el móvil, pero no necesitamos app nativa.
+
+[00:02:50] Marta: Y necesitamos que se integre con nuestro ERP para volcar las facturas validadas.
+Usamos SAP, y para esto ya tenemos el conector montado de otro proyecto: es sincronizar el maestro
+de proveedores y empujar las facturas. Nuestro equipo nos ha dicho que es una integración de las
+habituales.
+
+[00:03:35] Consultor: ¿Autenticación?
+
+[00:03:40] Sergio: Login con usuario y contraseña, recuperación por correo, y roles: proveedor,
+gestor de compras y administrador. Lo estándar. Sin SSO por ahora.
+
+[00:04:15] Consultor: ¿Informes?
+
+[00:04:20] Marta: Un módulo de informes básico: facturas por proveedor y por periodo, y estado de
+pedidos. Exportable a Excel. Con eso vamos servidos.
+
+[00:05:00] Consultor: ¿El alcance está cerrado?
+
+[00:05:05] Marta: Sí. Lo hemos discutido internamente y esto es lo que necesitamos para este año.
+Si más adelante queremos más, será otro proyecto.
+
+[00:05:35] Sergio: Y no hay requisitos de certificación ni de rendimiento especiales. Es un portal
+interno para proveedores conocidos.

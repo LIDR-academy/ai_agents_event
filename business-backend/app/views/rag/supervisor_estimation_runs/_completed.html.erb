@@ -1,0 +1,102 @@
+<%# A finished run: the estimate, whether a human touched it, and any guardrail issues. %>
+<section class="rounded-md border border-white/10 p-5 mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-sm font-bold tracking-tight text-white/70 uppercase">Estimación</h2>
+    <% if run.confidence_pct %>
+      <span class="text-xs text-white/50">
+        Confianza <span class="font-bold text-white/80"><%= run.confidence_pct %>%</span>
+      </span>
+    <% end %>
+  </div>
+
+  <% if run.estimate_components.blank? %>
+    <p class="text-white/40 text-sm">El flujo no llegó a producir una estimación.</p>
+  <% else %>
+    <table class="w-full text-sm">
+      <thead class="text-white/50 text-xs">
+        <tr>
+          <th class="text-left py-2 font-bold">Componente</th>
+          <th class="text-left py-2 font-bold">Justificación</th>
+          <th class="text-right py-2 font-bold">Días</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-white/5">
+        <% run.estimate_components.each do |component| %>
+          <tr>
+            <td class="py-2 text-white/90"><%= component["name"] %></td>
+            <td class="py-2 text-white/50 text-xs">
+              <%= truncate(component["rationale"].to_s, length: 80) %>
+            </td>
+            <td class="py-2 text-right text-white/90">
+              <% if component["engineer_days"] %>
+                <%= component["engineer_days"] %>d
+              <% else %>
+                <span class="text-danger text-xs font-bold">sin presupuestar</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr class="border-t border-white/15">
+          <td class="py-2 font-bold text-white/80" colspan="2">Total</td>
+          <td class="py-2 text-right font-bold text-white text-lg"><%= run.total_engineer_days %>d</td>
+        </tr>
+      </tfoot>
+    </table>
+  <% end %>
+
+  <%# Session 14 (live) — competition: the synthesized RANGE, never an average. The
+      spread IS the signal — a wide bracket says the project carries structural
+      uncertainty. This whole block is read-only and the pattern is stack-agnostic: any
+      HTTP client reading the same estimate JSONB can render it. %>
+  <% if run.estimate_range.present? %>
+    <div class="mt-4 pt-4 border-t border-white/10">
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-bold tracking-tight text-white/60 uppercase">
+          Rango (competición conservador ↔ agresivo)
+        </span>
+        <span class="text-white font-bold">
+          <%= run.estimate_range["low"] %>–<%= run.estimate_range["high"] %>d
+        </span>
+      </div>
+      <% if run.open_questions.any? %>
+        <p class="text-white/50 text-xs mt-2 mb-1">Preguntas abiertas que estrecharían el rango:</p>
+        <ul class="space-y-1">
+          <% run.open_questions.each do |question| %>
+            <li class="text-sm text-white/70 flex gap-2">
+              <span class="text-white/30">·</span><span><%= question %></span>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+</section>
+
+<% if run.human_decision.present? %>
+  <section class="rounded-md border border-white/10 p-5 mb-6">
+    <h2 class="text-sm font-bold tracking-tight text-white/70 uppercase mb-3">Decisión humana</h2>
+    <p class="text-sm text-white/80">
+      <span class="font-bold"><%= run.human_decision["decision"] %></span>
+      <% if run.human_decision["note"].present? %>
+        <span class="text-white/50">· <%= run.human_decision["note"] %></span>
+      <% end %>
+    </p>
+  </section>
+<% end %>
+
+<% if run.errors_list.present? %>
+  <section class="rounded-md border border-warning/30 p-5 mb-6">
+    <h2 class="text-sm font-bold tracking-tight text-warning uppercase mb-3">
+      Avisos de los guardarraíles
+    </h2>
+    <ul class="space-y-1.5">
+      <% run.errors_list.each do |issue| %>
+        <li class="text-sm text-white/70 flex gap-2">
+          <span class="text-warning">·</span><span><%= issue %></span>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+<% end %>

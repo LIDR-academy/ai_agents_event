@@ -1,0 +1,15 @@
+<previous_summary>
+{% if previous_summary %}
+{{ previous_summary }}
+{% else %}
+(no previous summary — this is the first compression pass)
+{% endif %}
+</previous_summary>
+
+<evicted_messages>
+{% for message in evicted %}
+[{{ message.role }}] {{ message.content }}
+{% endfor %}
+</evicted_messages>
+
+Return the updated cumulative summary that integrates the evicted messages with whatever durable facts the previous summary already captured.

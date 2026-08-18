@@ -1,0 +1,119 @@
+<% estimate = run.estimate %>
+
+<div class="flex items-center gap-3 mb-5">
+  <h2 class="text-lg font-bold tracking-tight text-white">Flujo completado</h2>
+  <span class="px-2.5 py-0.5 rounded-md text-xs font-bold <%= run.status == "validated" ? "bg-success/15 border border-success/40 text-success-light" : "bg-brand/15 border border-brand text-brand-soft" %>">
+    <%= run.status || "—" %>
+  </span>
+</div>
+
+<% pricing = run.pricing %>
+
+<%# El precio es aritmética determinista sobre las horas que el grafo fundamentó: ningún
+    agente interviene en esta cifra. %>
+<% if pricing.priced? %>
+  <div class="grid sm:grid-cols-3 gap-3 mb-6">
+    <div class="rounded-md border border-white/10 bg-ink/30 px-4 py-3">
+      <div class="text-2xl font-bold text-white tabular-nums"><%= run.total_engineer_days %></div>
+      <div class="text-white/50 text-xs mt-0.5">jornadas</div>
+    </div>
+    <div class="rounded-md border border-white/10 bg-ink/30 px-4 py-3">
+      <div class="text-2xl font-bold text-white tabular-nums"><%= format_hours(run.total_engineer_hours) %></div>
+      <div class="text-white/50 text-xs mt-0.5">horas</div>
+    </div>
+    <div class="rounded-md border border-brand/50 bg-brand/10 px-4 py-3">
+      <div class="text-2xl font-bold text-brand tabular-nums">
+        <%= format_eur(pricing.total) %>
+      </div>
+      <div class="text-white/50 text-xs mt-0.5">precio</div>
+    </div>
+  </div>
+<% end %>
+
+<div class="rounded-md border border-white/10 overflow-hidden mb-6">
+  <div class="bg-ink/40 px-4 py-2 flex items-center justify-between">
+    <span class="text-sm font-bold text-white/80">Estimación validada</span>
+    <span class="text-sm font-mono text-white/70"><%= run.total_engineer_days %> días · <%= format_hours(run.total_engineer_hours) %> h</span>
+  </div>
+  <%# Cada módulo se despliega con sus tareas: es el mismo desglose que llevan el PDF y el
+      markdown, para que lo que se ve en pantalla y lo que se entrega coincidan. %>
+  <div class="divide-y divide-white/10">
+    <% run.estimate_modules.each do |mod| %>
+      <details class="group">
+        <summary class="px-4 py-2.5 flex items-center justify-between gap-3 cursor-pointer hover:bg-white/5 list-none">
+          <span class="text-sm text-white/80">
+            <span class="text-white/30 mr-1 group-open:hidden">▸</span><span class="text-white/30 mr-1 hidden group-open:inline">▾</span><%= mod.name %>
+          </span>
+          <span class="text-xs font-mono text-white/60">
+            <%= format_hours(mod.subtotal_hours) %>h · <%= mod.tasks.size %> tareas<%
+              %><% if pricing.priced? %> · <span class="text-white/80"><%= format_eur(mod.subtotal_cost) %></span><% end %>
+          </span>
+        </summary>
+        <ul class="bg-ink/20 px-4 py-2 space-y-1">
+          <% mod.tasks.each do |task| %>
+            <li class="flex items-baseline justify-between gap-3 text-xs">
+              <span class="text-white/60 min-w-0"><%= task.name %></span>
+              <span class="font-mono text-white/50 shrink-0 tabular-nums">
+                <%= format_hours(task.estimated_hours) %>h<%
+                  %><% if pricing.priced? %> · <%= format_eur(task.cost_eur) %><% end %>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+      </details>
+    <% end %>
+  </div>
+
+  <% if pricing.priced? %>
+    <div class="bg-ink/40 px-4 py-3 border-t border-white/10 space-y-1 text-sm">
+      <div class="flex items-center justify-between text-white/60">
+        <span><%= format_hours(pricing.hours) %> h × <%= pricing.rate_eur_per_hour %> €/h</span>
+        <span class="font-mono"><%= format_eur(pricing.base) %></span>
+      </div>
+      <% if pricing.contingency? %>
+        <div class="flex items-center justify-between text-white/60">
+          <span>Contingencia <%= pricing.contingency_pct %>%</span>
+          <span class="font-mono"><%= format_eur(pricing.contingency) %></span>
+        </div>
+      <% end %>
+      <div class="flex items-center justify-between text-white font-bold pt-1 border-t border-white/10">
+        <span>Total</span>
+        <span class="font-mono text-brand"><%= format_eur(pricing.total) %></span>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% if run.analysis_report? %>
+  <div class="mb-6"><%= render "reliability_report", report: run.analysis_report %></div>
+<% end %>
+
+<div class="rounded-md border border-white/10 bg-ink/30 p-5">
+  <div class="flex items-center justify-between gap-3 mb-3 flex-wrap">
+    <div class="text-xs uppercase tracking-tight font-bold text-white/50">Propuesta comercial · El Arquitecto</div>
+    <div class="flex items-center gap-2">
+      <% if run.proposal? %>
+        <%= link_to "Descargar PDF", proposal_pdf_rag_graph_estimation_run_path(run),
+              class: "inline-flex items-center px-3 py-1.5 bg-white/10 text-white font-bold rounded-md hover:bg-white/20 transition-colors text-xs" %>
+        <%= link_to "Markdown", proposal_md_rag_graph_estimation_run_path(run),
+              class: "inline-flex items-center px-3 py-1.5 bg-white/10 text-white font-bold rounded-md hover:bg-white/20 transition-colors text-xs" %>
+      <% end %>
+      <%= button_to (run.proposal? ? "Regenerar" : "Generar propuesta"),
+            generate_proposal_rag_graph_estimation_run_path(run), method: :post,
+            form: { data: { turbo: false } },
+            class: "inline-flex items-center px-3 py-1.5 bg-brand text-ink-dark font-bold rounded-md hover:bg-brand-strong cursor-pointer transition-colors text-xs" %>
+    </div>
+  </div>
+  <% if run.proposal? %>
+    <% if run.proposal_title.present? %>
+      <h3 class="text-white font-bold text-base mb-2"><%= run.proposal_title %></h3>
+    <% end %>
+    <%# proposal_prose, no proposal: es el único sitio donde se garantiza que no haya
+        sección de fiabilidad, y lo comparten pantalla, PDF y markdown. %>
+    <div class="prose prose-invert prose-sm max-w-none whitespace-pre-wrap text-white/80"><%= run.proposal_prose %></div>
+  <% else %>
+    <p class="text-white/50 text-sm">
+      No se generó propuesta en la puerta 2. El Arquitecto puede redactarla ahora desde la estimación validada.
+    </p>
+  <% end %>
+</div>

@@ -1,0 +1,6 @@
+[09:15:02] Javier Romero: Buenas. Estamos revisando el presupuesto BUDGET-2024-0002 firmado en marzo, código de cliente CLI-0078. Quería preguntar por el escalado de la integración con el ERP.
+[09:15:40] Diego Marín: Sí, lo tengo aquí. La fase de backend está cerrada. ¿Qué dudas tienes?
+[09:16:18] Javier Romero: Nuestra responsable de logística, Pilar Alonso, quiere meter el almacén de Zaragoza en el alcance. Eso son tres semanas más y un coste adicional que aún no hemos firmado.
+[09:17:05] Diego Marín: Entiendo. Te paso una adenda con detalle y la mando también a j.romero@betanorte.com y al alias de operaciones que me diste, ops-betanorte@betanorte.com.
+[09:17:35] Javier Romero: Perfecto. Una pregunta más sobre cumplimiento: ¿los logs de auditoría caen bajo el contrato marco o necesito una addenda LOPDGDD?
+[09:18:12] Diego Marín: Addenda específica. Te la preparo esta semana.

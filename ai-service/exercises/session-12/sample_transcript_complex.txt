@@ -1,0 +1,49 @@
+Reunión de descubrimiento — Proyecto "Plataforma logística RUTA"
+Cliente: Álvaro Sáenz (Director de Operaciones) y Nuria Prieto (IT Manager), TransPeninsular Logística
+Consultor: equipo de estimación
+Fecha: reunión inicial
+
+[00:00:08] Consultor: Gracias por venir. Contadnos la foto completa y luego bajamos al detalle.
+
+[00:00:20] Álvaro: Somos una empresa de logística y transporte. Queremos una plataforma nueva,
+RUTA, que unifique lo que hoy tenemos en cuatro sitios distintos. Es un proyecto grande, os aviso.
+Hay varias piezas que no tienen nada que ver entre sí.
+
+[00:00:52] Consultor: Perfecto, vamos pieza a pieza. Empecemos por el corazón.
+
+[00:01:00] Álvaro: La primera pieza es el backend de negocio: gestión de pedidos, asignación de
+rutas, seguimiento de envíos y el cálculo de tarifas. Es el núcleo. Tiene que exponer una API para
+todo lo demás. Hoy esto lo llevamos medio a mano y en hojas de cálculo, así que es de cero.
+
+[00:02:15] Nuria: Y ojo, tiene que integrarse con nuestro ERP. Usamos SAP. Necesitamos una
+integración con SAP para sincronizar facturación, clientes y el maestro de artículos. Eso es un
+mundo aparte: hay que mapear IDocs, montar la capa de middleware y gestionar reintentos. No lo
+subestiméis, que ya nos hemos quemado antes con integraciones de SAP.
+
+[00:03:40] Consultor: Anotado, integración con ERP SAP como componente propio. ¿Qué más?
+
+[00:03:48] Álvaro: La tercera pieza es una app móvil para los repartidores. Android e iOS. Tienen
+que ver su hoja de ruta del día, confirmar entregas con firma y foto, y funcionar sin cobertura —
+modo offline con sincronización cuando vuelve la conexión. Los repartidores no son técnicos, así
+que tiene que ser muy simple.
+
+[00:05:10] Nuria: Y la cuarta, que para dirección es la que más ilusión hace: un panel de
+analítica. Cuadros de mando con KPIs de entregas a tiempo, costes por ruta, incidencias. Dirección
+quiere ver tendencias y poder filtrar por zona y por cliente. Idealmente con alertas cuando algo se
+sale de lo normal.
+
+[00:06:30] Consultor: O sea, cuatro componentes bien diferenciados: backend de negocio con API,
+integración con SAP, app móvil para repartidores con modo offline, y un panel de analítica con
+cuadros de mando. ¿Prioridad o van a la vez?
+
+[00:06:55] Álvaro: El backend y la integración con SAP son lo primero, sin eso no hay nada. La app
+y la analítica pueden ir un poco después, pero las queremos todas en el alcance de la estimación.
+
+[00:07:30] Nuria: Sobre tecnología: no os casamos con nada, pero el equipo interno se maneja con
+Python y con React para el front. La app móvil nos da igual si es nativa o híbrida, lo que salga
+mejor. La base de datos que propongáis.
+
+[00:08:15] Consultor: Clarísimo. Os preparamos una estimación de esfuerzo por componente y un total,
+con las tarifas históricas de proyectos parecidos que tengamos.
+
+[00:08:28] Álvaro: Eso es justo lo que necesito para llevarlo a comité. Gracias.

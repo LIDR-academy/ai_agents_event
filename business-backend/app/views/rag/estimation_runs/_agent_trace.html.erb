@@ -1,0 +1,44 @@
+<%# Session 12 — the hand-written agent's reason→act→observe trace (STEP N),
+    carried inside the phase JSONB it drove. Rendered under the structure (phase 1)
+    and the hours (phase 2 recovery) steps. Locals:
+      trace         — a Rag::AgentTraceView (required)
+      title         — section heading (required)
+      empty_message — shown when the trace has zero steps (optional; nil = hide) %>
+<% empty_message = local_assigns.fetch(:empty_message, nil) %>
+<% if trace.steps.any? %>
+  <div class="mb-6">
+    <div class="flex items-center gap-2 text-xs uppercase tracking-tight text-white/50 font-bold mb-2">
+      <span><%= title %></span>
+      <span class="px-2 py-0.5 rounded bg-brand/15 text-brand-soft normal-case"><%= trace.total_count %> pasos</span>
+      <% if trace.search_count.positive? %>
+        <span class="px-2 py-0.5 rounded bg-ink/50 text-white/60 normal-case"><%= trace.search_count %> búsquedas</span>
+      <% end %>
+    </div>
+    <ol class="space-y-3">
+      <% trace.steps.each do |s| %>
+        <% tool_classes = case s.tool
+             when "search_budgets" then "text-brand-soft"
+             when "derive_task_hours" then "text-success-light"
+             when "validate_estimate" then "text-white"
+             when "propose_structure" then "text-brand"
+             else "text-white/70"
+           end %>
+        <li class="rounded-md border border-white/10 bg-ink/30 overflow-hidden">
+          <div class="flex items-center justify-between bg-ink/50 px-3 py-1.5">
+            <span class="font-mono text-xs font-bold text-white/80">STEP <%= s.step %></span>
+            <span class="font-mono text-xs font-bold <%= tool_classes %>"><%= s.tool %></span>
+          </div>
+          <div class="px-3 py-2 space-y-1.5 text-sm">
+            <p class="text-white/60"><span class="text-white/40 font-mono text-xs mr-1">reasoning:</span><%= s.reasoning %></p>
+            <p class="text-white/90 font-mono text-xs break-all"><span class="text-white/40 mr-1">action:</span><%= s.action %></p>
+            <p class="text-white/70"><span class="text-white/40 font-mono text-xs mr-1">observation:</span><%= s.observation %></p>
+          </div>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+<% elsif empty_message %>
+  <div class="mb-6 p-3 rounded-md bg-ink/30 border border-white/10 text-xs text-white/50">
+    <%= empty_message %>
+  </div>
+<% end %>

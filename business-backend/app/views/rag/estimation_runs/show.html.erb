@@ -1,0 +1,27 @@
+<% content_for :title, "RAG Wizard · estimación guiada" %>
+<% step = %w[transcript].include?(@step) ? "reformulation" : @step %>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="flex items-center justify-between mb-2">
+    <h1 class="text-2xl font-bold tracking-tighter text-white">Estimación guiada (RAG)</h1>
+    <span class="text-xs font-mono text-white/40">run #<%= @run.id %></span>
+  </div>
+  <p class="text-white/50 text-sm mb-6">
+    Transcripción → reformulación → generación de estructura (sin RAG) → revisión humana →
+    horas por búsqueda semántica (híbrido + reranking) → validación humana. Cada etapa llama a su
+    endpoint del servicio IA y puedes re-ejecutarla.
+  </p>
+
+  <%= render "progress", run: @run, step: step %>
+
+  <div class="mt-8">
+    <%= render "step_#{step}", run: @run %>
+  </div>
+
+  <div class="mt-10 pt-6 border-t border-white/10 flex items-center gap-4">
+    <%= link_to "← Nueva ejecución", new_rag_estimation_run_path,
+          class: "text-brand font-bold hover:text-brand-soft tracking-tight text-sm" %>
+    <%= link_to "Histórico", rag_estimation_runs_path,
+          class: "text-white/60 font-bold hover:text-white tracking-tight text-sm" %>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+Reunión de seguimiento - cliente legado (formato pre-2024, sin marcadores horarios)
+
+Carmen Vidal abre la sesión recordando que el presupuesto en curso es BUDGET-2024-0005 y que el código interno del cliente sigue siendo CLI-0288. La interlocutora principal por parte del proveedor es la responsable técnica, que toma nota de la conversación.
+
+Carmen comenta que tras la reunión del once de abril el alcance se amplió. El equipo de planta de Toledo necesita además un panel de control en tiempo real con métricas de OEE. Esto añade trabajo a la fase de implementación y obliga a actualizar el importe.
+
+El proveedor responde que el incremento es de unos dos mil euros y que se reflejará en una nueva versión del presupuesto. Carmen confirma que está alineada y pide que la documentación se mande a carmen.vidal@toledo-ind.es y en copia a su director financiero, Antonio Salgado, cuyo email es a.salgado@toledo-ind.es.
+
+Se cierra acordando que la próxima reunión la organizará Antonio Salgado tras la firma de la nueva versión.

@@ -1,0 +1,72 @@
+<%# Side panel showing the ProjectMetadata snapshot. Updated after each turn. %>
+<aside class="p-4 rounded-md bg-ink/30 border border-white/10 space-y-4">
+  <div>
+    <h3 class="text-xs uppercase tracking-tight text-white/50 font-bold mb-2">Conversation</h3>
+    <% if chat_session.persisted? %>
+      <p class="text-xs text-white/70 font-mono break-all"><%= chat_session.remote_session_id %></p>
+      <p class="text-xs text-white/50 mt-1">Turns: <%= chat_session.turn_count %></p>
+      <% snapshot = chat_session.remote_session_snapshot %>
+      <% if snapshot.present? %>
+        <div class="mt-2 space-y-1 text-xs text-white/70">
+          <% if snapshot["last_resolved_tier"].present? %>
+            <p>
+              Tier:
+              <span class="font-bold text-white"><%= snapshot["last_resolved_tier"] %></span>
+              <% if snapshot["last_tier_rule"].present? %>
+                <span class="text-white/50">(<%= snapshot["last_tier_rule"] %>)</span>
+              <% end %>
+            </p>
+          <% end %>
+          <% if (snapshot["anchors_count"] || 0).positive? %>
+            <p>Anchors kept: <span class="font-bold text-white"><%= snapshot["anchors_count"] %></span></p>
+          <% end %>
+          <% if (snapshot["summary_chars"] || 0).positive? %>
+            <p>Summary chars: <span class="font-bold text-white"><%= snapshot["summary_chars"] %></span></p>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-xs text-white/50">No active session</p>
+    <% end %>
+  </div>
+
+  <div>
+    <h3 class="text-xs uppercase tracking-tight text-white/50 font-bold mb-2">Project metadata</h3>
+    <% if metadata.values.compact.all? { |v| v.respond_to?(:empty?) ? v.empty? : v.nil? } %>
+      <p class="text-xs text-white/60 italic">No project context yet — send the first turn to populate.</p>
+    <% else %>
+      <dl class="text-sm space-y-2">
+        <% if metadata["project_name"].present? %>
+          <div>
+            <dt class="text-xs uppercase text-white/40 font-bold">Project</dt>
+            <dd class="text-white"><%= metadata["project_name"] %></dd>
+          </div>
+        <% end %>
+        <% if metadata["assumed_team_size"].present? %>
+          <div>
+            <dt class="text-xs uppercase text-white/40 font-bold">Team size</dt>
+            <dd class="text-white"><%= metadata["assumed_team_size"] %></dd>
+          </div>
+        <% end %>
+        <% if metadata["mentioned_technologies"].present? && !metadata["mentioned_technologies"].empty? %>
+          <div>
+            <dt class="text-xs uppercase text-white/40 font-bold">Technologies</dt>
+            <dd class="flex flex-wrap gap-1 mt-1">
+              <% metadata["mentioned_technologies"].each do |tech| %>
+                <span class="px-2 py-0.5 rounded bg-brand/20 text-brand text-xs font-bold tracking-tight">
+                  <%= tech %>
+                </span>
+              <% end %>
+            </dd>
+          </div>
+        <% end %>
+        <% if metadata["agreed_scope"].present? %>
+          <div>
+            <dt class="text-xs uppercase text-white/40 font-bold">Agreed scope</dt>
+            <dd class="text-white/90 text-xs leading-relaxed mt-1"><%= metadata["agreed_scope"] %></dd>
+          </div>
+        <% end %>
+      </dl>
+    <% end %>
+  </div>
+</aside>

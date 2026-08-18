@@ -1,0 +1,41 @@
+<%# The supervisor's decisions, in order. This is the pedagogical centrepiece of the
+    session: a routing decision nobody can inspect is an act of faith, so every one of
+    them is surfaced with the model's own reason and WHO actually decided —
+    llm (the model's choice stood) / fallback (the legality guard overrode it) /
+    limit (the step budget forced a finish). %>
+<section class="rounded-md border border-white/10 p-5 mb-6">
+  <h2 class="text-sm font-bold tracking-tight text-white/70 uppercase mb-1">
+    Enrutado del supervisor
+  </h2>
+  <p class="text-white/40 text-xs mb-4">
+    Quién decidió cada salto: <span class="text-brand font-bold">llm</span> = la elección del modelo
+    se mantuvo · <span class="text-warning font-bold">fallback</span> = la guarda de legalidad la
+    corrigió · <span class="text-danger font-bold">limit</span> = se agotó el presupuesto de pasos.
+  </p>
+
+  <% if run.routing_history.blank? %>
+    <p class="text-white/40 text-sm">Sin decisiones registradas.</p>
+  <% else %>
+    <ol class="space-y-2">
+      <% run.routing_history.each do |row| %>
+        <%
+          source = row["source"]
+          source_classes =
+            case source
+            when "llm"      then "bg-brand/15 border border-brand/40 text-brand"
+            when "fallback" then "bg-warning/15 border border-warning/40 text-warning"
+            else                 "bg-danger/15 border border-danger/40 text-danger"
+            end
+        %>
+        <li class="flex items-start gap-3 text-sm">
+          <span class="font-mono text-white/40 w-6 shrink-0"><%= row["step"].to_i + 1 %>.</span>
+          <span class="font-mono text-white/90 w-52 shrink-0"><%= row["next_agent"] %></span>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold shrink-0 <%= source_classes %>">
+            <%= source %>
+          </span>
+          <span class="text-white/60"><%= row["reason"] %></span>
+        </li>
+      <% end %>
+    </ol>
+  <% end %>
+</section>

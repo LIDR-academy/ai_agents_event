@@ -1,0 +1,48 @@
+<%# Live per-agent panel: polls #progress and fills in each agent's line as it runs.
+    Node rows are backed by Agents::GraphFlow::NODES (same catalog as /agents/graph_flow),
+    so the labels/models match the didactic diagram. %>
+<div class="rounded-md border border-white/10 overflow-hidden"
+     data-controller="graph-progress"
+     data-graph-progress-url-value="<%= progress_rag_graph_estimation_run_path(run) %>"
+     data-graph-progress-finished-value="false">
+  <div class="bg-ink/40 px-4 py-3 flex items-center justify-between gap-4">
+    <div>
+      <h2 class="text-lg font-bold tracking-tight text-white">Flujo en vivo</h2>
+      <p class="text-white/50 text-xs mt-0.5">
+        Cada agente reporta lo que hace según termina · se actualiza sola cada 1,5 s
+      </p>
+    </div>
+    <span class="shrink-0 inline-flex items-center gap-1.5 text-xs text-brand">
+      <span class="h-2 w-2 rounded-full bg-brand animate-pulse"></span> en curso
+    </span>
+  </div>
+
+  <ul class="divide-y divide-white/10">
+    <% Agents::GraphFlow::NODES.each do |node| %>
+      <% ch = Agents::GraphFlow.character_for(node.key) %>
+      <li data-node="<%= node.key %>" data-state="idle" class="px-4 py-3 flex items-start gap-3">
+        <% if ch %>
+          <span class="shrink-0 h-9 w-9 rounded-full border flex items-center justify-center text-lg <%= ch.classes %>" title="<%= ch.name %>"><%= ch.avatar %></span>
+        <% end %>
+        <div class="min-w-0 flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span data-role="dot" class="h-2.5 w-2.5 rounded-full bg-white/20 shrink-0"></span>
+            <span class="font-bold text-white text-sm"><%= ch&.name || node.label %></span>
+            <span class="text-white/40 text-xs"><%= node.label %></span>
+            <% if node.model %>
+              <span class="font-mono text-white/40 text-xs"><%= node.model %></span>
+            <% else %>
+              <span class="text-white/30 text-xs italic">sin LLM</span>
+            <% end %>
+          </div>
+          <% if ch %><div class="text-white/40 text-xs italic mt-0.5">«<%= ch.tagline %>»</div><% end %>
+          <div data-role="msg" class="text-white/60 text-xs mt-0.5 min-h-4"></div>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="px-4 py-2.5 bg-ink/20 text-white/40 text-xs">
+    Esta pantalla se recarga sola cuando el tramo llega a una puerta humana o al final.
+  </div>
+</div>

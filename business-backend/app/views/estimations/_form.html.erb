@@ -1,0 +1,98 @@
+<%= form_with model: request, url: estimations_path, scope: :estimation_request, local: true,
+      class: "space-y-5",
+      data: {
+        controller: "transcription-upload form-loading",
+        action: "submit->form-loading#start"
+      } do |f| %>
+
+  <% if request.errors.any? %>
+    <div class="p-4 rounded-md bg-brand/15 border border-brand text-brand-soft">
+      <p class="font-bold mb-1 text-white">Please fix the following:</p>
+      <ul class="list-disc list-inside text-sm">
+        <% request.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <div class="flex items-center justify-between mb-1">
+      <%= f.label :description, "Description or transcription", class: "block text-sm font-bold text-white/90" %>
+      <label class="text-xs font-bold tracking-tight text-brand hover:text-brand-soft cursor-pointer">
+        Upload .txt
+        <input type="file"
+               accept=".txt,text/plain"
+               class="hidden"
+               data-action="change->transcription-upload#load"
+               data-transcription-upload-target="fileInput">
+      </label>
+    </div>
+    <%= f.text_area :description, rows: 12,
+          class: "w-full border border-white/20 rounded-md p-3 text-white bg-ink/40 placeholder:text-white/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand",
+          placeholder: "Paste a discovery-call transcription, or describe the project: scope, key features, integrations, constraints…",
+          data: { transcription_upload_target: "textarea" } %>
+    <div class="flex items-center justify-between mt-1">
+      <p class="text-xs text-white/50">Between 20 and 80,000 characters. Long transcriptions will increase latency.</p>
+      <span class="text-xs text-white/70 data-[kind=error]:text-brand data-[kind=ok]:text-brand"
+            data-transcription-upload-target="status"></span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div>
+      <%= f.label :project_type, class: "block text-sm font-bold mb-1 text-white/90" %>
+      <%= f.select :project_type,
+            Estimation::Request::PROJECT_TYPES.map { |v| [ v.humanize, v ] },
+            { include_blank: "Select…" },
+            class: "w-full border border-white/20 rounded-md p-3 text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand [&>option]:bg-ink-dark [&>option]:text-white" %>
+    </div>
+
+    <div>
+      <%= f.label :detail_level, class: "block text-sm font-bold mb-1 text-white/90" %>
+      <%= f.select :detail_level,
+            Estimation::Request::DETAIL_LEVELS.map { |v| [ v.humanize, v ] },
+            {},
+            class: "w-full border border-white/20 rounded-md p-3 text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand [&>option]:bg-ink-dark [&>option]:text-white" %>
+    </div>
+  </div>
+
+  <div>
+    <%= f.label :output_format, class: "block text-sm font-bold mb-1 text-white/90" %>
+    <%= f.select :output_format,
+          Estimation::Request::OUTPUT_FORMATS.map { |v| [ v.humanize, v ] },
+          {},
+          class: "w-full border border-white/20 rounded-md p-3 text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand [&>option]:bg-ink-dark [&>option]:text-white" %>
+  </div>
+
+  <div class="pt-2">
+    <button type="submit"
+            data-form-loading-target="submit"
+            data-disable-with="false"
+            class="inline-flex items-center px-6 py-3 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors disabled:cursor-not-allowed">
+      <span data-form-loading-target="label">Generate estimation</span>
+      <svg data-form-loading-target="spinner"
+           class="hidden ml-2 h-5 w-5 animate-spin"
+           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+           aria-hidden="true">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+    </button>
+
+    <div data-form-loading-target="statusPanel"
+         class="hidden mt-4 p-4 rounded-md bg-ink/30 border border-white/10 flex items-center gap-3"
+         role="status" aria-live="polite">
+      <svg class="h-5 w-5 animate-spin text-brand shrink-0"
+           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+           aria-hidden="true">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+      <div class="flex-1 text-sm">
+        <span class="text-white/90" data-form-loading-target="phaseText">Conectando con el servicio IA…</span>
+        <span class="ml-2 font-mono text-xs text-white/50" data-form-loading-target="timer">00:00</span>
+      </div>
+    </div>
+  </div>
+<% end %>

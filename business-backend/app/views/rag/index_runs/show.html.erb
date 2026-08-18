@@ -1,0 +1,56 @@
+<% content_for :title, "Ampliación ##{@run.id}" %>
+
+<div class="max-w-4xl mx-auto px-4 py-10"
+     data-controller="index-run-poller"
+     data-index-run-poller-url-value="<%= status_rag_index_run_path(@run) %>"
+     data-index-run-poller-submitted-value="<%= @run.submitted_count %>"
+     data-index-run-poller-finished-value="<%= @run.finished? %>">
+
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold tracking-tighter text-white">Ampliación del corpus #<%= @run.id %></h1>
+    <%= link_to "← Volver", rag_index_runs_path, class: "text-white/60 font-bold hover:text-white text-sm" %>
+  </div>
+
+  <div class="rounded-md border border-white/10 bg-ink/30 p-4 mb-6">
+    <div class="flex flex-wrap items-center gap-4 text-sm">
+      <div>
+        <span class="text-white/50 text-xs uppercase tracking-tight font-bold">Estado</span>
+        <span class="ml-2 font-bold text-white" data-index-run-poller-target="status"><%= @run.status %></span>
+      </div>
+      <div>
+        <span class="text-white/50 text-xs uppercase tracking-tight font-bold">Procesados</span>
+        <span class="ml-2 font-bold text-white tabular-nums" data-index-run-poller-target="processed">
+          <%= @run.documents_processed %> / <%= @run.submitted_count %>
+        </span>
+      </div>
+      <div>
+        <span class="text-white/50 text-xs uppercase tracking-tight font-bold">chunk_type</span>
+        <span class="ml-2 font-mono text-white/80"><%= @run.chunk_type %></span>
+      </div>
+    </div>
+
+    <div class="mt-3 h-2 w-full rounded-full bg-ink/60 overflow-hidden">
+      <div class="h-2 bg-brand transition-all duration-500"
+           style="width: <%= @run.submitted_count.positive? ? (@run.documents_processed * 100 / @run.submitted_count) : 0 %>%"
+           data-index-run-poller-target="bar"></div>
+    </div>
+
+    <% unless @run.finished? %>
+      <p class="text-white/40 text-xs mt-2">Indexando en segundo plano… esta página se actualiza sola.</p>
+    <% end %>
+  </div>
+
+  <% if @run.finished? && @run.after_stats.present? && @run.after_stats["collections"].present? %>
+    <% if @run.chunks_added %>
+      <div class="p-3 rounded-md bg-success/15 border border-success/40 text-success-light text-sm mb-5">
+        ✓ Corpus ampliado · <span class="font-bold"><%= @run.chunks_added %></span> chunks nuevos indexados.
+      </div>
+    <% end %>
+    <div class="grid md:grid-cols-2 gap-4">
+      <%= render "stats_panel", collections: @run.before_stats["collections"], title: "Antes" %>
+      <%= render "stats_panel", collections: @run.after_stats["collections"], title: "Después" %>
+    </div>
+  <% elsif @run.before_stats["collections"].present? %>
+    <%= render "stats_panel", collections: @run.before_stats["collections"], title: "Corpus al iniciar" %>
+  <% end %>
+</div>

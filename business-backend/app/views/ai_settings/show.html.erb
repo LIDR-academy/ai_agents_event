@@ -1,0 +1,99 @@
+<% content_for :title, "Ajustes · Estimator" %>
+
+<div class="max-w-5xl mx-auto px-4 py-8">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold tracking-tighter text-white">Ajustes del servicio IA</h1>
+    <p class="text-white/60 mt-1 text-sm max-w-3xl">
+      Cambia los modelos LLM <span class="text-white font-bold">en caliente</span>: el override se
+      guarda en el servicio (Redis) y aplica en la siguiente llamada — sin tocar
+      <code class="font-mono text-xs">.env</code> ni recrear contenedores.
+      «Por defecto» restaura el valor del <code class="font-mono text-xs">.env</code>.
+    </p>
+  </div>
+
+  <% if flash.now[:alert] || flash[:alert] %>
+    <div class="mb-6 p-4 rounded-md bg-brand/15 border border-brand text-brand-soft">
+      <p class="font-bold text-white"><%= flash.now[:alert] || flash[:alert] %></p>
+    </div>
+  <% end %>
+  <% if flash[:notice] %>
+    <div class="mb-6 p-4 rounded-md bg-success/15 border border-success text-white">
+      <p class="font-bold"><%= flash[:notice] %></p>
+    </div>
+  <% end %>
+
+  <% if @catalog.nil? %>
+    <div class="p-6 rounded-md bg-ink/30 border border-white/10 text-white/60 text-sm">
+      El servicio IA no está disponible ahora mismo. Levanta el stack
+      (<code class="font-mono text-xs">docker compose up -d</code>) y recarga.
+    </div>
+  <% else %>
+    <%= form_with url: ai_settings_path, method: :put, local: true, class: "space-y-6" do %>
+      <div class="rounded-md border border-white/10 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-ink/40 text-white/70">
+            <tr>
+              <th class="text-left p-3 font-bold tracking-tight">Knob</th>
+              <th class="text-left p-3 font-bold tracking-tight">Modelo</th>
+              <th class="text-left p-3 font-bold tracking-tight">Estado</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-white/10">
+            <% @catalog.model_configs.each do |config| %>
+              <tr>
+                <td class="p-3 align-top">
+                  <div class="font-bold text-white"><%= config.label %></div>
+                  <div class="text-white/50 text-xs mt-0.5 max-w-md"><%= config.description %></div>
+                  <div class="text-white/30 text-xs font-mono mt-0.5"><%= config.key %></div>
+                </td>
+                <td class="p-3 align-top">
+                  <%= select_tag "models[#{config.key}]",
+                        options_for_select(
+                          [ [ "Por defecto (#{config.default})", "" ] ] +
+                            @catalog.available_models.map { |m| [ m, m ] },
+                          config.overridden ? config.effective : ""
+                        ),
+                        class: "w-full max-w-xs border border-white/20 rounded-md p-2.5 text-sm text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand [&>option]:bg-ink-dark [&>option]:text-white" %>
+                </td>
+                <td class="p-3 align-top">
+                  <% if config.overridden %>
+                    <span class="text-xs font-bold tracking-tight uppercase bg-brand/20 text-brand px-2 py-0.5 rounded">override</span>
+                    <div class="text-white/50 text-xs mt-1">activo: <span class="font-mono text-white/80"><%= config.effective %></span></div>
+                  <% else %>
+                    <span class="text-xs font-bold tracking-tight uppercase bg-white/10 text-white/60 px-2 py-0.5 rounded">default</span>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+            <%# --- EMBEDDING_MODEL: deliberadamente read-only --- %>
+            <tr class="bg-ink/20">
+              <td class="p-3 align-top">
+                <div class="font-bold text-white/60">Modelo de embeddings</div>
+                <div class="text-white/40 text-xs mt-0.5 max-w-md"><%= @catalog.embedding_model_note %></div>
+                <div class="text-white/30 text-xs font-mono mt-0.5">EMBEDDING_MODEL</div>
+              </td>
+              <td class="p-3 align-top">
+                <span class="font-mono text-sm text-white/60"><%= @catalog.embedding_model %></span>
+              </td>
+              <td class="p-3 align-top">
+                <span class="text-xs font-bold tracking-tight uppercase bg-white/10 text-white/40 px-2 py-0.5 rounded">read-only</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <button type="submit"
+                class="inline-flex items-center px-6 py-3 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors">
+          Guardar
+        </button>
+        <p class="text-xs text-white/50 max-w-md">
+          Con un override de primario activo no hay fallback automático de provider
+          (llamada directa al modelo elegido). El catálogo solo ofrece modelos cuyo
+          provider tiene API key configurada.
+        </p>
+      </div>
+    <% end %>
+  <% end %>
+</div>

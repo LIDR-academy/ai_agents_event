@@ -1,0 +1,113 @@
+<%= form_with url: rag_chunking_comparisons_path, method: :post, local: true,
+      class: "space-y-6",
+      data: {
+        controller: "chunking-lab form-loading",
+        action: "submit->form-loading#start"
+      } do %>
+
+  <%# --- Estrategias ------------------------------------------------------ %>
+  <fieldset class="border border-white/10 rounded-md p-4">
+    <legend class="text-xs uppercase tracking-tight text-white/50 font-bold px-2">Estrategias</legend>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-1">
+      <% Rag::Strategy::CATALOG.each do |strategy| %>
+        <label class="flex items-start gap-3 p-3 rounded-md bg-ink/30 border border-white/10 cursor-pointer hover:border-white/30 transition-colors">
+          <%= check_box_tag "strategies[]", strategy.name,
+                @selected_strategies.include?(strategy.name),
+                id: "strategy_#{strategy.name}",
+                class: "mt-1 accent-brand",
+                data: {
+                  chunking_lab_target: "strategy",
+                  cost_tier: strategy.cost_tier,
+                  action: "change->chunking-lab#refreshHint"
+                } %>
+          <span class="flex-1">
+            <span class="flex items-center gap-2">
+              <span class="font-bold text-white text-sm"><%= strategy.label %></span>
+              <% if strategy.cost_tier == :expensive %>
+                <span class="text-xs font-bold tracking-tight uppercase bg-brand/20 text-brand px-1.5 py-0.5 rounded">$ · lento</span>
+              <% elsif strategy.cost_tier == :cheap %>
+                <span class="text-xs font-bold tracking-tight uppercase bg-white/10 text-white/70 px-1.5 py-0.5 rounded">$</span>
+              <% end %>
+              <% if strategy.needs_key %>
+                <span class="text-xs text-white/40 font-mono"><%= strategy.needs_key %>_key</span>
+              <% end %>
+            </span>
+            <span class="block text-xs text-white/60 mt-0.5"><%= strategy.description %></span>
+          </span>
+        </label>
+      <% end %>
+    </div>
+    <p class="text-xs text-white/50 mt-3" data-chunking-lab-target="hint">
+      Selección actual: estrategias gratuitas — el run tarda segundos.
+    </p>
+  </fieldset>
+
+  <%# --- Playground: queries --------------------------------------------- %>
+  <fieldset class="border border-white/10 rounded-md p-4">
+    <legend class="text-xs uppercase tracking-tight text-white/50 font-bold px-2">Consultas (playground)</legend>
+    <p class="text-xs text-white/50 mb-2">
+      Opcional: sin consultas el run devuelve solo estadísticas. Cada consulta se embebe una vez
+      y se busca el top-k por similitud coseno en cada estrategia.
+    </p>
+
+    <div class="flex flex-wrap gap-2 mb-3">
+      <% EstimatorAi::BudgetCorpus.sample_queries.each do |query| %>
+        <button type="button"
+                class="text-xs font-bold tracking-tight px-2 py-1 rounded bg-brand/20 text-brand hover:bg-brand/30 transition-colors cursor-pointer"
+                data-action="click->chunking-lab#addQuery"
+                data-query="<%= query %>">
+          + <%= query %>
+        </button>
+      <% end %>
+    </div>
+
+    <div class="space-y-2" data-chunking-lab-target="queriesContainer">
+      <% @queries.each do |query| %>
+        <input type="text" name="queries[]" value="<%= query %>"
+               class="w-full border border-white/20 rounded-md p-2.5 text-sm text-white bg-ink/40 placeholder:text-white/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand">
+      <% end %>
+      <input type="text" name="queries[]" value=""
+             placeholder="Escribe una consulta libre, p. ej. 'OAuth authentication for fintech mobile app'"
+             class="w-full border border-white/20 rounded-md p-2.5 text-sm text-white bg-ink/40 placeholder:text-white/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand">
+    </div>
+
+    <div class="mt-3 flex items-center gap-3">
+      <label for="top_k" class="text-sm font-bold text-white/90">top_k</label>
+      <%= number_field_tag :top_k, @top_k, min: 1, max: 10,
+            class: "w-20 border border-white/20 rounded-md p-2 text-sm text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand" %>
+      <span class="text-xs text-white/50">chunks por consulta y estrategia (1–10)</span>
+    </div>
+  </fieldset>
+
+  <%# --- Submit + estado de carga ----------------------------------------- %>
+  <div class="pt-1">
+    <button type="submit"
+            data-form-loading-target="submit"
+            data-disable-with="false"
+            class="inline-flex items-center px-6 py-3 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors disabled:cursor-not-allowed">
+      <span data-form-loading-target="label">Comparar estrategias</span>
+      <svg data-form-loading-target="spinner"
+           class="hidden ml-2 h-5 w-5 animate-spin"
+           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+           aria-hidden="true">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+    </button>
+
+    <div data-form-loading-target="statusPanel"
+         class="hidden mt-4 p-4 rounded-md bg-ink/30 border border-white/10 flex items-center gap-3"
+         role="status" aria-live="polite">
+      <svg class="h-5 w-5 animate-spin text-brand shrink-0"
+           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+           aria-hidden="true">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+      <div class="flex-1 text-sm">
+        <span class="text-white/90" data-form-loading-target="phaseText">Conectando con el servicio IA…</span>
+        <span class="ml-2 font-mono text-xs text-white/50" data-form-loading-target="timer">00:00</span>
+      </div>
+    </div>
+  </div>
+<% end %>

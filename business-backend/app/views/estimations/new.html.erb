@@ -1,0 +1,11 @@
+<div class="max-w-2xl mx-auto py-12 px-4">
+  <h1 class="text-3xl font-bold tracking-tighter mb-8 text-white">New estimation</h1>
+
+  <% if flash[:alert].present? %>
+    <div class="mb-6 p-4 rounded-md bg-brand/15 border border-brand text-brand-soft">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+
+  <%= render "form", request: @request %>
+</div>

@@ -1,0 +1,179 @@
+<% content_for :title, "Agentes · Estimator" %>
+<% handwritten = @profiles.select { |p| p.agent_type == "handwritten" } %>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold tracking-tighter text-white">Agentes</h1>
+    <p class="text-white/60 mt-1 text-sm max-w-3xl">
+      Un agente es <span class="text-white font-bold">un bucle</span>: un modelo que decide, unas
+      tools que ejecutan, una condición de parada. Aquí revisas cada agente y creas
+      <span class="text-white font-bold">perfiles</span> nombrados y personalizados (modelo, esfuerzo,
+      iteraciones, recuperación y una <span class="text-white font-bold">persona</span>). Conviven tres estilos: el
+      <span class="text-white font-bold">agente hecho a mano</span>, la orquestación
+      <span class="text-white font-bold">Actor-Critic-Boss</span> y el
+      <span class="text-white font-bold">flujo multi-agente por grafo</span>.
+    </p>
+  </div>
+
+  <% if flash[:notice] %>
+    <div class="mb-6 p-4 rounded-md bg-success/15 border border-success text-white">
+      <p class="font-bold"><%= flash[:notice] %></p>
+    </div>
+  <% end %>
+
+  <%# --- Agente hecho a mano (S12): perfiles editables --------------------- %>
+  <section class="rounded-md border border-white/10 overflow-hidden mb-8">
+    <div class="bg-ink/40 px-4 py-3 flex items-center justify-between">
+      <div>
+        <h2 class="text-lg font-bold tracking-tight text-white">Agente hecho a mano</h2>
+        <p class="text-white/50 text-xs mt-0.5">
+          Bucle manual sobre la Responses API: <span class="text-white/80">reason → act → observe</span>.
+          Tools: <code class="text-brand">search_budgets</code>,
+          <code class="text-brand">derive_task_hours</code>,
+          <code class="text-brand">validate_estimate</code>. Para cuando deja de pedir tools o al
+          alcanzar <code class="text-brand">max_iterations</code>. Conduce las dos fases del wizard
+          (<code class="font-mono text-white/60">/v1/estimate/agent/structure</code> y
+          <code class="font-mono text-white/60">/hours</code>).
+        </p>
+      </div>
+      <%= link_to "Nuevo perfil", new_agents_profile_path,
+            class: "shrink-0 inline-flex items-center px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+    </div>
+
+    <% if handwritten.empty? %>
+      <p class="px-4 py-5 text-white/50 text-sm">Aún no hay perfiles. Crea el primero.</p>
+    <% else %>
+      <table class="w-full text-sm">
+        <thead class="bg-ink/20 text-white/60">
+          <tr>
+            <th class="text-left p-3 font-bold tracking-tight">Nombre</th>
+            <th class="text-left p-3 font-bold tracking-tight">Modelo</th>
+            <th class="text-left p-3 font-bold tracking-tight">Effort</th>
+            <th class="text-right p-3 font-bold tracking-tight">Iter.</th>
+            <th class="text-left p-3 font-bold tracking-tight">Persona</th>
+            <th class="text-right p-3 font-bold tracking-tight">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/10">
+          <% handwritten.each do |profile| %>
+            <tr class="hover:bg-white/5">
+              <td class="p-3 align-top">
+                <div class="flex items-center gap-2.5">
+                  <% if profile.avatar.attached? %>
+                    <%= image_tag profile.avatar,
+                          class: "h-8 w-8 rounded-full object-cover border border-white/15 shrink-0", alt: profile.name %>
+                  <% else %>
+                    <div class="h-8 w-8 rounded-full bg-ink/60 border border-white/10 flex items-center justify-center text-white/40 text-xs shrink-0">
+                      <%= profile.name.to_s.first&.upcase.presence || "?" %>
+                    </div>
+                  <% end %>
+                  <div>
+                    <%= link_to profile.name, agents_profile_path(profile), class: "text-brand font-bold hover:text-brand-soft" %>
+                    <% if profile.is_default? %>
+                      <span class="ml-2 text-xs font-bold uppercase bg-brand/20 text-brand px-2 py-0.5 rounded">default</span>
+                    <% end %>
+                  </div>
+                </div>
+              </td>
+              <td class="p-3 align-top font-mono text-white/80"><%= profile.model || "—" %></td>
+              <td class="p-3 align-top text-white/70"><%= profile.reasoning_effort || "—" %></td>
+              <td class="p-3 align-top text-right text-white/70 tabular-nums"><%= profile.max_iterations || "—" %></td>
+              <td class="p-3 align-top text-white/50 text-xs max-w-xs"><%= truncate(profile.persona.to_s, length: 60).presence || "—" %></td>
+              <td class="p-3 align-top text-right whitespace-nowrap">
+                <%= link_to "Editar", edit_agents_profile_path(profile), class: "text-white/70 hover:text-white font-bold text-xs" %>
+                <span class="text-white/20 mx-1">·</span>
+                <%= link_to "Probar", new_rag_estimation_run_path, class: "text-white/70 hover:text-white font-bold text-xs" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </section>
+
+  <%# --- Agentes del grafo (S13): informativo, solo lectura -------------- %>
+  <% kind_badges = {
+       agent: "bg-brand/15 text-brand",
+       gate: "bg-amber-400/15 text-amber-300",
+       fanout: "bg-sky-400/15 text-sky-300",
+       join: "bg-white/10 text-white/60"
+     } %>
+  <section class="rounded-md border border-white/10 overflow-hidden mb-8">
+    <div class="bg-ink/40 px-4 py-3 flex items-center justify-between gap-4">
+      <div>
+        <h2 class="text-lg font-bold tracking-tight text-white">Agentes del grafo</h2>
+        <p class="text-white/50 text-xs mt-0.5 max-w-2xl">
+          El pipeline de estimación reexpresado como un <span class="text-white/80">grafo LangGraph</span>:
+          agentes especializados encadenados con dos <span class="text-white/80">handovers</span>
+          (<code class="text-brand">Command(goto)</code>) y dos <span class="text-white/80">gates humanos</span>
+          (<code class="text-brand">interrupt()</code>). Solo lectura — sus modelos se fijan por
+          <code class="font-mono text-white/60">.env</code> en el servicio IA.
+        </p>
+      </div>
+      <%= link_to agents_graph_flow_path,
+            class: "shrink-0 inline-flex items-center px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" do %>
+        Ver el flujo →
+      <% end %>
+    </div>
+
+    <ul class="divide-y divide-white/10">
+      <% Agents::GraphFlow::NODES.each do |node| %>
+        <% ch = Agents::GraphFlow.character_for(node.key) %>
+        <li class="px-4 py-3.5 flex flex-col sm:flex-row sm:items-start gap-3">
+          <div class="sm:w-56 shrink-0">
+            <div class="flex items-center gap-2">
+              <% if ch %>
+                <span class="shrink-0 h-7 w-7 rounded-full border flex items-center justify-center text-sm <%= ch.classes %>" title="<%= ch.name %>"><%= ch.avatar %></span>
+              <% end %>
+              <span class="font-bold text-white"><%= ch&.name || node.label %></span>
+              <span class="text-xs font-bold uppercase tracking-tight px-1.5 py-0.5 rounded <%= kind_badges.fetch(node.kind, "bg-white/10 text-white/60") %>">
+                <%= Agents::GraphFlow.kind_label(node.kind) %>
+              </span>
+            </div>
+            <div class="text-white/40 text-xs mt-0.5"><%= node.label %><% if ch %> · «<%= ch.tagline %>»<% end %></div>
+            <div class="mt-1 text-xs">
+              <% if node.model %>
+                <span class="font-mono text-white/80"><%= node.model %></span>
+              <% else %>
+                <span class="text-white/40">sin modelo</span>
+              <% end %>
+            </div>
+            <% if node.config_key %>
+              <div class="text-white/30 text-xs font-mono mt-0.5"><%= node.config_key %></div>
+            <% end %>
+          </div>
+          <div class="min-w-0">
+            <p class="text-sm text-white/80 font-bold tracking-tight"><%= node.role %></p>
+            <p class="text-white/50 text-xs mt-1 leading-relaxed"><%= node.explanation %></p>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <%# --- Actor-Critic-Boss (S4/S5): informativo, solo lectura ------------- %>
+  <section class="rounded-md border border-white/10 overflow-hidden">
+    <div class="bg-ink/40 px-4 py-3">
+      <h2 class="text-lg font-bold tracking-tight text-white">Actor-Critic-Boss</h2>
+      <p class="text-white/50 text-xs mt-0.5">Orquestación, no tool-calling — solo lectura aquí.</p>
+    </div>
+    <div class="px-4 py-4 text-sm text-white/70 space-y-2">
+      <p>
+        Una máquina de estados: el <span class="text-white font-bold">actor</span> propone, el
+        <span class="text-white font-bold">critic</span> audita, el <span class="text-white font-bold">boss</span>
+        decide <code class="text-brand">accept</code> / <code class="text-brand">iterate</code> /
+        <code class="text-brand">synthesize</code> hasta <code class="text-brand">BOSS_MAX_ITERATIONS</code>.
+        El LLM no elige tools: el control de flujo es determinista.
+      </p>
+      <p class="text-white/50 text-xs">
+        Su configuración vive en Ajustes (modelos actor/crítico) y se prueba desde el chat en modo ACB.
+      </p>
+      <div class="flex items-center gap-3 pt-1">
+        <%= link_to "Ajustes (modelos)", ai_settings_path,
+              class: "inline-flex items-center px-3 py-1.5 bg-white/10 text-white font-bold rounded-md hover:bg-white/20 transition-colors text-xs" %>
+        <%= link_to "Probar en el chat (ACB)", new_chat_session_path,
+              class: "inline-flex items-center px-3 py-1.5 bg-white/10 text-white font-bold rounded-md hover:bg-white/20 transition-colors text-xs" %>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,42 @@
+<% content_for :title, "Grafo de agentes · histórico" %>
+
+<div class="max-w-4xl mx-auto px-4 py-10">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold tracking-tighter text-white">Estimaciones por grafo de agentes</h1>
+    <%= link_to "Nueva ejecución", new_rag_graph_estimation_run_path,
+          class: "inline-flex items-center px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+  </div>
+
+  <% if @runs.empty? %>
+    <p class="text-white/50">Aún no hay ejecuciones. Empieza una nueva.</p>
+  <% else %>
+    <div class="rounded-md border border-white/10 overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-ink/40 text-white/70">
+          <tr>
+            <th class="text-left p-3 font-bold tracking-tight">#</th>
+            <th class="text-left p-3 font-bold tracking-tight">Estado del grafo</th>
+            <th class="text-left p-3 font-bold tracking-tight">Puerta / status</th>
+            <th class="text-right p-3 font-bold tracking-tight">Creada</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/10">
+          <% @runs.each do |run| %>
+            <tr class="hover:bg-white/5">
+              <td class="p-3 font-mono text-white/50">
+                <%= link_to "##{run.id}", rag_graph_estimation_run_path(run), class: "text-brand hover:text-brand-soft font-bold" %>
+              </td>
+              <td class="p-3">
+                <span class="px-2.5 py-0.5 rounded-md text-xs font-bold <%= run.completed? ? "bg-success/15 border border-success/40 text-success-light" : "bg-ink/40 border border-white/10 text-white/70" %>">
+                  <%= run.graph_state %>
+                </span>
+              </td>
+              <td class="p-3 text-white/70"><%= run.current_gate || run.status || "—" %></td>
+              <td class="p-3 text-right text-white/50"><%= run.created_at&.strftime("%d/%m %H:%M") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

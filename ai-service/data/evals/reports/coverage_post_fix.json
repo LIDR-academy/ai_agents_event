@@ -1,0 +1,47 @@
+{
+  "label": "post-fix",
+  "structure": "data/evals/run20_structure.json",
+  "query_style": "current",
+  "search_mode": "vector",
+  "rerank": false,
+  "exact": false,
+  "tasks": 119,
+  "cells": [
+    {
+      "top_k": 5,
+      "threshold": 0.44,
+      "tasks": 119,
+      "matched": 92,
+      "matched_pct": 77.3,
+      "green": 3,
+      "amber": 89,
+      "red": 27,
+      "flagged": 28,
+      "flagged_no_match": 27,
+      "flagged_low_rel": 1,
+      "reliability_mean": 0.533,
+      "reliability_median": 0.538,
+      "reliability_max": 0.691,
+      "dispersion_mean": 0.143,
+      "dispersion_median": 0.127
+    },
+    {
+      "top_k": 5,
+      "threshold": 0.45,
+      "tasks": 119,
+      "matched": 97,
+      "matched_pct": 81.5,
+      "green": 3,
+      "amber": 94,
+      "red": 22,
+      "flagged": 23,
+      "flagged_no_match": 22,
+      "flagged_low_rel": 1,
+      "reliability_mean": 0.523,
+      "reliability_median": 0.526,
+      "reliability_max": 0.691,
+      "dispersion_mean": 0.155,
+      "dispersion_median": 0.144
+    }
+  ]
+}

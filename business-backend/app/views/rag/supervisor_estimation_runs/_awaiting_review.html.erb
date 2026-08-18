@@ -1,0 +1,90 @@
+<%# The review screen: WHY the run stopped, then the three verbs.
+    The reasons come from the service IA verbatim — the reviewer should see the same
+    sentence the trigger produced, not a paraphrase that could drift from it. %>
+<section class="rounded-md border border-warning/40 bg-warning/5 p-5 mb-6">
+  <h2 class="text-sm font-bold tracking-tight text-warning uppercase mb-3">
+    Esta estimación necesita revisión humana
+  </h2>
+  <ul class="space-y-1.5 mb-4">
+    <% run.review_reasons.each do |reason| %>
+      <li class="text-sm text-white/80 flex gap-2">
+        <span class="text-warning">·</span><span><%= reason %></span>
+      </li>
+    <% end %>
+  </ul>
+  <% if run.confidence_pct %>
+    <p class="text-xs text-white/50">
+      Confianza <span class="font-bold text-white/80"><%= run.confidence_pct %>%</span>
+      <% if run.threshold %>
+        · umbral configurado <span class="font-bold text-white/80"><%= (run.threshold * 100).round %>%</span>
+      <% end %>
+    </p>
+  <% end %>
+</section>
+
+<%= form_with url: resume_rag_supervisor_estimation_run_path(run), method: :post,
+              data: { controller: "form-loading" }, class: "mb-6" do %>
+  <section class="rounded-md border border-white/10 p-5 mb-4">
+    <h2 class="text-sm font-bold tracking-tight text-white/70 uppercase mb-4">
+      Estimación propuesta
+    </h2>
+
+    <% if run.estimate_components.blank? %>
+      <p class="text-white/40 text-sm">El flujo no llegó a producir componentes.</p>
+    <% else %>
+      <table class="w-full text-sm mb-4">
+        <thead class="text-white/50 text-xs">
+          <tr>
+            <th class="text-left py-2 font-bold">Componente</th>
+            <th class="text-left py-2 font-bold">Justificación</th>
+            <th class="text-right py-2 font-bold w-28">Días</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/5">
+          <% run.estimate_components.each_with_index do |component, index| %>
+            <tr>
+              <td class="py-2 text-white/90"><%= component["name"] %></td>
+              <td class="py-2 text-white/50 text-xs">
+                <%= truncate(component["rationale"].to_s, length: 80) %>
+              </td>
+              <td class="py-2 text-right">
+                <%= number_field_tag "components[#{index}][engineer_days]",
+                      component["engineer_days"], min: 0, step: 1,
+                      class: "w-24 bg-ink/60 border rounded-md px-2 py-1 text-right text-white text-sm #{component['engineer_days'].nil? ? 'border-danger/60' : 'border-white/15'}" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr class="border-t border-white/15">
+            <td class="py-2 font-bold text-white/80" colspan="2">Total propuesto</td>
+            <td class="py-2 text-right font-bold text-white"><%= run.total_engineer_days %>d</td>
+          </tr>
+        </tfoot>
+      </table>
+      <p class="text-white/40 text-xs">
+        Edita los días solo si eliges <span class="font-bold">Ajustar</span>; el servicio recalcula
+        el total a partir de los componentes.
+      </p>
+    <% end %>
+  </section>
+
+  <div class="mb-4">
+    <%= label_tag :note, "Nota para el registro (opcional)",
+          class: "block text-xs font-bold tracking-tight text-white/70 uppercase mb-2" %>
+    <%= text_field_tag :note, nil, placeholder: "p. ej. revisado con el cliente el 14/07",
+          class: "w-full bg-ink/60 border border-white/15 rounded-md px-3 py-2 text-white text-sm" %>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <%= button_tag "Aprobar", name: "decision", value: "approve", type: :submit,
+          data: { form_loading_target: "submit" },
+          class: "px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+    <%= button_tag "Ajustar y aprobar", name: "decision", value: "adjust", type: :submit,
+          data: { form_loading_target: "submit" },
+          class: "px-4 py-2 border border-white/20 text-white font-bold tracking-tight rounded-md hover:bg-white/5 transition-colors text-sm" %>
+    <%= button_tag "Rechazar", name: "decision", value: "reject", type: :submit,
+          data: { form_loading_target: "submit" },
+          class: "px-4 py-2 border border-danger/40 text-danger font-bold tracking-tight rounded-md hover:bg-danger/10 transition-colors text-sm ml-auto" %>
+  </div>
+<% end %>

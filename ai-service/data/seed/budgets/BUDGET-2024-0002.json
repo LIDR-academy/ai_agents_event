@@ -1,0 +1,16 @@
+{
+  "budget_id": "BUDGET-2024-0002",
+  "client_name": "BetaNorte Distribución",
+  "client_code": "CLI-0078",
+  "currency": "eur",
+  "total_amount": 28000,
+  "signed_at": "12/03/2024",
+  "phases": [
+    {"name": "Auditoría procesos", "weeks": 2, "amount": 6000},
+    {"name": "Backend integraciones", "weeks": 4, "amount": 14000},
+    {"name": "Cuadros de mando", "weeks": 2, "amount": 8000}
+  ],
+  "contact": "Javier Romero",
+  "contact_email": "j.romero@betanorte.com",
+  "notes": "Migración del ERP legado. Tres almacenes."
+}

@@ -1,0 +1,588 @@
+{
+  "modules": [
+    {
+      "name": "Patient Portal & Mobile App",
+      "tasks": [
+        {
+          "name": "Define patient journeys and IA",
+          "description": "Map UX flows for booking, results, history, payments, and teleconsultation."
+        },
+        {
+          "name": "Account and identity linking",
+          "description": "Patient signup/login and linkage to existing HIS/MRN via matching."
+        },
+        {
+          "name": "Appointment booking UI",
+          "description": "Search by clinic/specialty/provider, choose teleconsult vs in-person, select slots."
+        },
+        {
+          "name": "Test results viewer",
+          "description": "Display structured/PDF lab results with statuses and download options."
+        },
+        {
+          "name": "Medical history (partial)",
+          "description": "Render past encounters/clinical acts from HIS with clear scope disclaimers."
+        },
+        {
+          "name": "Teleconsultation entry",
+          "description": "Join/start video session from appointment detail with pre-call device check."
+        },
+        {
+          "name": "Payments in booking",
+          "description": "Present prices, collect payment with SCA/3DS, show receipts post-payment."
+        },
+        {
+          "name": "Preferences & consents",
+          "description": "Manage notification settings, GDPR/telemedicine consents, and contact verification."
+        },
+        {
+          "name": "Localization (ES/CA/EN)",
+          "description": "Implement i18n strings, locales for date/number, and content fallback."
+        },
+        {
+          "name": "Accessibility (WCAG 2.1 AA)",
+          "description": "High-contrast, large text, keyboard navigation, screen-reader semantics."
+        },
+        {
+          "name": "Patient profile & dependents",
+          "description": "Edit demographics, manage dependents/authorizations, verify contacts."
+        },
+        {
+          "name": "Analytics & instrumentation",
+          "description": "Tag key events for funnel and drop-off analysis."
+        }
+      ],
+      "description": "Patient-facing web and mobile experiences for booking, results, history (partial), payments, and video entry."
+    },
+    {
+      "name": "Unified Appointment Management & Resource Scheduling",
+      "tasks": [
+        {
+          "name": "Scheduling domain model",
+          "description": "Model clinics, providers, rooms, equipment, services, and locations."
+        },
+        {
+          "name": "Appointment types & rules",
+          "description": "Durations, buffers, eligibility, prepayment flags, teleconsult eligibility."
+        },
+        {
+          "name": "Provider templates & calendars",
+          "description": "Templates, rotations, holidays, blackout periods, and slot generation."
+        },
+        {
+          "name": "Booking engine & locking",
+          "description": "Conflict detection, atomic bookings, concurrency safeguards."
+        },
+        {
+          "name": "Resource allocation",
+          "description": "Room/equipment assignment and block booking for procedures."
+        },
+        {
+          "name": "Staff calendar UI",
+          "description": "Day/week/month views, multi-clinic, bulk operations, quick actions."
+        },
+        {
+          "name": "Waitlist & no-shows",
+          "description": "Manage waitlist, overbooking policies, and no-show tracking."
+        },
+        {
+          "name": "Change/cancel workflows",
+          "description": "Reschedules/cancellations with audit trail and policy enforcement."
+        },
+        {
+          "name": "Notifications hooks",
+          "description": "Emit events for reminders, changes, and cancellations to messaging service."
+        },
+        {
+          "name": "Calendar integrations",
+          "description": "Optional ICS/Outlook/Google sync for providers."
+        },
+        {
+          "name": "Performance & scaling",
+          "description": "Optimize slot search and booking throughput under peak load."
+        }
+      ],
+      "description": "Enterprise scheduling to replace CitaSalud with resources, rules, and staff tooling."
+    },
+    {
+      "name": "Teleconsultation (Integrated Video)",
+      "tasks": [
+        {
+          "name": "Video stack selection",
+          "description": "Evaluate vendor vs self-hosted WebRTC; confirm GDPR/data residency."
+        },
+        {
+          "name": "Signaling/STUN/TURN",
+          "description": "Provision signaling and ICE infra with secure config."
+        },
+        {
+          "name": "Session lifecycle",
+          "description": "Create/join rooms per appointment with scoped tokens and expiry."
+        },
+        {
+          "name": "Embedded UIs",
+          "description": "Patient and clinician call UIs with waiting room and device checks."
+        },
+        {
+          "name": "In-call controls",
+          "description": "Mute/camera, basic chat, screen share (if approved), network fallbacks."
+        },
+        {
+          "name": "Status synchronization",
+          "description": "Sync start/end/no-show to scheduling for reporting and billing."
+        },
+        {
+          "name": "Recording policy",
+          "description": "Implement policy-based recording (or disable) with secure storage/retention."
+        },
+        {
+          "name": "Quality monitoring",
+          "description": "Collect QoS metrics, logs, and user-facing diagnostics."
+        },
+        {
+          "name": "Security & privacy",
+          "description": "E2E transport security, consent display, and privacy notices."
+        }
+      ],
+      "description": "Embedded, compliant video visits without external apps."
+    },
+    {
+      "name": "Payments & Billing",
+      "tasks": [
+        {
+          "name": "Gateway integration",
+          "description": "Integrate EU-compliant gateway (PSD2 SCA/3DS) with web/mobile SDKs."
+        },
+        {
+          "name": "Payment flows",
+          "description": "Prepay-at-booking and post-consult capture linked to appointment type."
+        },
+        {
+          "name": "Invoicing & receipts",
+          "description": "Generate VAT-compliant invoices and email receipts."
+        },
+        {
+          "name": "Refunds & fees",
+          "description": "Handle cancellations, partial refunds, and no-show fee rules."
+        },
+        {
+          "name": "Reconciliation",
+          "description": "Daily settlement reports, ledger updates, and mismatch handling."
+        },
+        {
+          "name": "Webhook processing",
+          "description": "Idempotent listeners with retry/backoff for payment events."
+        },
+        {
+          "name": "PCI scope minimization",
+          "description": "Tokenization, hosted fields, and secure storage practices."
+        },
+        {
+          "name": "Finance console",
+          "description": "Admin UI for transaction search, exports, and adjustments."
+        },
+        {
+          "name": "Chargebacks",
+          "description": "Dispute workflows and evidence submission."
+        }
+      ],
+      "description": "Online payment flows tied to clinical acts and appointments."
+    },
+    {
+      "name": "Interoperability & External Integrations",
+      "tasks": [
+        {
+          "name": "Integration architecture",
+          "description": "Select interface engine and patterns (FHIR/HL7 v2, REST, queues)."
+        },
+        {
+          "name": "Secure connectivity",
+          "description": "mTLS/VPN, OAuth2/JWT, IP allowlists, certificate management."
+        },
+        {
+          "name": "HIS synchronization",
+          "description": "Demographics, encounters, and documents with canonical mappings."
+        },
+        {
+          "name": "Patient identity/MPI",
+          "description": "Deterministic/probabilistic matching and duplicate resolution."
+        },
+        {
+          "name": "ePrescription (FHIR)",
+          "description": "Implement MedicationRequest/Dispense workflows and required auth."
+        },
+        {
+          "name": "Lab results ingestion",
+          "description": "Process HL7 v2 ORU/FHIR DiagnosticReport with LOINC and PDFs."
+        },
+        {
+          "name": "Eventing & sync",
+          "description": "Publish/subscribe for appointments/results; retries/DLQ."
+        },
+        {
+          "name": "Consent-aware exchange",
+          "description": "Gate data flows by consent; implement break-glass logging."
+        },
+        {
+          "name": "Interface monitoring",
+          "description": "Dashboards, alerts, and replay tools for failed messages."
+        },
+        {
+          "name": "API documentation & tests",
+          "description": "Partner docs, collections, and certification test suites."
+        },
+        {
+          "name": "Terminology services",
+          "description": "Manage value sets (SNOMED, LOINC) and code translation."
+        }
+      ],
+      "description": "Standards-based connectivity with HIS, ePrescription, and lab systems."
+    },
+    {
+      "name": "Home Nursing Mobile (Offline)",
+      "tasks": [
+        {
+          "name": "Workflow & forms",
+          "description": "Define visit tasks, vitals, notes, photos, and signatures."
+        },
+        {
+          "name": "Tech selection",
+          "description": "Choose React Native/Flutter and offline-first libraries."
+        },
+        {
+          "name": "Encrypted local store",
+          "description": "On-device encryption, schema versioning, and data minimization."
+        },
+        {
+          "name": "Visit management UI",
+          "description": "Visit list, details, and form entry usable fully offline."
+        },
+        {
+          "name": "Sync engine",
+          "description": "Delta sync, conflict detection/resolution, background jobs."
+        },
+        {
+          "name": "Auth & access",
+          "description": "RBAC, device binding, session handling, biometric unlock."
+        },
+        {
+          "name": "Scheduling integration",
+          "description": "Pull visit schedules; push completed notes to HIS/EHR."
+        },
+        {
+          "name": "Resilience & auditing",
+          "description": "Retry queues, offline audit logs, error surfaces."
+        },
+        {
+          "name": "Device security",
+          "description": "Remote wipe/MDM hooks and jailbreak/root detection."
+        },
+        {
+          "name": "Field testing",
+          "description": "Validate under weak networks and capture telemetry."
+        }
+      ],
+      "description": "Offline-capable field app for home healthcare with secure sync."
+    },
+    {
+      "name": "Notifications & Communications",
+      "tasks": [
+        {
+          "name": "Provider setup",
+          "description": "Select SMS/email/push providers and verify sender identities."
+        },
+        {
+          "name": "Templating & i18n",
+          "description": "Localized templates (ES/CA/EN) with variables and previews."
+        },
+        {
+          "name": "Event triggers",
+          "description": "Wire booking/reminder/result/receipt events to messaging pipeline."
+        },
+        {
+          "name": "Delivery pipeline",
+          "description": "Queueing, retries, throttling, and quiet hours per timezone."
+        },
+        {
+          "name": "User preferences",
+          "description": "Opt-in/opt-out, channel priorities, and contact verification."
+        },
+        {
+          "name": "Secure links",
+          "description": "One-time tokens and deep links into app/portal."
+        },
+        {
+          "name": "Operator tools",
+          "description": "View/resend messages and suppress duplicates."
+        },
+        {
+          "name": "Monitoring & analytics",
+          "description": "Delivery tracking, failure alerts, and effectiveness metrics."
+        }
+      ],
+      "description": "Transactional SMS/email/push for reminders, results, schedule changes, and receipts."
+    },
+    {
+      "name": "Reporting & Analytics (Admin + Regulatory)",
+      "tasks": [
+        {
+          "name": "KPI definition",
+          "description": "Define occupancy, absenteeism, revenue, and conversion metrics."
+        },
+        {
+          "name": "Data platform",
+          "description": "Build ODS/warehouse and scheduled ETL from operational systems."
+        },
+        {
+          "name": "Admin dashboards",
+          "description": "Interactive views with filters, drilldowns, and exports."
+        },
+        {
+          "name": "Absenteeism metrics",
+          "description": "Compute no-show/cancellation rates and cohorts."
+        },
+        {
+          "name": "Revenue analytics",
+          "description": "Tie payments to clinical acts and appointment types by clinic."
+        },
+        {
+          "name": "Regulatory specs",
+          "description": "Capture authority report schemas, mappings, and cadences."
+        },
+        {
+          "name": "Report generation",
+          "description": "Produce CSV/XML/HL7 as required and support secure submission."
+        },
+        {
+          "name": "Data quality & lineage",
+          "description": "Validation, reconciliation, and re-run/correction workflows."
+        },
+        {
+          "name": "Access & privacy",
+          "description": "RBAC and PII minimization/anonymization in reports."
+        }
+      ],
+      "description": "Dashboards for operations/finance and automated regulatory reports."
+    },
+    {
+      "name": "Security, Privacy & Compliance (GDPR)",
+      "tasks": [
+        {
+          "name": "RBAC/ABAC",
+          "description": "Define roles/permissions for patients, clinicians, and admins."
+        },
+        {
+          "name": "Authentication",
+          "description": "Patient MFA/passwordless; clinician SSO via enterprise IdP."
+        },
+        {
+          "name": "Consent management",
+          "description": "Record, enforce, and revoke treatment/data-sharing/telemedicine consents."
+        },
+        {
+          "name": "GDPR program",
+          "description": "DPIA, records of processing, retention, DSAR export/erase."
+        },
+        {
+          "name": "Encryption & keys",
+          "description": "TLS everywhere, data-at-rest encryption, KMS/HSM and rotation."
+        },
+        {
+          "name": "Audit logging",
+          "description": "Comprehensive, tamper-evident access and action logs."
+        },
+        {
+          "name": "Secure SDLC",
+          "description": "Threat modeling and SAST/DAST/dependency scanning gates."
+        },
+        {
+          "name": "Pen testing",
+          "description": "External/internal tests and remediation tracking."
+        },
+        {
+          "name": "Incident response",
+          "description": "Runbooks, tabletop exercises, and breach notifications."
+        },
+        {
+          "name": "Third-party compliance",
+          "description": "DPAs, data residency, and vendor risk reviews."
+        }
+      ],
+      "description": "Cross-cutting security, privacy, and regulatory alignment."
+    },
+    {
+      "name": "Data Migration (CitaSalud)",
+      "tasks": [
+        {
+          "name": "Discovery & access",
+          "description": "Inventory schemas, volumes, and obtain secure data access."
+        },
+        {
+          "name": "Scope & rules",
+          "description": "Decide history depth, fields, and transformation logic."
+        },
+        {
+          "name": "Mapping",
+          "description": "Map appointment types/resources/patients to new model and HIS IDs."
+        },
+        {
+          "name": "ETL pipelines",
+          "description": "Extract, stage, transform, and load with reproducible jobs."
+        },
+        {
+          "name": "Cleansing & dedupe",
+          "description": "Normalize data and resolve duplicates with HIS/MPI."
+        },
+        {
+          "name": "Validation & rehearsals",
+          "description": "Counts, sampling, and full dry-run migrations."
+        },
+        {
+          "name": "Cutover plan",
+          "description": "Freeze window, delta load, verification, and rollback steps."
+        },
+        {
+          "name": "Communication & training",
+          "description": "Prepare clinics and staff for new workflows and changes."
+        },
+        {
+          "name": "Post-cutover support",
+          "description": "Monitor defects and correct data issues quickly."
+        }
+      ],
+      "description": "Migrate legacy appointment data to the unified scheduler with validation and cutover."
+    },
+    {
+      "name": "Platform Engineering & DevOps",
+      "tasks": [
+        {
+          "name": "Environment provisioning",
+          "description": "IaC for dev/test/preprod/prod networking and security baselines."
+        },
+        {
+          "name": "CI/CD pipelines",
+          "description": "Automated builds/tests/deploys for backend, web, and mobile."
+        },
+        {
+          "name": "API gateway & WAF",
+          "description": "Ingress control, rate limiting, auth enforcement, and WAF rules."
+        },
+        {
+          "name": "Observability",
+          "description": "Centralized logs, metrics, traces, and SIEM integration."
+        },
+        {
+          "name": "Data protection",
+          "description": "Backups, retention policies, and DR with RPO/RTO validation."
+        },
+        {
+          "name": "Database operations",
+          "description": "Sizing, HA/replication, encryption, and performance tuning."
+        },
+        {
+          "name": "TURN/STUN capacity",
+          "description": "Autoscaling and monitoring for teleconsultation infra."
+        },
+        {
+          "name": "Secrets management",
+          "description": "Vault/KMS, rotation policies, and access audits."
+        },
+        {
+          "name": "Cost & performance",
+          "description": "Cost monitoring and continuous performance optimization."
+        },
+        {
+          "name": "Mobile releases",
+          "description": "App store submission, code signing, and MDM distribution."
+        }
+      ],
+      "description": "Cloud, CI/CD, observability, reliability, and operational tooling."
+    },
+    {
+      "name": "Quality Assurance & Testing",
+      "tasks": [
+        {
+          "name": "Test strategy",
+          "description": "Risk-based plan, environments, and traceability to requirements."
+        },
+        {
+          "name": "Automation",
+          "description": "Unit/integration/E2E tests for portal, scheduling, payments, and video."
+        },
+        {
+          "name": "Test data",
+          "description": "Synthetic PHI datasets and masking in non-prod."
+        },
+        {
+          "name": "Standards conformance",
+          "description": "Validate HL7 v2/FHIR profiles with official validators."
+        },
+        {
+          "name": "Performance tests",
+          "description": "Load/stress for booking, notifications, and video concurrency."
+        },
+        {
+          "name": "Security tests",
+          "description": "SAST/DAST, dependency scans, and config hardening checks."
+        },
+        {
+          "name": "Offline tests",
+          "description": "Home nursing sync under airplane mode, conflicts, and retries."
+        },
+        {
+          "name": "A11y & i18n tests",
+          "description": "WCAG checks and ES/CA/EN localization across devices/browsers."
+        },
+        {
+          "name": "UAT & regression",
+          "description": "Run UAT with clinics/admins and maintain regression suites."
+        }
+      ],
+      "description": "End-to-end quality program across functionality, performance, security, and standards."
+    },
+    {
+      "name": "Project Management & Change Enablement",
+      "tasks": [
+        {
+          "name": "Phased roadmap",
+          "description": "Prioritize unified agenda and patient portal for September MVP."
+        },
+        {
+          "name": "Governance & cadences",
+          "description": "Steering, vendor/partner syncs, and decision logs."
+        },
+        {
+          "name": "Requirements & stories",
+          "description": "Workshops, story mapping, and acceptance criteria."
+        },
+        {
+          "name": "API spec documentation",
+          "description": "Document HIS and legacy appointment APIs; onboard partners."
+        },
+        {
+          "name": "Risk & RAID",
+          "description": "Manage integration risks and mitigation plans."
+        },
+        {
+          "name": "Training & help center",
+          "description": "Create materials and deliver sessions for staff and clinicians."
+        },
+        {
+          "name": "Cutover & rollout",
+          "description": "Pilot clinics, feature flags, checklists, and hypercare support."
+        },
+        {
+          "name": "Compliance checkpoints",
+          "description": "Schedule legal/clinical reviews; triage assistant feasibility spike."
+        },
+        {
+          "name": "Status & budget",
+          "description": "Progress reporting, burn tracking, and vendor management."
+        }
+      ],
+      "description": "Program governance, partner coordination, phasing, and adoption."
+    }
+  ],
+  "reasoning": "Decomposition isolates patient-facing experiences, core scheduling, and payments from complex interoperability and offline home-care needs, while treating security/GDPR as a cross-cutting concern. Teleconsultation is a dedicated module due to real-time/WebRTC infrastructure and compliance. Reporting merges admin dashboards and regulatory outputs over a shared analytics data layer. Data migration is split out to manage CitaSalud cutover risk. Notifications and DevOps are separate to support September MVP readiness and operational scale. Uncertainties around HIS/eRx/lab interfaces and legacy data quality keep confidence at medium; the structure enables a phased MVP (agenda + portal + video + payments + notifications) while integrations and reporting proceed in parallel.",
+  "confidence": "medium"
+}

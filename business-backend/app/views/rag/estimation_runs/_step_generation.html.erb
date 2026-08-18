@@ -1,0 +1,168 @@
+<% view = run.generation_view %>
+
+<h2 class="text-lg font-bold tracking-tight text-white mb-1">2 · Generación de la estructura (agente)</h2>
+<p class="text-white/50 text-sm mb-5">
+  El <span class="text-white/80">agente hecho a mano</span> descompone el proyecto en
+  <span class="text-white/80">módulos → tareas</span> como una
+  <span class="text-white/80">decomposición libre del brief</span>: <span class="text-white/80">sin
+  mirar la BBDD vectorial</span> y sin estimar horas. Las horas se derivan después, por tarea, con
+  búsqueda semántica (paso «Horas»). Tú revisas y editas el árbol en el siguiente paso.
+</p>
+
+<%= render "step_agent", keys: [ "structure" ] %>
+
+  <%= form_with url: generate_rag_estimation_run_path(run), method: :post, local: true,
+        class: "mb-6", data: { controller: "form-loading", action: "submit->form-loading#start" } do %>
+    <button type="submit" data-form-loading-target="submit" data-disable-with="false"
+            class="inline-flex items-center px-5 py-2.5 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors text-sm disabled:cursor-not-allowed">
+      <span data-form-loading-target="label"><%= view ? "Re-generar estructura" : "Generar estructura" %></span>
+      <svg data-form-loading-target="spinner" class="hidden ml-2 h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+    </button>
+    <% if view %>
+      <span class="ml-3 text-xs text-white/40">Re-generar vuelve a llamar al LLM (coste).</span>
+    <% end %>
+    <div data-form-loading-target="statusPanel"
+         class="hidden mt-4 p-4 rounded-md bg-ink/30 border border-white/10 flex items-center gap-3" role="status" aria-live="polite">
+      <svg class="h-5 w-5 animate-spin text-brand shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+      <div class="flex-1 text-sm">
+        <span class="text-white/90" data-form-loading-target="phaseText">Generando con gpt-5 (razonamiento)…</span>
+        <span class="ml-2 font-mono text-xs text-white/50" data-form-loading-target="timer">00:00</span>
+      </div>
+    </div>
+  <% end %>
+
+  <% if view %>
+    <% estimate = view.estimate %>
+
+    <%# Session 12 · the agent's one-step decomposition trace (why it split it so). %>
+    <% if (trace = run.generation_agent_trace) %>
+      <%= render "agent_trace", trace: trace, title: "Traza del agente · descomposición" %>
+    <% end %>
+
+    <%# Grounding signals — the teaching payoff. %>
+    <% unless view.grounding_clean? %>
+      <div class="p-4 rounded-md bg-brand/15 border border-brand text-white mb-5 space-y-1">
+        <% if view.fabricated_citations? %>
+          <p class="text-sm"><span class="font-bold text-brand">⚠ Citaciones inventadas:</span>
+            ids <%= view.fabricated_source_ids.join(", ") %> no están entre los chunks recuperados.</p>
+        <% end %>
+        <% unless view.coherent %>
+          <p class="text-sm"><span class="font-bold text-brand">⚠ Incoherencia:</span>
+            confidence="insufficient" pero con cifras presentes.</p>
+        <% end %>
+        <p class="text-xs text-white/60">El pipeline completo reintenta automáticamente; aquí lo mostramos a propósito.</p>
+      </div>
+    <% end %>
+
+    <%# Session 11 · verificación de citaciones a nivel de línea (integridad referencial). %>
+    <% if (cr = view.citation_report) %>
+      <div class="p-4 rounded-md bg-ink/30 border border-white/10 mb-5">
+        <div class="text-xs uppercase tracking-tight text-white/50 font-bold mb-2">Verificación de citaciones (por línea)</div>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <span class="px-2 py-1 rounded bg-success/15 text-success-light font-bold"><%= cr.grounded_lines %> grounded</span>
+          <span class="px-2 py-1 rounded <%= cr.has_dangling? ? "bg-danger/20 text-danger" : "bg-ink/50 text-white/50" %> font-bold"><%= cr.dangling_lines %> colgantes</span>
+          <span class="px-2 py-1 rounded bg-brand/15 text-brand-soft font-bold"><%= cr.insufficient_lines %> sin datos</span>
+          <span class="px-2 py-1 rounded bg-ink/50 text-white/60"><%= cr.verified_citations %> citas verificadas</span>
+        </div>
+        <% if cr.has_dangling? %>
+          <p class="text-xs text-danger mt-2">Ids colgantes (nunca recuperados): <%= cr.dangling_citations.join(", ") %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <%# Session 11 · gate semántico de alucinaciones (¿la cifra se deduce de la cita?). %>
+    <% if (hr = view.hallucination_report) %>
+      <div class="p-4 rounded-md <%= hr.has_degraded? ? "bg-danger/10 border border-danger/40" : "bg-ink/30 border border-white/10" %> mb-5">
+        <div class="text-xs uppercase tracking-tight text-white/50 font-bold mb-2">Gate semántico (anclaje + juez)</div>
+        <div class="flex flex-wrap gap-2 text-xs mb-2">
+          <span class="px-2 py-1 rounded bg-success/15 text-success-light font-bold"><%= hr.grounded_lines %> grounded</span>
+          <span class="px-2 py-1 rounded <%= hr.has_degraded? ? "bg-danger/20 text-danger" : "bg-ink/50 text-white/50" %> font-bold"><%= hr.degraded_lines %> degradadas</span>
+          <span class="px-2 py-1 rounded bg-brand/15 text-brand-soft font-bold"><%= hr.insufficient_lines %> sin datos</span>
+        </div>
+        <% hr.lines.select(&:degraded?).each do |ln| %>
+          <p class="text-xs text-danger">• <%= ln.module_name %> / <%= ln.component %>: <%= ln.reason %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if estimate.insufficient? %>
+      <div class="p-5 rounded-md bg-ink/40 border border-white/10">
+        <span class="text-xs font-bold tracking-tight uppercase bg-brand text-ink-dark px-2 py-1 rounded">insufficient</span>
+        <p class="text-white/90 text-sm mt-3"><%= estimate.insufficient_context_explanation.presence || estimate.reasoning %></p>
+      </div>
+    <% else %>
+      <div class="p-4 rounded-md bg-ink/30 border border-white/10 mb-5 inline-flex items-center gap-2">
+        <span class="text-xs uppercase tracking-tight text-white/50 font-bold">Confianza estructura</span>
+        <span class="text-lg font-bold tracking-tighter text-white"><%= estimate.confidence %></span>
+      </div>
+
+      <%# Modular breakdown: one section per functional block, tasks inside. No
+          hours yet — they arrive in the per-task hours step. %>
+      <% estimate.modules.each do |mod| %>
+        <div class="rounded-md border border-white/10 overflow-hidden mb-4">
+          <div class="flex items-center justify-between bg-ink/40 px-3 py-2">
+            <div>
+              <span class="font-bold text-white"><%= mod.name %></span>
+              <% if mod.description.present? %>
+                <span class="text-white/50 text-xs block"><%= mod.description %></span>
+              <% end %>
+            </div>
+            <span class="text-white/40 tabular-nums text-xs shrink-0"><%= mod.tasks.size %> tareas</span>
+          </div>
+          <table class="w-full text-sm">
+            <tbody class="divide-y divide-white/10">
+              <% mod.tasks.each do |task| %>
+                <tr>
+                  <td class="p-3 align-top">
+                    <div class="text-white/90"><%= task.name %></div>
+                    <% if task.description.present? %>
+                      <div class="text-white/50 text-xs mt-0.5"><%= task.description %></div>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      <% end %>
+    <% end %>
+
+    <% if estimate.sources.any? %>
+      <div class="text-xs uppercase tracking-tight text-white/50 font-bold mb-2">Citaciones</div>
+      <div class="flex flex-wrap gap-2 mb-5">
+        <% estimate.sources.each do |src| %>
+          <span class="inline-flex items-center gap-1.5 bg-ink/50 border border-white/10 rounded px-2 py-1 text-xs text-white/80">
+            <span class="font-mono">#<%= src.source_id %></span>
+            <span class="text-brand"><%= src.relevance %></span>
+            <span class="text-white/50"><%= truncate(src.used_for, length: 50) %></span>
+          </span>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if estimate.assumptions.any? %>
+      <div class="text-xs uppercase tracking-tight text-white/50 font-bold mb-2">Supuestos (sin fuente)</div>
+      <ul class="space-y-1 mb-5 text-sm">
+        <% estimate.assumptions.each do |a| %>
+          <li class="text-white/80">
+            <span class="inline-block bg-ink/60 rounded px-1.5 py-0.5 text-xs text-brand mr-1"><%= a.impact %></span>
+            <%= a.description %> <span class="text-white/40">— <%= a.rationale %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <details class="mb-5">
+      <summary class="text-xs uppercase tracking-tight text-white/50 font-bold cursor-pointer">Razonamiento</summary>
+      <p class="text-white/70 text-sm mt-2 leading-relaxed"><%= estimate.reasoning %></p>
+    </details>
+
+    <%= link_to "Continuar → Revisión de la estructura", rag_estimation_run_path(run, step: "review"),
+          class: "inline-flex items-center px-5 py-2.5 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+  <% end %>

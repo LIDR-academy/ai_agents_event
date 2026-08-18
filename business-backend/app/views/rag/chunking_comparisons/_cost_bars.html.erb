@@ -1,0 +1,25 @@
+<% max_cost = response.max_ingestion_cost_usd %>
+<div>
+  <h2 class="text-xs uppercase tracking-tight text-white/50 font-bold mb-2">Coste de ingesta por estrategia</h2>
+  <div class="p-4 rounded-md bg-ink/30 border border-white/10 space-y-2">
+    <% if max_cost.zero? %>
+      <p class="text-sm text-white/60">
+        Todas las estrategias del run son gratuitas: cero llamadas LLM extra durante la ingesta.
+      </p>
+    <% else %>
+      <% response.strategy_names.each do |name| %>
+        <% stats = response.stats_for(name) %>
+        <% pct = ((stats.ingestion_cost_usd.to_f / max_cost) * 100).round %>
+        <div class="flex items-center gap-3 text-sm">
+          <span class="w-44 shrink-0 text-white/80 font-bold tracking-tight truncate"><%= Rag::Strategy.label_for(name) %></span>
+          <div class="flex-1 h-3 rounded bg-ink/50 overflow-hidden">
+            <div class="h-full bg-brand rounded" style="width: <%= [ pct, stats.free? ? 0 : 2 ].max %>%"></div>
+          </div>
+          <span class="w-20 text-right text-white/70 tabular-nums text-xs">
+            <%= stats.free? ? "$0" : "$#{sprintf("%.4f", stats.ingestion_cost_usd)}" %>
+          </span>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<% content_for :title, "Supervisor · ejecución ##{@run.id}" %>
+
+<div class="max-w-4xl mx-auto px-4 py-10">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-3xl font-bold tracking-tighter text-white">Ejecución #<%= @run.id %></h1>
+      <p class="text-white/40 text-xs font-mono mt-1"><%= @run.estimation_id.first(8) %></p>
+    </div>
+    <div class="flex items-center gap-3">
+      <%= render "status_badge", run: @run %>
+      <%= link_to "Bandeja", rag_supervisor_estimation_runs_path,
+            class: "text-sm text-brand hover:text-brand-soft font-bold" %>
+    </div>
+  </div>
+
+  <%# The screen is a pure state machine over the row: paused → review, else result. %>
+  <% if @run.paused? %>
+    <%= render "awaiting_review", run: @run %>
+  <% else %>
+    <%= render "completed", run: @run %>
+  <% end %>
+
+  <%= render "routing_trace", run: @run %>
+  <%= render "audit_trail", run: @run %>
+</div>

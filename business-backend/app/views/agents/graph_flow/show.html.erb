@@ -1,0 +1,136 @@
+<% content_for :title, "Flujo de agentes · Estimator" %>
+
+<%
+  # Card accent per node kind, and the labeled connector per outgoing transition.
+  card_cls = {
+    agent:  "border-brand/30",
+    gate:   "border-amber-400/40",
+    fanout: "border-sky-400/40",
+    join:   "border-white/20"
+  }
+  kind_badges = {
+    agent:  "bg-brand/15 text-brand",
+    gate:   "bg-amber-400/15 text-amber-300",
+    fanout: "bg-sky-400/15 text-sky-300",
+    join:   "bg-white/10 text-white/60"
+  }
+  connectors = {
+    handover:    { text: "Command(goto=…)", note: "handover explícito — sin arista estática", cls: "border-brand/40 text-brand" },
+    edge:        { text: "arista estática",  note: nil, cls: "border-white/15 text-white/50" },
+    send:        { text: "Send · fan-out",   note: "una rama en paralelo por cada tarea aprobada", cls: "border-sky-400/40 text-sky-300" },
+    join:        { text: "join · N → 1",     note: "las ramas convergen en el mismo super-step", cls: "border-white/20 text-white/60" },
+    conditional: { text: "arista condicional", note: "→ proposal si GRAPH_PROPOSAL_ENABLED + want_proposal · si no → END", cls: "border-amber-400/40 text-amber-300" },
+    end:         { text: "END", note: nil, cls: "border-success/40 text-success-light" }
+  }
+%>
+
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold tracking-tighter text-white">Flujo de agentes</h1>
+    <p class="text-white/60 mt-1 text-sm max-w-2xl">
+      El pipeline de estimación reexpresado como un <span class="text-white font-bold">grafo LangGraph</span>:
+      una <span class="text-white font-bold">estado compartido tipado</span> que fluye por agentes
+      especializados. Dos <span class="text-white font-bold">handovers</span> explícitos
+      (<code class="font-mono text-brand">Command(goto)</code>), dos <span class="text-white font-bold">gates humanos</span>
+      (<code class="font-mono text-brand">interrupt()</code> + resume) y un <span class="text-white font-bold">fan-out</span>
+      (<code class="font-mono text-brand">Send</code>) que estima cada tarea en paralelo. Recurso de solo
+      lectura — no ejecuta nada.
+    </p>
+  </div>
+
+  <%# --- Leyenda de la notación ------------------------------------------- %>
+  <div class="rounded-md border border-white/10 bg-ink/30 px-4 py-3 mb-8 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-xs">
+    <div class="flex items-start gap-2">
+      <span class="font-mono text-brand shrink-0">Command(goto)</span>
+      <span class="text-white/50">handover: un agente pasa el control a otro sin arista estática.</span>
+    </div>
+    <div class="flex items-start gap-2">
+      <span class="font-mono text-amber-300 shrink-0">interrupt()</span>
+      <span class="text-white/50">gate humano: el grafo pausa y espera un resume con la decisión.</span>
+    </div>
+    <div class="flex items-start gap-2">
+      <span class="font-mono text-sky-300 shrink-0">Send</span>
+      <span class="text-white/50">fan-out: una rama en paralelo por tarea; convergen en un join.</span>
+    </div>
+    <div class="flex items-start gap-2">
+      <span class="font-mono text-amber-300 shrink-0">conditional</span>
+      <span class="text-white/50">arista condicional: enruta a proposal o a END según el estado.</span>
+    </div>
+  </div>
+
+  <%# --- El grafo, de arriba abajo ---------------------------------------- %>
+  <div class="flex flex-col items-stretch">
+    <%# START %>
+    <div class="self-center text-xs font-mono font-bold tracking-tight uppercase px-3 py-1 rounded-full bg-white/10 text-white/60">START</div>
+    <div class="flex flex-col items-center py-1">
+      <div class="w-px h-3 bg-white/15"></div>
+      <div class="w-px h-3 bg-white/15"></div>
+    </div>
+
+    <% Agents::GraphFlow::NODES.each do |node| %>
+      <% ch = Agents::GraphFlow.character_for(node.key) %>
+      <%# --- tarjeta de nodo --- %>
+      <div class="rounded-lg border <%= card_cls.fetch(node.kind, "border-white/15") %> bg-ink/30 p-4">
+        <div class="flex items-center justify-between gap-3 flex-wrap">
+          <div class="flex items-center gap-2.5">
+            <% if ch %>
+              <span class="shrink-0 h-9 w-9 rounded-full border flex items-center justify-center text-lg <%= ch.classes %>" title="<%= ch.name %>"><%= ch.avatar %></span>
+            <% end %>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="font-bold text-white"><%= ch&.name || node.label %></span>
+                <span class="text-xs font-bold uppercase tracking-tight px-1.5 py-0.5 rounded <%= kind_badges.fetch(node.kind, "bg-white/10 text-white/60") %>">
+                  <%= Agents::GraphFlow.kind_label(node.kind) %>
+                </span>
+              </div>
+              <div class="text-white/40 text-xs"><%= node.label %><% if ch %> · <span class="italic">«<%= ch.tagline %>»</span><% end %></div>
+            </div>
+          </div>
+          <div class="text-xs">
+            <% if node.model %>
+              <span class="font-mono text-white/80"><%= node.model %></span>
+            <% else %>
+              <span class="text-white/40 italic">sin LLM</span>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="text-white/30 text-xs font-mono mt-1">
+          <%= node.node_fn %>()<% if node.config_key %> · <%= node.config_key %><% end %>
+        </div>
+
+        <p class="text-sm text-white/80 font-bold tracking-tight mt-2.5"><%= node.role %></p>
+        <p class="text-white/50 text-xs mt-1 leading-relaxed"><%= node.explanation %></p>
+
+        <% if node.kind == :gate %>
+          <div class="mt-2.5 inline-flex items-center gap-1.5 text-xs bg-amber-400/10 text-amber-300 px-2 py-1 rounded">
+            <span>⏸</span><span>pausa <code class="font-mono">interrupt()</code> — reanuda con <code class="font-mono">Command(resume=…)</code></span>
+          </div>
+        <% end %>
+      </div>
+
+      <%# --- conector saliente --- %>
+      <% c = connectors.fetch(node.edge, connectors[:edge]) %>
+      <div class="flex flex-col items-center py-1.5">
+        <div class="w-px h-3 bg-white/15"></div>
+        <div class="text-xs font-mono px-2.5 py-1 rounded-md border bg-ink/40 <%= c[:cls] %>">
+          ↓ <%= c[:text] %>
+        </div>
+        <% if c[:note] %>
+          <div class="text-white/40 text-xs mt-1 text-center max-w-sm"><%= c[:note] %></div>
+        <% end %>
+        <div class="w-px h-3 bg-white/15"></div>
+      </div>
+    <% end %>
+
+    <%# END %>
+    <div class="self-center text-xs font-mono font-bold tracking-tight uppercase px-3 py-1 rounded-full bg-success/15 border border-success/40 text-success-light">END</div>
+  </div>
+
+  <div class="mt-10 pt-6 border-t border-white/10 flex items-center gap-4">
+    <%= link_to "← Volver a Agentes", agents_profiles_path,
+          class: "text-brand font-bold hover:text-brand-soft tracking-tight text-sm" %>
+    <%= link_to "Probar el flujo", new_rag_graph_estimation_run_path,
+          class: "text-white/60 font-bold hover:text-white tracking-tight text-sm" %>
+  </div>
+</div>

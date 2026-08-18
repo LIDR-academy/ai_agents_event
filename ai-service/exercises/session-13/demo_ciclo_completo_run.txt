@@ -1,0 +1,843 @@
+2026-07-16 09:01:54 [info     ] logfire_configured             service_name=estimator
+transcript    : /tmp/demo_ciclo.txt
+checkpointer  : AsyncPostgresSaver (pool)
+per-task hours: real estimate_one()
+estimation_id : s13-demo_ciclo
+
+2026-07-16 09:01:54 [info     ] graph_checkpointer_ready       pool_max=10
+[92m09:02:07 - LiteLLM:WARNING[0m: common_utils.py:979 - litellm: could not pre-load bedrock-runtime response stream shape — Bedrock event-stream decoding will be unavailable. Error: No module named 'botocore'
+[92m09:02:07 - LiteLLM:WARNING[0m: common_utils.py:24 - litellm: could not pre-load sagemaker-runtime response stream shape — SageMaker event-stream decoding will be unavailable. Error: No module named 'botocore'
+2026-07-16 09:02:07 [info     ] llm_structured_call_started    model=gpt-4o-mini response_model=ComplexityClassification
+2026-07-16 09:02:18 [info     ] llm_structured_call_completed  latency_ms=10895 model=gpt-4o-mini provider=openai
+2026-07-16 09:02:18 [info     ] agent_classifier_done          brief_chars=2270 complexity=high
+2026-07-16 09:02:18 [info     ] agent_structure_start          effort=high model=gpt-5 persona=False
+2026-07-16 09:04:17 [info     ] agent_structure_done           confidence=medium modules=14 tasks=138
+2026-07-16 09:04:17 [info     ] agent_structure_node_done      effort=high modules=14 tasks=138
+  ⏸ human gate 'structure_review' → auto-resume {'approved': True}
+2026-07-16 09:04:17 [info     ] human_gate_structure_resumed   approved=True modules=14
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1498 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=37 module='Business Backend (Contracts, Billing, Customer API)' task='Invoice calculation pipeline'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1493 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=37 module='Business Backend (Contracts, Billing, Customer API)' task='Payments & dunning'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1500 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=34 module='Business Backend (Contracts, Billing, Customer API)' task='Billing rules engine'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1495 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=32 module='Solution Architecture & Discovery' task='Tech stack decisions'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1500 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=37 module='Business Backend (Contracts, Billing, Customer API)' task='Direct debit (SEPA) integration'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1503 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=34 module='Solution Architecture & Discovery' task='Delivery phasing plan'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1499 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=34 module='Solution Architecture & Discovery' task='Build-vs-buy assessments'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1505 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=34 module='Solution Architecture & Discovery' task='Stakeholder workshops & domain discovery'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1514 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=33 module='Solution Architecture & Discovery' task='Target architecture blueprint'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1511 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Business Backend (Contracts, Billing, Customer API)' task='Invoice rendering & numbering'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1505 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Business Backend (Contracts, Billing, Customer API)' task='Consumption aggregation service'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=3 search_mode=vector search_time_ms=1514 vector_hits=3
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=32 module='Business Backend (Contracts, Billing, Customer API)' task='Domain model & relational schema'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1505 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Solution Architecture & Discovery' task='High-level data model'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1509 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Solution Architecture & Discovery' task='Regulatory rules inventory'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1517 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Solution Architecture & Discovery' task='Non-functional requirements & SLAs'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1448 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=36 module='Business Backend (Contracts, Billing, Customer API)' task='Admin UI for tariffs/rules'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1440 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=25 module='Business Backend (Contracts, Billing, Customer API)' task='ERP/accounting export'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1438 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Business Backend (Contracts, Billing, Customer API)' task='Golden test datasets'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1434 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Business Backend (Contracts, Billing, Customer API)' task='Reference data seeding'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1433 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=38 module='Business Backend (Contracts, Billing, Customer API)' task='Public API (REST/GraphQL)'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1426 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Telemetric Ingestion Layer' task='Out-of-order handling'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1450 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Telemetric Ingestion Layer' task='Deduplication & idempotency'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1444 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Telemetric Ingestion Layer' task='Protocol adapters'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1433 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Telemetric Ingestion Layer' task='Canonical reading schema'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1444 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Business Backend (Contracts, Billing, Customer API)' task='Audit & change history'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1424 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=50 module='Telemetric Ingestion Layer' task='Streaming pipeline'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1397 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Telemetric Ingestion Layer' task='Data quality & anomalies'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=1 search_mode=vector search_time_ms=1423 vector_hits=1
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=48 module='Telemetric Ingestion Layer' task='Secure connectivity'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1396 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Telemetric Ingestion Layer' task='Device registry & provisioning'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1373 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=27 module='Telemetric Ingestion Layer' task='Time-series storage'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1316 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=50 module='Telemetric Ingestion Layer' task='Monitoring & SLOs'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1352 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Telemetric Ingestion Layer' task='Error handling & DLQ'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1315 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Telemetric Ingestion Layer' task='Historical backfill'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1317 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Telemetric Ingestion Layer' task='Publish aggregates'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1318 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=32 module='Customer Self-Service Portal (Web)' task='UX flows & IA'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1284 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=25 module='Customer Self-Service Portal (Web)' task='Authentication & account linking'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1299 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=30 module='Customer Self-Service Portal (Web)' task='React app scaffolding'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1312 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Customer Self-Service Portal (Web)' task='Issue reporting'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1302 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=37 module='Customer Self-Service Portal (Web)' task='Consumption dashboards'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1297 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Customer Self-Service Portal (Web)' task='Direct debit setup'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1259 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Customer Self-Service Portal (Web)' task='Tariff change flow'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1253 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=19 module='Customer Self-Service Portal (Web)' task='Notifications & preferences'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1240 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=20 module='Customer Self-Service Portal (Web)' task='Accessibility & responsive'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1235 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Customer Self-Service Portal (Web)' task='Bills & payments UI'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1233 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Customer Self-Service Portal (Web)' task='Performance & error states'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=1 search_mode=vector search_time_ms=1200 vector_hits=1
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=35 module='Customer Self-Service Portal (Web)' task='Analytics & consent'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1179 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Mobile Field Technician App' task='Offline-first data layer'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1179 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=35 module='Mobile Field Technician App' task='Project setup & UI kit'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1186 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Mobile Field Technician App' task='Work orders module'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=1 search_mode=vector search_time_ms=1183 vector_hits=1
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=25 module='Mobile Field Technician App' task='Auth & device registration'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1179 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Mobile Field Technician App' task='Commissioning workflow'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1164 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Mobile Field Technician App' task='On-site diagnostics'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=2 search_mode=vector search_time_ms=1166 vector_hits=2
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=31 module='Mobile Field Technician App' task='Maps & routing'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1142 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=21 module='Mobile Field Technician App' task='Push notifications'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1145 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Mobile Field Technician App' task='Customer signature'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1093 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=31 module='Mobile Field Technician App' task='Telemetry & crash reporting'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1117 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Mobile Field Technician App' task='Release & distribution'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1109 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Mobile Field Technician App' task='Device security'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1094 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Dynamic Tariff & Forecasting Engine' task='Tariff policy definition'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1098 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Dynamic Tariff & Forecasting Engine' task='Market price ingestion'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1054 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Dynamic Tariff & Forecasting Engine' task='Baseline forecasting model'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1041 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Dynamic Tariff & Forecasting Engine' task='Feature engineering'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1026 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Dynamic Tariff & Forecasting Engine' task='Publish tariffs'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1027 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Dynamic Tariff & Forecasting Engine' task='Simulation sandbox'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1029 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Dynamic Tariff & Forecasting Engine' task='Model serving API'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1019 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Dynamic Tariff & Forecasting Engine' task='Monitoring & retraining'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=1028 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Dynamic Tariff & Forecasting Engine' task='Versioning & governance'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=1008 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=29 module='Regulatory Compliance & Reporting' task='Obligation catalogue'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=996 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Regulatory Compliance & Reporting' task='Data lineage & mapping'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=975 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=29 module='Regulatory Compliance & Reporting' task='Report generation'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=966 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=29 module='Regulatory Compliance & Reporting' task='Regulated charge validation'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=2 search_mode=vector search_time_ms=961 vector_hits=2
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=26 module='Regulatory Compliance & Reporting' task='Secure submission'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=935 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=25 module='Regulatory Compliance & Reporting' task='Immutable audit trail'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=942 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Regulatory Compliance & Reporting' task='Exception handling UI'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=934 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Dynamic Tariff & Forecasting Engine' task='Tariff calculation engine'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=895 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=29 module='Regulatory Compliance & Reporting' task='Annual update workflow'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=877 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=20 module='Identity & Access Management' task='API & device credentials'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=893 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Identity & Access Management' task='Tenant/realm separation'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=878 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Regulatory Compliance & Reporting' task='Auditor access'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=862 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=21 module='Identity & Access Management' task='MFA & recovery'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=872 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Identity & Access Management' task='IdP setup'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=4 search_mode=vector search_time_ms=869 vector_hits=4
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=20 module='Identity & Access Management' task='RBAC/ABAC policies'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=862 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Regulatory Compliance & Reporting' task='Data retention & masking'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=843 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Identity & Access Management' task='Session/token management'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=818 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=25 module='Data Platform & Storage' task='Database selection & sizing'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=839 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Identity & Access Management' task='Provisioning (SCIM)'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=815 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Identity & Access Management' task='Auth auditing'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=794 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=26 module='Data Platform & Storage' task='Schema design'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=813 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Identity & Access Management' task='Secrets management'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=802 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Platform & Storage' task='Time-series partitioning'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=746 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=45 module='Data Platform & Storage' task='ETL/ELT pipelines'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=743 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Platform & Storage' task='Raw telemetry lake'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=739 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Platform & Storage' task='Backup & restore'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=737 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Platform & Storage' task='Performance tuning'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=735 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Platform & Storage' task='Data catalog & governance'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=731 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=38 module='DevOps & Infrastructure' task='Cloud landing zone'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=729 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=39 module='DevOps & Infrastructure' task='Containerization & orchestration'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=689 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='DevOps & Infrastructure' task='Runbooks & on-call'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=729 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Platform & Storage' task='CDC & data sharing'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=675 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=38 module='DevOps & Infrastructure' task='Infrastructure as Code'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=685 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=24 module='DevOps & Infrastructure' task='CI/CD pipelines'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=667 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=45 module='DevOps & Infrastructure' task='Scalability & capacity'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=665 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=20 module='DevOps & Infrastructure' task='Observability stack'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=650 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='DevOps & Infrastructure' task='DR & backups'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=649 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=31 module='DevOps & Infrastructure' task='Cost management'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=629 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Security & Privacy' task='Threat modeling'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=615 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Security & Privacy' task='Transport security'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=1 search_mode=vector search_time_ms=590 vector_hits=1
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=25 module='Security & Privacy' task='Secure SDLC'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=587 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Security & Privacy' task='Incident response'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=586 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Security & Privacy' task='GDPR compliance'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=587 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Security & Privacy' task='PII classification'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=582 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=23 module='Security & Privacy' task='Data protection'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=556 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=36 module='QA & Testing' task='Test strategy & gates'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=554 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=27 module='QA & Testing' task='Backend/unit/integration tests'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=539 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=27 module='QA & Testing' task='Mobile UI tests'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=538 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=28 module='QA & Testing' task='E2E portal tests'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=1 search_mode=vector search_time_ms=515 vector_hits=1
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=37 module='QA & Testing' task='Device protocol simulators'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=514 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=15 module='QA & Testing' task='Performance & load tests'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=512 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=34 module='Security & Privacy' task='Vulnerability management'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=516 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=27 module='QA & Testing' task='Contract & schema tests'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=4 search_mode=vector search_time_ms=518 vector_hits=4
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=17 module='QA & Testing' task='Test data management'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=496 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=26 module='QA & Testing' task='UAT coordination'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=468 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Migration & Cutover' task='Legacy inventory & mapping'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=484 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=31 module='QA & Testing' task='Regression in CI'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=412 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Migration & Cutover' task='Trial migrations'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=336 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Migration & Cutover' task='Cutover plan'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=401 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Migration & Cutover' task='Cleansing & transformation'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=337 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Migration & Cutover' task='Shadow/parallel billing'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=300 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=27 module='Project Management & Delivery' task='Training & handover'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=301 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Project Management & Delivery' task='Phased roadmap & milestones'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=301 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Project Management & Delivery' task='Risk & dependency management'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=303 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Project Management & Delivery' task='Backlog & prioritization'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=302 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=29 module='Project Management & Delivery' task='Go-live & hypercare'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=301 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=41 module='Project Management & Delivery' task='Stakeholder reporting'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=303 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Project Management & Delivery' task='Governance & ceremonies'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=304 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Project Management & Delivery' task='Proposal & pricing pack'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=303 vector_hits=0
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=False hours=None module='Data Migration & Cutover' task='Post-go-live validation'
+2026-07-16 09:04:20 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=303 vector_hits=5
+2026-07-16 09:04:20 [info     ] estimate_task_hours_branch     has_match=True hours=43 module='Project Management & Delivery' task='Vendor/partner coordination'
+2026-07-16 09:04:20 [info     ] agentic_recovery_start         flagged=74 total=138
+2026-07-16 09:04:20 [info     ] agent_hours_recovery_start     effort=medium flagged=74 model=gpt-5 persona=False
+2026-07-16 09:05:36 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=21 vector_hits=0
+2026-07-16 09:05:36 [info     ] agent_tool_search_budgets      query='Define non-functional requirements and SLAs for a SaaS platform: latency, throughput, availability, security, data retention.' results=0
+2026-07-16 09:05:36 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=19 vector_hits=0
+2026-07-16 09:05:36 [info     ] agent_tool_search_budgets      query='Design high-level domain data model for utilities billing: customers, meters, contracts, tariffs, invoices.' results=0
+2026-07-16 09:05:37 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=5 vector_hits=0
+2026-07-16 09:05:37 [info     ] agent_tool_search_budgets      query='Regulatory rules inventory for an energy retailer: catalog regulator and distributor obligations, update cadence, and test data needs.' results=0
+2026-07-16 09:05:37 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=13 vector_hits=0
+2026-07-16 09:05:37 [info     ] agent_tool_search_budgets      query='Consumption aggregation microservice to roll up telemetry to billing periods; handle gap filling, estimates, and corrections.' results=0
+2026-07-16 09:05:37 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=9 vector_hits=0
+2026-07-16 09:05:37 [info     ] agent_tool_search_budgets      query='Invoice PDF rendering service with legal numbering/series management and archival for billing.' results=0
+2026-07-16 09:05:37 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=11 vector_hits=5
+2026-07-16 09:05:37 [info     ] agent_tool_search_budgets      query='SEPA direct debit integration: mandate capture, PAIN.008 file generation, bank reconciliation workflows.' results=5
+2026-07-16 09:05:37 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=16 vector_hits=0
+2026-07-16 09:05:37 [info     ] agent_tool_search_budgets      query='Audit log and change history for master data with immutability, approvals, and reason codes.' results=0
+2026-07-16 09:05:37 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=10 vector_hits=0
+2026-07-16 09:05:37 [info     ] agent_tool_search_budgets      query='Create golden test datasets for billing validation over time with reference scenarios.' results=0
+2026-07-16 09:05:38 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=13 vector_hits=0
+2026-07-16 09:05:38 [info     ] agent_tool_search_budgets      query='Reference data seeding: load tariff catalogs, tax tables, and initial configuration for a billing system.' results=0
+2026-07-16 09:05:38 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=13 vector_hits=0
+2026-07-16 09:05:38 [info     ] agent_tool_search_budgets      query='Device registry and provisioning for meters/EV chargers: register devices, map to accounts, manage credentials.' results=0
+2026-07-16 09:05:38 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=11 vector_hits=0
+2026-07-16 09:05:38 [info     ] agent_tool_search_budgets      query='Implement protocol adapters: MQTT topic mapping, Modbus/TCP drivers, and OCPP 1.6/2.0.1 handlers.' results=0
+2026-07-16 09:05:38 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=13 vector_hits=0
+2026-07-16 09:05:38 [info     ] agent_tool_search_budgets      query='Canonical meter reading event schema with versioning and schema registry.' results=0
+2026-07-16 09:05:38 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=13 vector_hits=5
+2026-07-16 09:05:38 [info     ] agent_tool_search_budgets      query='Out-of-order event handling in IoT ingestion using event-time, watermarks, and reorder buffers.' results=5
+2026-07-16 09:05:38 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=12 vector_hits=5
+2026-07-16 09:05:38 [info     ] agent_tool_search_budgets      query='Deduplication, counter rollover detection, and idempotent writes in telemetry ingestion pipeline.' results=5
+2026-07-16 09:05:39 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=3 vector_hits=0
+2026-07-16 09:05:39 [info     ] agent_tool_search_budgets      query='Telemetry data quality and anomaly detection: range checks, plausibility checks, and flagging suspect readings.' results=0
+2026-07-16 09:05:39 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=1 search_mode=vector search_time_ms=12 vector_hits=1
+2026-07-16 09:05:39 [info     ] agent_tool_search_budgets      query='Error handling for ingestion pipeline: retry strategies, dead-letter queues, and reprocessing tools.' results=1
+2026-07-16 09:05:39 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=10 vector_hits=0
+2026-07-16 09:05:39 [info     ] agent_tool_search_budgets      query='Historical backfill tooling to bulk import past meter readings and reconcile.' results=0
+2026-07-16 09:05:39 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=12 vector_hits=0
+2026-07-16 09:05:39 [info     ] agent_tool_search_budgets      query='Publish derived consumption aggregates/events from ingestion to billing backend.' results=0
+2026-07-16 09:05:39 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=9 vector_hits=0
+2026-07-16 09:05:39 [info     ] agent_tool_search_budgets      query='Web portal bills and payments UI: list invoices, details, PDF download, payment status.' results=0
+2026-07-16 09:05:39 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=11 vector_hits=0
+2026-07-16 09:05:39 [info     ] agent_tool_search_budgets      query='Tariff change self-service flow: eligibility checks, simulation, confirmation, effective date handling.' results=0
+2026-07-16 09:05:40 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=12 vector_hits=0
+2026-07-16 09:05:40 [info     ] agent_tool_search_budgets      query='Direct debit setup in customer portal: capture SEPA mandate consent and show mandate status.' results=0
+2026-07-16 09:05:40 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=9 vector_hits=5
+2026-07-16 09:05:40 [info     ] agent_tool_search_budgets      query='Customer issue reporting UI: create and view tickets with categories, attachments, and progress tracking.' results=5
+2026-07-16 09:05:40 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=9 vector_hits=5
+2026-07-16 09:05:40 [info     ] agent_tool_search_budgets      query='Web app performance and error state handling: code splitting, caching, robust error/empty states.' results=5
+2026-07-16 09:05:40 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=9 vector_hits=0
+2026-07-16 09:05:40 [info     ] agent_tool_search_budgets      query='Offline-first mobile data layer: local SQLite database and sync with conflict resolution.' results=0
+2026-07-16 09:05:40 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=9 vector_hits=0
+2026-07-16 09:05:40 [info     ] agent_tool_search_budgets      query='Mobile work orders module: inbox, details, accept/complete, notes, photo attachments.' results=0
+2026-07-16 09:05:40 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=12 vector_hits=0
+2026-07-16 09:05:40 [info     ] agent_tool_search_budgets      query='Mobile commissioning workflow: QR/barcode scanning, meter serial capture, validation checks.' results=0
+2026-07-16 09:05:41 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=10 vector_hits=0
+2026-07-16 09:05:41 [info     ] agent_tool_search_budgets      query='Mobile customer signature capture attached to completion reports.' results=0
+2026-07-16 09:05:41 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=9 vector_hits=0
+2026-07-16 09:05:41 [info     ] agent_tool_search_budgets      query='Mobile on-site diagnostics for meters/devices: connectivity tests and troubleshooting.' results=0
+2026-07-16 09:05:41 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=8 vector_hits=5
+2026-07-16 09:05:41 [info     ] agent_tool_search_budgets      query='Mobile app device security: secure storage, biometric/PIN lock, and root/jailbreak detection.' results=5
+2026-07-16 09:05:41 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=9 vector_hits=5
+2026-07-16 09:05:41 [info     ] agent_tool_search_budgets      query='Mobile CI/CD and distribution: automate builds, signing, and App Store/Play/MDM deployment.' results=5
+2026-07-16 09:05:41 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=10 vector_hits=0
+2026-07-16 09:05:41 [info     ] agent_tool_search_budgets      query='Tariff policy/rule definition: business constraints, caps/floors, approval workflow.' results=0
+2026-07-16 09:05:41 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=11 vector_hits=0
+2026-07-16 09:05:41 [info     ] agent_tool_search_budgets      query='Wholesale market price ingestion: fetch, validate, and schedule updates.' results=0
+2026-07-16 09:05:42 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=8 vector_hits=0
+2026-07-16 09:05:42 [info     ] agent_tool_search_budgets      query='Feature store for forecasting: combine weather, calendar, and historical signals.' results=0
+2026-07-16 09:05:42 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=12 vector_hits=0
+2026-07-16 09:05:42 [info     ] agent_tool_search_budgets      query='Baseline energy consumption forecasting model: train and backtest (Prophet/XGBoost/LSTM) with MAPE targets.' results=0
+2026-07-16 09:05:42 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=13 vector_hits=0
+2026-07-16 09:05:42 [info     ] agent_tool_search_budgets      query='Deploy ML model serving API for online inference with autoscaling and authentication.' results=0
+2026-07-16 09:05:42 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=10 vector_hits=0
+2026-07-16 09:05:42 [info     ] agent_tool_search_budgets      query='Tariff calculation engine: apply rules and guardrails to forecasts and inputs to produce prices.' results=0
+2026-07-16 09:05:42 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=9 vector_hits=0
+2026-07-16 09:05:42 [info     ] agent_tool_search_budgets      query='Simulation sandbox: run what-if scenarios and compare against historical data.' results=0
+2026-07-16 09:05:43 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=12 vector_hits=0
+2026-07-16 09:05:43 [info     ] agent_tool_search_budgets      query='Model and rule versioning and governance: track versions, approvals, and rollback capability.' results=0
+2026-07-16 09:05:43 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=13 vector_hits=0
+2026-07-16 09:05:43 [info     ] agent_tool_search_budgets      query='Publish approved tariffs to backend and customer portal with effective dates.' results=0
+2026-07-16 09:05:43 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=9 vector_hits=5
+2026-07-16 09:05:43 [info     ] agent_tool_search_budgets      query='Model monitoring and scheduled retraining: drift detection and accuracy tracking.' results=5
+2026-07-16 09:05:43 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=11 vector_hits=0
+2026-07-16 09:05:43 [info     ] agent_tool_search_budgets      query='Data lineage and mapping for regulatory reporting: define sources and transformations for reportable fields.' results=0
+2026-07-16 09:05:43 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=11 vector_hits=5
+2026-07-16 09:05:43 [info     ] agent_tool_search_budgets      query='Exception handling back-office UI: manage rejections, corrections, and resubmissions.' results=5
+2026-07-16 09:05:43 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=2 search_mode=vector search_time_ms=12 vector_hits=2
+2026-07-16 09:05:43 [info     ] agent_tool_search_budgets      query='GDPR data retention, masking, and subject-access exports implementation.' results=2
+2026-07-16 09:05:44 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=3 vector_hits=5
+2026-07-16 09:05:44 [info     ] agent_tool_search_budgets      query='Auditor access: provide read-only views and export packs for audits.' results=5
+2026-07-16 09:05:44 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=8 vector_hits=5
+2026-07-16 09:05:44 [info     ] agent_tool_search_budgets      query='Identity provider setup (Keycloak/Auth0) with OIDC/OAuth2 flows.' results=5
+2026-07-16 09:05:44 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=9 vector_hits=0
+2026-07-16 09:05:44 [info     ] agent_tool_search_budgets      query='Multi-tenant realm separation in IAM: isolate customers, technicians, and staff with tailored policies.' results=0
+2026-07-16 09:05:44 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=2 search_mode=vector search_time_ms=12 vector_hits=2
+2026-07-16 09:05:44 [info     ] agent_tool_search_budgets      query='SCIM provisioning: integrate HR/Active Directory for staff lifecycle management.' results=2
+2026-07-16 09:05:44 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=11 vector_hits=5
+2026-07-16 09:05:44 [info     ] agent_tool_search_budgets      query='Session and token management in IAM: token lifetimes, refresh, PKCE, and logout flows.' results=5
+2026-07-16 09:05:44 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=10 vector_hits=5
+2026-07-16 09:05:44 [info     ] agent_tool_search_budgets      query='Authentication auditing: centralize login events, detect anomalies, and send alerts.' results=5
+2026-07-16 09:05:45 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=13 vector_hits=5
+2026-07-16 09:05:45 [info     ] agent_tool_search_budgets      query='Secrets management using Vault/KMS: keys, rotation, and access control.' results=5
+2026-07-16 09:05:45 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=8 vector_hits=5
+2026-07-16 09:05:45 [info     ] agent_tool_search_budgets      query='Time-series database partitioning strategy: retention, compression, and partitioning.' results=5
+2026-07-16 09:05:45 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=11 vector_hits=0
+2026-07-16 09:05:45 [info     ] agent_tool_search_budgets      query='Raw telemetry data lake: persist canonical events to object storage with lifecycle policies.' results=0
+2026-07-16 09:05:45 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=8 vector_hits=0
+2026-07-16 09:05:45 [info     ] agent_tool_search_budgets      query='Data catalog and governance: data dictionary, PII flags, and quality rules ownership.' results=0
+2026-07-16 09:05:45 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=11 vector_hits=0
+2026-07-16 09:05:45 [info     ] agent_tool_search_budgets      query='Backup and restore for data platforms: PITR, snapshots, and restore drills.' results=0
+2026-07-16 09:05:46 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=13 vector_hits=0
+2026-07-16 09:05:46 [info     ] agent_tool_search_budgets      query='Database performance tuning: optimize queries, caching, and connection pooling.' results=0
+2026-07-16 09:05:46 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=10 vector_hits=5
+2026-07-16 09:05:46 [info     ] agent_tool_search_budgets      query='Change data capture and safe data sharing feeds for downstream systems.' results=5
+2026-07-16 09:05:46 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=10 vector_hits=0
+2026-07-16 09:05:46 [info     ] agent_tool_search_budgets      query='Runbooks and on-call readiness: define SLOs, alerts, and remediation procedures.' results=0
+2026-07-16 09:05:46 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=8 vector_hits=0
+2026-07-16 09:05:46 [info     ] agent_tool_search_budgets      query='Disaster recovery and backups: set RTO/RPO targets, backups, chaos/resilience drills.' results=0
+2026-07-16 09:05:46 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=5 vector_hits=5
+2026-07-16 09:05:46 [info     ] agent_tool_search_budgets      query='Threat modeling across system components and key data flows.' results=5
+2026-07-16 09:05:46 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=10 vector_hits=5
+2026-07-16 09:05:46 [info     ] agent_tool_search_budgets      query='Transport security: enforce TLS everywhere, internal mTLS, and automate certificate lifecycle.' results=5
+2026-07-16 09:05:47 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=11 vector_hits=0
+2026-07-16 09:05:47 [info     ] agent_tool_search_budgets      query='PII classification: catalog personal data, data minimization, and masking strategies.' results=0
+2026-07-16 09:05:47 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=2 vector_hits=0
+2026-07-16 09:05:47 [info     ] agent_tool_search_budgets      query='GDPR compliance program: DPIA, consents, privacy notices, and subject-rights handling.' results=0
+2026-07-16 09:05:47 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=10 vector_hits=0
+2026-07-16 09:05:47 [info     ] agent_tool_search_budgets      query='Incident response readiness: playbooks, tabletop exercises, and audit readiness.' results=0
+2026-07-16 09:05:47 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=2 search_mode=vector search_time_ms=10 vector_hits=2
+2026-07-16 09:05:47 [info     ] agent_tool_search_budgets      query='Legacy data inventory and mapping: catalog sources, field mappings, and quality gaps.' results=2
+2026-07-16 09:05:47 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=11 vector_hits=5
+2026-07-16 09:05:47 [info     ] agent_tool_search_budgets      query='Data cleansing and transformation: deduplicate, normalize, and implement ETL jobs.' results=5
+2026-07-16 09:05:47 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=11 vector_hits=0
+2026-07-16 09:05:47 [info     ] agent_tool_search_budgets      query='Trial migrations: dry runs with reconciliation and variance reports.' results=0
+2026-07-16 09:05:48 [info     ] rag_retrieve_done              candidates_evaluated=0 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=22 vector_hits=0
+2026-07-16 09:05:48 [info     ] agent_tool_search_budgets      query='Shadow/parallel billing: run side-by-side to validate invoices before cutover.' results=0
+2026-07-16 09:05:48 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=12 vector_hits=0
+2026-07-16 09:05:48 [info     ] agent_tool_search_budgets      query='Cutover planning: define freeze windows, rollback steps, and communications.' results=0
+2026-07-16 09:05:48 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=38 vector_hits=5
+2026-07-16 09:05:48 [info     ] agent_tool_search_budgets      query='Post-go-live validation: verify records, resolve defects, and stabilize operations.' results=5
+2026-07-16 09:05:48 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=8 vector_hits=5
+2026-07-16 09:05:48 [info     ] agent_tool_search_budgets      query='Project governance and ceremonies setup: cadence, boards, and decision forums.' results=5
+2026-07-16 09:05:48 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=2 search_mode=vector search_time_ms=10 vector_hits=2
+2026-07-16 09:05:48 [info     ] agent_tool_search_budgets      query='Backlog creation and prioritization aligned to component priorities.' results=2
+2026-07-16 09:05:48 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=10 vector_hits=0
+2026-07-16 09:05:48 [info     ] agent_tool_search_budgets      query='Phased roadmap and milestones: MVP definition, follow-on releases, dependencies.' results=0
+2026-07-16 09:05:49 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=7 vector_hits=0
+2026-07-16 09:05:49 [info     ] agent_tool_search_budgets      query='Risk and dependency management: maintain RAID log and mitigation actions.' results=0
+2026-07-16 09:05:49 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=3 vector_hits=0
+2026-07-16 09:05:49 [info     ] agent_tool_search_budgets      query='Proposal and pricing pack: management presentation and comparable pricing evidence.' results=0
+2026-07-16 09:06:33 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=21 vector_hits=5
+2026-07-16 09:06:33 [info     ] agent_tool_search_budgets      query='NFR/SLA specification and SLOs for an enterprise platform: latency, throughput, availability, security, data retention.' results=5
+2026-07-16 09:06:35 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=11 vector_hits=5
+2026-07-16 09:06:35 [info     ] agent_tool_search_budgets      query='Enterprise billing domain modeling: ERD for customers, assets/meters, contracts, tariffs, and invoices.' results=5
+2026-07-16 09:06:38 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=12 vector_hits=5
+2026-07-16 09:06:38 [info     ] agent_tool_search_budgets      query='Regulatory requirements matrix and obligations catalog; update cadence; test data definition for compliance.' results=5
+2026-07-16 09:06:40 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=2 search_mode=vector search_time_ms=17 vector_hits=2
+2026-07-16 09:06:40 [info     ] agent_tool_search_budgets      query='Meter data aggregation service for billing cycles, with gap-filling, estimation, and corrections.' results=2
+2026-07-16 09:06:42 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=0 search_mode=vector search_time_ms=13 vector_hits=0
+2026-07-16 09:06:42 [info     ] agent_tool_search_budgets      query='Invoice generation service: PDF templates, legal invoice numbering sequences/series, and archival/retention.' results=0
+2026-07-16 09:06:45 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=12 vector_hits=5
+2026-07-16 09:06:45 [info     ] agent_tool_search_budgets      query='Immutable audit trail for master data, with change history, approvals, and reason codes.' results=5
+2026-07-16 09:06:48 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=5 search_mode=vector search_time_ms=9 vector_hits=5
+2026-07-16 09:06:48 [info     ] agent_tool_search_budgets      query='Golden datasets for billing regression tests: curated scenarios tracked over time.' results=5
+2026-07-16 09:06:50 [info     ] rag_retrieve_done              candidates_evaluated=1547 collection=budget lexical_hits=0 rerank=False results=1 search_mode=vector search_time_ms=9 vector_hits=1
+2026-07-16 09:06:50 [info     ] agent_tool_search_budgets      query='Seed reference data for billing: load tariff catalogs, tax tables, and initial configuration scripts.' results=1
+2026-07-16 09:06:52 [warning  ] agent_max_iterations_reached   iterations=10
+2026-07-16 09:06:52 [info     ] agent_hours_recovery_done      derived=0 iterations=10 steps=82 stopped_reason=max_iterations
+2026-07-16 09:06:52 [info     ] recover_and_handover_done      flagged=74 recovered=0 total_engineer_days=251
+2026-07-16 09:06:52 [info     ] llm_structured_call_started    model=gpt-4o response_model=ReliabilityReport
+2026-07-16 09:06:57 [info     ] llm_structured_call_completed  latency_ms=4594 model=gpt-4o provider=openai
+2026-07-16 09:06:57 [info     ] agent_analysis_done            grounded_task_ratio=0.471 overall_confidence=low weak_points=18
+  ⏸ human gate 'final_review' → auto-resume {'validated': True, 'want_proposal': True}
+2026-07-16 09:06:57 [info     ] human_gate_analysis_resumed    overrides=0 validated=True want_proposal=True
+2026-07-16 09:06:57 [info     ] llm_structured_call_started    model=gpt-4o response_model=CommercialProposal
+2026-07-16 09:07:04 [info     ] llm_structured_call_completed  latency_ms=7056 model=gpt-4o provider=openai
+2026-07-16 09:07:04 [info     ] agent_proposal_done            scope=14 title='Comprehensive Software Development Proposal'
+
+==============================================================================
+SESSION 13 — MULTI-AGENT ESTIMATION GRAPH RUN
+==============================================================================
+estimation_id : s13-demo_ciclo
+complexity    : high
+status        : validated
+
+STRUCTURE (structure_agent → gate 1)
+  ▸ Solution Architecture & Discovery
+      - Stakeholder workshops & domain discovery
+      - Non-functional requirements & SLAs
+      - Target architecture blueprint
+      - High-level data model
+      - Regulatory rules inventory
+      - Build-vs-buy assessments
+      - Tech stack decisions
+      - Delivery phasing plan
+  ▸ Business Backend (Contracts, Billing, Customer API)
+      - Domain model & relational schema
+      - Billing rules engine
+      - Consumption aggregation service
+      - Invoice calculation pipeline
+      - Invoice rendering & numbering
+      - Direct debit (SEPA) integration
+      - Payments & dunning
+      - Public API (REST/GraphQL)
+      - Admin UI for tariffs/rules
+      - ERP/accounting export
+      - Audit & change history
+      - Golden test datasets
+      - Reference data seeding
+  ▸ Telemetric Ingestion Layer
+      - Device registry & provisioning
+      - Protocol adapters
+      - Secure connectivity
+      - Canonical reading schema
+      - Out-of-order handling
+      - Deduplication & idempotency
+      - Streaming pipeline
+      - Time-series storage
+      - Data quality & anomalies
+      - Error handling & DLQ
+      - Monitoring & SLOs
+      - Historical backfill
+      - Publish aggregates
+  ▸ Customer Self-Service Portal (Web)
+      - UX flows & IA
+      - React app scaffolding
+      - Authentication & account linking
+      - Consumption dashboards
+      - Bills & payments UI
+      - Tariff change flow
+      - Direct debit setup
+      - Issue reporting
+      - Notifications & preferences
+      - Accessibility & responsive
+      - Performance & error states
+      - Analytics & consent
+  ▸ Mobile Field Technician App
+      - Project setup & UI kit
+      - Offline-first data layer
+      - Auth & device registration
+      - Work orders module
+      - Commissioning workflow
+      - Customer signature
+      - On-site diagnostics
+      - Maps & routing
+      - Push notifications
+      - Device security
+      - Telemetry & crash reporting
+      - Release & distribution
+  ▸ Dynamic Tariff & Forecasting Engine
+      - Tariff policy definition
+      - Market price ingestion
+      - Feature engineering
+      - Baseline forecasting model
+      - Model serving API
+      - Tariff calculation engine
+      - Simulation sandbox
+      - Versioning & governance
+      - Publish tariffs
+      - Monitoring & retraining
+  ▸ Regulatory Compliance & Reporting
+      - Obligation catalogue
+      - Data lineage & mapping
+      - Regulated charge validation
+      - Report generation
+      - Secure submission
+      - Immutable audit trail
+      - Exception handling UI
+      - Annual update workflow
+      - Data retention & masking
+      - Auditor access
+  ▸ Identity & Access Management
+      - IdP setup
+      - Tenant/realm separation
+      - RBAC/ABAC policies
+      - MFA & recovery
+      - API & device credentials
+      - Provisioning (SCIM)
+      - Session/token management
+      - Auth auditing
+      - Secrets management
+  ▸ Data Platform & Storage
+      - Database selection & sizing
+      - Schema design
+      - Time-series partitioning
+      - Raw telemetry lake
+      - ETL/ELT pipelines
+      - Data catalog & governance
+      - Backup & restore
+      - Performance tuning
+      - CDC & data sharing
+  ▸ DevOps & Infrastructure
+      - Cloud landing zone
+      - Containerization & orchestration
+      - Infrastructure as Code
+      - CI/CD pipelines
+      - Observability stack
+      - Runbooks & on-call
+      - Scalability & capacity
+      - DR & backups
+      - Cost management
+  ▸ Security & Privacy
+      - Threat modeling
+      - Secure SDLC
+      - Transport security
+      - Data protection
+      - PII classification
+      - GDPR compliance
+      - Vulnerability management
+      - Incident response
+  ▸ QA & Testing
+      - Test strategy & gates
+      - Backend/unit/integration tests
+      - Device protocol simulators
+      - E2E portal tests
+      - Mobile UI tests
+      - Performance & load tests
+      - Contract & schema tests
+      - Test data management
+      - UAT coordination
+      - Regression in CI
+  ▸ Data Migration & Cutover
+      - Legacy inventory & mapping
+      - Cleansing & transformation
+      - Trial migrations
+      - Shadow/parallel billing
+      - Cutover plan
+      - Post-go-live validation
+  ▸ Project Management & Delivery
+      - Governance & ceremonies
+      - Backlog & prioritization
+      - Phased roadmap & milestones
+      - Risk & dependency management
+      - Stakeholder reporting
+      - Vendor/partner coordination
+      - Training & handover
+      - Go-live & hypercare
+      - Proposal & pricing pack
+
+ESTIMATE (hours agent → analysis → gate 2)
+  ▸ Solution Architecture & Discovery
+      - Stakeholder workshops & domain discovery: 34h
+      - Non-functional requirements & SLAs: NO MATCH  ⚠ flagged
+      - Target architecture blueprint: 33h
+      - High-level data model: NO MATCH  ⚠ flagged
+      - Regulatory rules inventory: NO MATCH  ⚠ flagged
+      - Build-vs-buy assessments: 34h
+      - Tech stack decisions: 32h
+      - Delivery phasing plan: 34h
+  ▸ Business Backend (Contracts, Billing, Customer API)
+      - Domain model & relational schema: 32h
+      - Billing rules engine: 34h
+      - Consumption aggregation service: NO MATCH  ⚠ flagged
+      - Invoice calculation pipeline: 37h
+      - Invoice rendering & numbering: NO MATCH  ⚠ flagged
+      - Direct debit (SEPA) integration: 37h
+      - Payments & dunning: 37h
+      - Public API (REST/GraphQL): 38h
+      - Admin UI for tariffs/rules: 36h
+      - ERP/accounting export: 25h
+      - Audit & change history: NO MATCH  ⚠ flagged
+      - Golden test datasets: NO MATCH  ⚠ flagged
+      - Reference data seeding: NO MATCH  ⚠ flagged
+  ▸ Telemetric Ingestion Layer
+      - Device registry & provisioning: NO MATCH  ⚠ flagged
+      - Protocol adapters: NO MATCH  ⚠ flagged
+      - Secure connectivity: 48h
+      - Canonical reading schema: NO MATCH  ⚠ flagged
+      - Out-of-order handling: NO MATCH  ⚠ flagged
+      - Deduplication & idempotency: NO MATCH  ⚠ flagged
+      - Streaming pipeline: 50h
+      - Time-series storage: 27h
+      - Data quality & anomalies: NO MATCH  ⚠ flagged
+      - Error handling & DLQ: NO MATCH  ⚠ flagged
+      - Monitoring & SLOs: 50h
+      - Historical backfill: NO MATCH  ⚠ flagged
+      - Publish aggregates: NO MATCH  ⚠ flagged
+  ▸ Customer Self-Service Portal (Web)
+      - UX flows & IA: 32h
+      - React app scaffolding: 30h
+      - Authentication & account linking: 25h
+      - Consumption dashboards: 37h
+      - Bills & payments UI: NO MATCH  ⚠ flagged
+      - Tariff change flow: NO MATCH  ⚠ flagged
+      - Direct debit setup: NO MATCH  ⚠ flagged
+      - Issue reporting: NO MATCH  ⚠ flagged
+      - Notifications & preferences: 19h
+      - Accessibility & responsive: 20h
+      - Performance & error states: NO MATCH  ⚠ flagged
+      - Analytics & consent: 35h
+  ▸ Mobile Field Technician App
+      - Project setup & UI kit: 35h
+      - Offline-first data layer: NO MATCH  ⚠ flagged
+      - Auth & device registration: 25h
+      - Work orders module: NO MATCH  ⚠ flagged
+      - Commissioning workflow: NO MATCH  ⚠ flagged
+      - Customer signature: NO MATCH  ⚠ flagged
+      - On-site diagnostics: NO MATCH  ⚠ flagged
+      - Maps & routing: 31h
+      - Push notifications: 21h
+      - Device security: NO MATCH  ⚠ flagged
+      - Telemetry & crash reporting: 31h
+      - Release & distribution: NO MATCH  ⚠ flagged
+  ▸ Dynamic Tariff & Forecasting Engine
+      - Tariff policy definition: NO MATCH  ⚠ flagged
+      - Market price ingestion: NO MATCH  ⚠ flagged
+      - Feature engineering: NO MATCH  ⚠ flagged
+      - Baseline forecasting model: NO MATCH  ⚠ flagged
+      - Model serving API: NO MATCH  ⚠ flagged
+      - Tariff calculation engine: NO MATCH  ⚠ flagged
+      - Simulation sandbox: NO MATCH  ⚠ flagged
+      - Versioning & governance: NO MATCH  ⚠ flagged
+      - Publish tariffs: NO MATCH  ⚠ flagged
+      - Monitoring & retraining: NO MATCH  ⚠ flagged
+  ▸ Regulatory Compliance & Reporting
+      - Obligation catalogue: 29h
+      - Data lineage & mapping: NO MATCH  ⚠ flagged
+      - Regulated charge validation: 29h
+      - Report generation: 29h
+      - Secure submission: 26h
+      - Immutable audit trail: 25h
+      - Exception handling UI: NO MATCH  ⚠ flagged
+      - Annual update workflow: 29h
+      - Data retention & masking: NO MATCH  ⚠ flagged
+      - Auditor access: NO MATCH  ⚠ flagged
+  ▸ Identity & Access Management
+      - IdP setup: NO MATCH  ⚠ flagged
+      - Tenant/realm separation: NO MATCH  ⚠ flagged
+      - RBAC/ABAC policies: 20h
+      - MFA & recovery: 21h
+      - API & device credentials: 20h
+      - Provisioning (SCIM): NO MATCH  ⚠ flagged
+      - Session/token management: NO MATCH  ⚠ flagged
+      - Auth auditing: NO MATCH  ⚠ flagged
+      - Secrets management: NO MATCH  ⚠ flagged
+  ▸ Data Platform & Storage
+      - Database selection & sizing: 25h
+      - Schema design: 26h
+      - Time-series partitioning: NO MATCH  ⚠ flagged
+      - Raw telemetry lake: NO MATCH  ⚠ flagged
+      - ETL/ELT pipelines: 45h
+      - Data catalog & governance: NO MATCH  ⚠ flagged
+      - Backup & restore: NO MATCH  ⚠ flagged
+      - Performance tuning: NO MATCH  ⚠ flagged
+      - CDC & data sharing: NO MATCH  ⚠ flagged
+  ▸ DevOps & Infrastructure
+      - Cloud landing zone: 38h
+      - Containerization & orchestration: 39h
+      - Infrastructure as Code: 38h
+      - CI/CD pipelines: 24h
+      - Observability stack: 20h
+      - Runbooks & on-call: NO MATCH  ⚠ flagged
+      - Scalability & capacity: 45h
+      - DR & backups: NO MATCH  ⚠ flagged
+      - Cost management: 31h
+  ▸ Security & Privacy
+      - Threat modeling: NO MATCH  ⚠ flagged
+      - Secure SDLC: 25h
+      - Transport security: NO MATCH  ⚠ flagged
+      - Data protection: 23h
+      - PII classification: NO MATCH  ⚠ flagged
+      - GDPR compliance: NO MATCH  ⚠ flagged
+      - Vulnerability management: 34h
+      - Incident response: NO MATCH  ⚠ flagged
+  ▸ QA & Testing
+      - Test strategy & gates: 36h
+      - Backend/unit/integration tests: 27h
+      - Device protocol simulators: 37h
+      - E2E portal tests: 28h
+      - Mobile UI tests: 27h
+      - Performance & load tests: 15h
+      - Contract & schema tests: 27h
+      - Test data management: 17h
+      - UAT coordination: 26h
+      - Regression in CI: 31h
+  ▸ Data Migration & Cutover
+      - Legacy inventory & mapping: NO MATCH  ⚠ flagged
+      - Cleansing & transformation: NO MATCH  ⚠ flagged
+      - Trial migrations: NO MATCH  ⚠ flagged
+      - Shadow/parallel billing: NO MATCH  ⚠ flagged
+      - Cutover plan: NO MATCH  ⚠ flagged
+      - Post-go-live validation: NO MATCH  ⚠ flagged
+  ▸ Project Management & Delivery
+      - Governance & ceremonies: NO MATCH  ⚠ flagged
+      - Backlog & prioritization: NO MATCH  ⚠ flagged
+      - Phased roadmap & milestones: NO MATCH  ⚠ flagged
+      - Risk & dependency management: NO MATCH  ⚠ flagged
+      - Stakeholder reporting: 41h
+      - Vendor/partner coordination: 43h
+      - Training & handover: 27h
+      - Go-live & hypercare: 29h
+      - Proposal & pricing pack: NO MATCH  ⚠ flagged
+  TOTAL: 251d (2011.0h, confidence medium)
+
+RELIABILITY REPORT (analysis_agent)
+  overall_confidence : low
+  grounded_task_ratio: 0.471
+  - [medium] Solution Architecture & Discovery: Non-functional requirements & SLAs has no historical match.
+  - [medium] Solution Architecture & Discovery: High-level data model has no historical match.
+  - [medium] Solution Architecture & Discovery: Regulatory rules inventory has no historical match.
+  - [medium] Business Backend (Contracts, Billing, Customer API): Consumption aggregation service has no historical match.
+  - [medium] Business Backend (Contracts, Billing, Customer API): Invoice rendering & numbering has no historical match.
+  - [medium] Telemetric Ingestion Layer: Device registry & provisioning has no historical match.
+  - [medium] Telemetric Ingestion Layer: Protocol adapters has no historical match.
+  - [medium] Customer Self-Service Portal (Web): Bills & payments UI has no historical match.
+  - [medium] Mobile Field Technician App: Offline-first data layer has no historical match.
+  - [medium] Dynamic Tariff & Forecasting Engine: All tasks have no historical match, need complete review.
+  - [medium] Regulatory Compliance & Reporting: Data lineage & mapping has no historical match.
+  - [medium] Identity & Access Management: IdP setup has no historical match.
+  - [medium] Data Platform & Storage: Time-series partitioning has no historical match.
+  - [medium] DevOps & Infrastructure: Runbooks & on-call has no historical match.
+  - [medium] Security & Privacy: Threat modeling has no historical match.
+  - [medium] QA & Testing: Test strategy & gates has low reliability score (0.358), needs verification.
+  - [medium] Data Migration & Cutover: All tasks have no historical match, need complete review.
+  - [medium] Project Management & Delivery: Governance & ceremonies has no historical match.
+  summary: The provided estimate has a low overall confidence primarily due to the significant number of tasks lacking historical matches, particularly in crucial modules like 'Dynamic Tariff & Forecasting Engine' and 'Data Migration & Cutover'. Given the grounded task ratio of 0.471, less than half of the tasks are reliably anchored to historical data, leaving substantial gaps. Attention is required on modules with critical ungrounded tasks and those with low reliability scores to avoid potential estimation errors.
+
+COMMERCIAL PROPOSAL (proposal_agent — bonus)
+## Proposal for Comprehensive Software Development
+
+### Executive Summary
+
+This proposal outlines our plan to deliver a comprehensive software solution across multiple key modules. Based on a detailed estimate, the total engineering effort required is 251 engineer-days. Noteworthy modules such as the 'Dynamic Tariff & Forecasting Engine' and 'Data Migration & Cutover' currently lack reliable historical data, which may affect overall confidence in the timeline.
+
+### Scope of Work
+
+Our proposed software development project includes the following modules:
+
+- **Solution Architecture & Discovery:** Involves 8 tasks with a total of 167 hours dedicated to this foundational phase.
+- **Business Backend (Contracts, Billing, Customer API):** Composed of 13 tasks totaling 276 hours, focusing on core business functionalities.
+- **Telemetric Ingestion Layer:** Incorporates 13 tasks amounting to 175 hours, crucial for data processing and ingestion.
+- **Customer Self-Service Portal (Web):** Encompasses 12 tasks with 198 hours allocated to enhance customer interactions.
+- **Mobile Field Technician App:** Contains 12 tasks with a commitment of 143 hours for mobile accessibility.
+- **Dynamic Tariff & Forecasting Engine:** A critical module with 10 tasks, currently unallocated hours, due to data matching challenges.
+- **Regulatory Compliance & Reporting:** Includes 10 tasks and 167 hours to ensure compliance with regulations.
+- **Identity & Access Management:** Focused on security, this module covers 9 tasks in 61 hours.
+- **Data Platform & Storage:** Encompasses 9 tasks over 96 hours for data handling needs.
+- **DevOps & Infrastructure:** A significant segment with 9 tasks requiring 235 hours, focusing on deployment and operations.
+- **Security & Privacy:** Dedicated to 8 tasks, requiring 82 hours to maintain system integrity.
+- **QA & Testing:** Comprises 10 tasks amounting to 271 hours, crucial for quality control.
+- **Data Migration & Cutover:** Consists of 6 tasks, currently unallocated hours, highlighting a need for further analysis.
+- **Project Management & Delivery:** Encompasses 9 tasks over 140 hours, ensuring project alignment and timelines.
+
+### Total Engineering Effort
+
+The total engineering effort required has been estimated at 251 engineer-days. However, with a grounded task ratio of 0.471, the reliability of our estimate is medium, cautioning us to pay special attention to modules with less historical data grounding. Focus shall particularly be placed on the 'Dynamic Tariff & Forecasting Engine' and 'Data Migration & Cutover' to refine our estimates and implementation timeline.
+
+### Conclusion
+
+This project represents a complex undertaking with significant requirements in software development. Attention to ungrounded tasks and closely monitoring modules with low reliability scores will be crucial for successful project delivery. We are committed to delivering a responsive and fully functional solution that meets your organizational needs. Further analysis and revising of estimates upon progression will be necessary to ensure reliability and accountability in project deliverance.

@@ -1,0 +1,59 @@
+<% modules = run.structure_modules %>
+
+<h2 class="text-lg font-bold tracking-tight text-white mb-1">3 · Revisión humana de la estructura</h2>
+<p class="text-white/50 text-sm mb-5">
+  Antes de estimar horas, revisa el desglose: añade, elimina o renombra módulos y tareas.
+  Cuando esté correcto, corre la <span class="text-white/80">búsqueda vectorial por tarea</span>
+  (determinista) y el <span class="text-white/80">agente recupera</span> las tareas sin análogo
+  reformulando la búsqueda, para derivar las horas desde proyectos históricos similares.
+</p>
+
+<%= render "step_agent", keys: [ "gate_structure" ], note: "revisión humana antes de estimar horas" %>
+
+<% if !run.step_complete?("generation") %>
+  <div class="p-4 rounded-md bg-brand/15 border border-brand text-brand-soft">
+    Aún no hay estructura generada. Vuelve a
+    <%= link_to "Generación", rag_estimation_run_path(run, step: "generation"), class: "underline font-bold" %>.
+  </div>
+<% else %>
+  <div data-controller="estimate-modules-editor">
+    <%= form_with url: estimate_hours_rag_estimation_run_path(run), method: :post, local: true,
+          data: { controller: "form-loading", action: "submit->form-loading#start" } do %>
+      <div data-estimate-modules-editor-target="modulesContainer">
+        <% modules.each_with_index do |mod, m| %>
+          <%= render "editable_module", m: m, mod: mod, mode: :structure,
+                tasks: mod.tasks.each_with_index.map { |task, t| [ t, task ] } %>
+        <% end %>
+      </div>
+
+      <p data-estimate-modules-editor-target="empty" class="<%= "hidden" if modules.any? %> p-4 text-white/40 text-sm">
+        Sin módulos. Añade bloques funcionales con «+ Añadir módulo».
+      </p>
+
+      <div class="flex items-center justify-between mt-2 mb-5">
+        <button type="button" data-action="estimate-modules-editor#addModule"
+                class="text-brand font-bold hover:text-brand-soft tracking-tight text-sm cursor-pointer">
+          + Añadir módulo
+        </button>
+      </div>
+
+      <button type="submit" data-form-loading-target="submit" data-disable-with="false"
+              class="inline-flex items-center px-5 py-2.5 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors text-sm">
+        <span data-form-loading-target="label">Estimar horas por tarea →</span>
+        <svg data-form-loading-target="spinner" class="hidden ml-2 h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+        </svg>
+      </button>
+      <span class="ml-3 text-xs text-white/40">Una búsqueda vectorial por tarea contra el corpus histórico.</span>
+
+      <%# Templates cloned by the Stimulus editor (structure mode: no hours/rate). %>
+      <template data-estimate-modules-editor-target="moduleTemplate">
+        <%= render "editable_module", m: "__MIDX__", mod: nil, tasks: [], mode: :structure %>
+      </template>
+      <template data-estimate-modules-editor-target="taskTemplate">
+        <%= render "editable_task", m: "__MIDX__", t: "__TIDX__", task: nil, mode: :structure %>
+      </template>
+    <% end %>
+  </div>
+<% end %>

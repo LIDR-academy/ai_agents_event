@@ -1,0 +1,50 @@
+<% modules = run.structure_modules %>
+
+<h2 class="text-lg font-bold tracking-tight text-white mb-1">🧑 Puerta humana 1 · Revisión del desglose</h2>
+<p class="text-white/50 text-sm mb-1">
+  El grafo está <span class="text-brand-soft font-bold">pausado</span> esperando tu revisión
+  (complejidad estimada: <span class="text-white/80"><%= run.pending_gate.dig("payload", "complexity") || "—" %></span>).
+  Ajusta módulos y tareas; al aprobar, el servicio IA <span class="text-white/80">reanuda</span> el
+  grafo (<code class="text-white/70">Command(resume=…)</code>): recupera horas por tarea en paralelo
+  y el agente de análisis redacta el informe de fiabilidad.
+</p>
+
+<div data-controller="estimate-modules-editor" class="mt-5">
+  <%= form_with url: resume_structure_rag_graph_estimation_run_path(run), method: :post, local: true,
+        data: { controller: "form-loading", action: "submit->form-loading#start" } do %>
+    <div data-estimate-modules-editor-target="modulesContainer">
+      <% modules.each_with_index do |mod, m| %>
+        <%= render "rag/estimation_runs/editable_module", m: m, mod: mod, mode: :structure,
+              tasks: mod.tasks.each_with_index.map { |task, t| [ t, task ] } %>
+      <% end %>
+    </div>
+
+    <p data-estimate-modules-editor-target="empty" class="<%= "hidden" if modules.any? %> p-4 text-white/40 text-sm">
+      Sin módulos. Añade bloques funcionales con «+ Añadir módulo».
+    </p>
+
+    <div class="flex items-center justify-between mt-2 mb-5">
+      <button type="button" data-action="estimate-modules-editor#addModule"
+              class="text-brand font-bold hover:text-brand-soft tracking-tight text-sm cursor-pointer">
+        + Añadir módulo
+      </button>
+    </div>
+
+    <button type="submit" data-form-loading-target="submit" data-disable-with="false"
+            class="inline-flex items-center px-5 py-2.5 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors text-sm">
+      <span data-form-loading-target="label">Aprobar y reanudar (horas + análisis) →</span>
+      <svg data-form-loading-target="spinner" class="hidden ml-2 h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+    </button>
+    <span class="ml-3 text-xs text-white/40">Fan-out: una búsqueda vectorial por tarea, en paralelo.</span>
+
+    <template data-estimate-modules-editor-target="moduleTemplate">
+      <%= render "rag/estimation_runs/editable_module", m: "__MIDX__", mod: nil, tasks: [], mode: :structure %>
+    </template>
+    <template data-estimate-modules-editor-target="taskTemplate">
+      <%= render "rag/estimation_runs/editable_task", m: "__MIDX__", t: "__TIDX__", task: nil, mode: :structure %>
+    </template>
+  <% end %>
+</div>

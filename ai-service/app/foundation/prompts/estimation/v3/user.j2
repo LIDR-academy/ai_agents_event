@@ -1,0 +1,17 @@
+<project_description>
+{{ description }}
+</project_description>
+
+Project type: {{ project_type }}.
+
+{% if critic_feedback %}
+<critic_feedback>
+A previous version of your estimation was reviewed by an independent auditor. Address the following issues before producing the next answer; do not repeat the same mistakes.
+
+{% for issue in critic_feedback.issues %}
+- [{{ issue.severity }}] {{ issue.category }} at `{{ issue.field_path }}`: {{ issue.description }}{% if issue.suggested_fix %} (suggested fix: {{ issue.suggested_fix }}){% endif %}
+{% endfor %}
+</critic_feedback>
+{% endif %}
+
+Estimate this project following the rules above, integrating the project_metadata context and the conversation history.

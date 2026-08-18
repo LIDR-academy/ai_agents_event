@@ -1,0 +1,69 @@
+# =============================================================================
+# Override de DESARROLLO (Sesión 15)
+# =============================================================================
+# Uso:
+#
+#     docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+#
+# Devuelve lo que el compose estricto quita a propósito:
+#   1. Puertos publicados al host (incluido el 8000 del servicio IA).
+#   2. Bind mounts del código, para editar sin reconstruir la imagen.
+#   3. Hot reload (`--reload` en uvicorn, `bin/dev` en Rails).
+#
+# El fichero estricto es el ENTREGABLE y el que refleja cómo se despliega en
+# cloud. Este es una comodidad local: nunca uses este override como referencia
+# de "cómo va a producción" — publica puertos que en producción serían un
+# agujero (la BBDD vectorial expuesta al host, el servicio IA sin pasar por el
+# backend de negocio).
+
+services:
+  business-backend:
+    environment:
+      # Recarga de plantillas/clases sin reiniciar el contenedor.
+      RAILS_ENV: development
+    volumes:
+      # Bind mount completo: cualquier cambio en app/, config/, db/migrate…
+      # lo ve el autoloader de Rails y el watcher de Tailwind al instante.
+      - ./business-backend:/rails
+    # bin/dev = foreman con Puma + tailwindcss:watch (Procfile.dev).
+    command: ["bin/dev"]
+    # Necesario para binding.irb / debug gem con `docker attach`.
+    tty: true
+    stdin_open: true
+
+  ai-service:
+    ports:
+      # SOLO en desarrollo. En el compose estricto este puerto NO existe, que es
+      # lo que se verifica en la comprobación 3 de docs/deployment-local.md.
+      # Útil para httpie/curl directos y para /docs (Swagger).
+      - "8000:8000"
+    volumes:
+      # Los mismos directorios que la imagen trae dentro, montados encima para
+      # editar en caliente. `data/` y `scripts/` se montan porque las sesiones
+      # en directo añaden fuentes de ingesta y migraciones nuevas.
+      - ./ai-service/app:/app/app
+      - ./ai-service/tests:/app/tests
+      - ./ai-service/data:/app/data
+      - ./ai-service/scripts:/app/scripts
+      - ./ai-service/alembic:/app/alembic
+      - ./ai-service/alembic.ini:/app/alembic.ini
+    # El entrypoint sigue aplicando las migraciones; aquí solo se añade --reload.
+    command:
+      ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  postgres:
+    ports:
+      # 5434 y no 5432: en macOS es habitual tener un Postgres de Homebrew
+      # escuchando ya en el 5432 del host, y el bind fallaría en silencio o
+      # te conectaría a la base equivocada.
+      - "5434:5432"
+
+  vector-db:
+    ports:
+      # 5433 — el puerto histórico del proyecto para la base con pgvector.
+      - "5433:5432"
+
+  redis:
+    ports:
+      - "6379:6379"
+      - "8001:8001" # RedisInsight (cómodo para enseñar la caché semántica)

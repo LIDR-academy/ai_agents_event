@@ -1,0 +1,106 @@
+===============================================================================
+ Sesion 15 - Traza de las 5 comprobaciones sobre el stack real
+ Generada con: docker compose up -d  (fichero estricto, sin override de dev)
+===============================================================================
+
+-------------------------------------------------------------------------------
+COMPROBACION 1 - Los 5 servicios arriba y healthy
+-------------------------------------------------------------------------------
+$ docker compose ps
+NAME                        IMAGE                             COMMAND                  SERVICE            CREATED              STATUS                        PORTS
+ai-service                  ai-engineering-ai-service         "/app/docker-entrypo…"   ai-service         About a minute ago   Up About a minute (healthy)   8000/tcp
+business-backend            ai-engineering-business-backend   "/rails/bin/docker-e…"   business-backend   About a minute ago   Up About a minute (healthy)   0.0.0.0:3000->3000/tcp
+business-backend-postgres   postgres:16-alpine                "docker-entrypoint.s…"   postgres           About a minute ago   Up About a minute (healthy)   5432/tcp
+redis                       redis/redis-stack:7.4.0-v0        "/entrypoint.sh"         redis              About a minute ago   Up About a minute (healthy)   6379/tcp, 8001/tcp
+vector-db                   pgvector/pgvector:pg16            "docker-entrypoint.s…"   vector-db          About a minute ago   Up About a minute (healthy)   5432/tcp
+
+Notese la columna PORTS: SOLO business-backend tiene un bind al host
+(0.0.0.0:3000->3000/tcp). ai-service expone 8000/tcp, que es el puerto
+INTERNO del contenedor - no hay puerto publicado en el host.
+
+-------------------------------------------------------------------------------
+COMPROBACION 2 - El backend de negocio responde desde el host
+-------------------------------------------------------------------------------
+$ curl -I http://localhost:3000
+HTTP/1.1 200 OK
+x-frame-options: SAMEORIGIN
+x-xss-protection: 0
+
+-------------------------------------------------------------------------------
+COMPROBACION 3 - El servicio IA NO es accesible desde el host
+-------------------------------------------------------------------------------
+$ curl --max-time 3 http://localhost:8000/health
+curl: (7) Failed to connect to localhost port 8000 after 0 ms: Couldn't connect to server
+
+   ^ Ese fallo es el resultado CORRECTO.
+
+$ docker compose exec business-backend curl -s http://ai-service:8000/health
+{"status":"healthy","version":"0.1.0","environment":"development"}
+
+   Alcanzable por DNS interno, y /health va exento de token a proposito
+   (el healthcheck de Docker no puede llevar credenciales).
+
+$ # misma red, SIN token -> 401
+   HTTP 401
+$ # misma red, CON token -> ya no es 401 (422 = payload vacio, paso la auth)
+   HTTP 422
+
+-------------------------------------------------------------------------------
+COMPROBACION 4 - Estimacion end-to-end dentro de los contenedores
+-------------------------------------------------------------------------------
+4a) Recuperacion: business-backend -> ai-service -> vector-db (pgvector)
+
+$ docker compose exec business-backend curl ... /v1/retrieval/search
+   chunks recuperados: 3
+   - id=30704   [Project: Ecommerce platform covering catalog & search, checkout & cart, notif
+   - id=30705   [Project: Ecommerce platform covering catalog & search, checkout & cart, notif
+   - id=31825   [Project: Ecommerce platform covering catalog & search, checkout & cart, front
+
+   Se envian LAS DOS cabeceras: X-Service-Token (middleware, toda la app)
+   y X-API-Key (router de la S9). Son capas independientes.
+
+4b) Estimacion completa via el cliente Rails (LLM real, gpt-4o-mini)
+
+
+   confianza=75%  total=40000 EUR  semanas=16  cached=true
+   - Discovery           5000 EUR / 2w
+   - Design              7500 EUR / 3w
+   - Implementation     20000 EUR / 8w
+   - QA                  5000 EUR / 2w
+   - Launch              2500 EUR / 1w
+   validador de esquema: suma de fases 40000 == total 40000
+
+   cached=true porque esta es la segunda llamada identica: la sirvio la cache
+   exacta (CAG) desde el contenedor redis, sin volver a llamar al LLM. En la
+   primera ejecucion salio cached=false.
+
+   Recorrido: navegador -> business-backend -> ai-service (con token)
+              -> guardrails -> LLM -> validadores de esquema -> respuesta
+
+-------------------------------------------------------------------------------
+COMPROBACION 5 - Persistencia: down && up sin pasos manuales
+-------------------------------------------------------------------------------
+ANTES del reinicio:
+   budget_chunks = 1609
+   documents     = 89
+
+$ docker compose down && docker compose up -d
+ai-service	Up About a minute (healthy)
+business-backend	Up 45 seconds (healthy)
+postgres	Up About a minute (healthy)
+redis	Up About a minute (healthy)
+vector-db	Up About a minute (healthy)
+
+DESPUES del reinicio:
+   budget_chunks = 1609
+   documents     = 89
+   tablas Rails  = 13
+
+   Los datos sobreviven porque las bases escriben en volumenes con nombre
+   (postgres_data, estimator_postgres_data, redis_data), que 'down' no borra.
+   'docker compose down -v' SI los borraria: con el corpus vectorial eso
+   significa volver a pagar los embeddings de la ingesta.
+
+===============================================================================
+ RESULTADO: las 5 comprobaciones pasan.
+===============================================================================

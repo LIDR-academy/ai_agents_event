@@ -1,0 +1,17 @@
+{
+  "budget_id": "BUDGET-2024-0001",
+  "client_name": "Acme España S.L.",
+  "client_code": "CLI-0042",
+  "currency": "EUR",
+  "total_amount": 45000,
+  "signed_at": "2024-02-14",
+  "phases": [
+    {"name": "Discovery", "weeks": 2, "amount": 8000},
+    {"name": "Diseño UX", "weeks": 3, "amount": 12000},
+    {"name": "Implementación MVP", "weeks": 6, "amount": 20000},
+    {"name": "Pruebas y despliegue", "weeks": 1, "amount": 5000}
+  ],
+  "contact": "Laura Fernández",
+  "contact_email": "laura.fernandez@acme.es",
+  "notes": "Proyecto B2B SaaS interno con integración a Workday."
+}

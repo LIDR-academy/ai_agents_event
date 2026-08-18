@@ -1,0 +1,101 @@
+# Catálogo de fuentes — Proyecto 2 (Sesión 06 · 2026-05-22)
+#
+# Este fichero ES código: lo carga `app.ingestion.catalog.loader.load_catalog`
+# y lo valida contra los modelos Pydantic de `app.ingestion.catalog.models`.
+# Cada `source` tiene una decision explícita y, si no es `include`, también
+# un `decision_reason`. Excluir una fuente es disciplina, no desidia.
+#
+# Para añadir una nueva fuente:
+#   1. Ejecuta `python -m app.ingestion.catalog.inspect data/seed` para obtener
+#      los facts (file_count, latest_modified, formats_detected).
+#   2. Añade el bloque YAML aquí abajo, con quality y sensitivity razonadas.
+#   3. Tira `python -m app.ingestion.catalog.loader data/catalog/catalog.yaml`
+#      para validar el cambio antes de hacer commit.
+
+version: "1.0.0"
+description: >
+  Catálogo del Proyecto 2 — fuentes auditadas para el subsistema de ingesta.
+  Tres entradas: presupuestos JSON (incluida), transcripciones TXT (review:
+  un fichero tiene formato heredado sin tags), rate card XLSX (excluida por
+  obsolescencia).
+
+sources:
+  - name: presupuestos_json
+    description: >
+      Presupuestos firmados 2024 en formato JSON. Cada fichero un presupuesto.
+      Fuente principal para el módulo de retrieval del Proyecto.
+    location: budgets
+    owners: ["comercial@empresa.local"]
+    format: json
+    volume_estimate: "≈ 6 ficheros, 5-10 KB cada uno"
+    refresh_declared: "Semanal tras cierre comercial."
+    refresh_observed: "Carga inicial; aún no hay segunda iteración medida."
+    quality:
+      completeness: 4
+      consistency: 3   # heterogeneidad de moneda EUR/eur, fechas mixtas
+      actuality: 5
+      reliability: 4
+    sensitivity:
+      has_pii: true
+      pii_flags: ["PERSON", "EMAIL", "BUDGET_ID", "CLIENT_CODE"]
+      access_level: confidential
+    lineage:
+      - "Generados por el CRM comercial (export manual)."
+      - "Validados por finanzas antes de firma."
+    decision: include
+    last_audited: 2026-05-22T09:00:00Z
+
+  - name: transcripciones_txt
+    description: >
+      Transcripciones de reuniones cliente-equipo. Dos formatos coexisten:
+      con tags `[hh:mm:ss] Speaker:` (2024+) y bloques de texto plano (legacy).
+    location: transcripts
+    owners: ["delivery@empresa.local"]
+    format: txt
+    volume_estimate: "≈ 3 ficheros heterogéneos"
+    refresh_declared: "Por reunión, agregadas semanalmente."
+    refresh_observed: "Mezcla: 2 ficheros 2025 con tags, 1 fichero 2023 sin tags."
+    quality:
+      completeness: 3   # transcripciones humanas, gaps esperados
+      consistency: 2    # dos formatos en convivencia
+      actuality: 4
+      reliability: 3
+    sensitivity:
+      has_pii: true
+      pii_flags: ["PERSON", "EMAIL", "BUDGET_ID", "CLIENT_CODE", "LOCATION"]
+      access_level: confidential
+    lineage:
+      - "Capturadas en Meet, exportadas por delivery."
+    decision: review
+    decision_reason: >
+      El fichero pre-2024 sin tags rompe el parser por defecto. Antes de
+      promover a `include` necesitamos owner sign-off sobre el modo legacy
+      del parser TXT y un retropoblado del campo `speaker`.
+    last_audited: 2026-05-22T09:00:00Z
+
+  - name: rate_card_xlsx
+    description: >
+      Tarifas internas por rol/senioridad. Una sola hoja en XLSX.
+    location: rate_card_2024.xlsx
+    owners: ["operaciones@empresa.local"]
+    format: xlsx
+    volume_estimate: "1 hoja, ~12 filas"
+    refresh_declared: "Anual, revisión por dirección."
+    refresh_observed: "last_modified=2024-01-12 — no actualizada para 2025."
+    quality:
+      completeness: 4
+      consistency: 5
+      actuality: 1     # ← el punto que rompe
+      reliability: 4
+    sensitivity:
+      has_pii: false
+      pii_flags: []
+      access_level: internal
+    lineage:
+      - "Excel mantenido por operaciones."
+    decision: exclude
+    decision_reason: >
+      actuality=1 — fichero del 12/01/2024 con tarifas obsoletas. Indexar
+      esta fuente alimentaría respuestas con precios de hace más de un año.
+      Si operaciones cierra la revisión 2025, levantar a `review`.
+    last_audited: 2026-05-22T09:00:00Z

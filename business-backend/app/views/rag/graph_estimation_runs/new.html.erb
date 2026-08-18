@@ -1,0 +1,79 @@
+<% content_for :title, "Grafo de agentes · nueva ejecución" %>
+
+<div class="max-w-3xl mx-auto px-4 py-10">
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold tracking-tighter text-white mt-1">Estimación por grafo de agentes</h1>
+    <p class="text-white/60 mt-2">
+      La orquestación vive dentro del servicio IA como un grafo multi-agente (LangGraph). Al pegar
+      la transcripción, el <span class="text-white/80">agente clasificador</span> juzga la
+      complejidad y la reformula, el <span class="text-white/80">agente de estructura</span> propone
+      módulos y tareas, y el flujo se <span class="text-white/80">pausa en la puerta humana 1</span>
+      para que la revises. Tú sólo arrancas y reanudas; el estado sobrevive a la pausa.
+    </p>
+  </div>
+
+  <%= form_with url: rag_graph_estimation_runs_path, scope: :graph_estimation_run, local: true,
+        class: "space-y-5",
+        data: { controller: "transcription-upload form-loading", action: "submit->form-loading#start" } do |f| %>
+
+    <% if flash.now[:alert] %>
+      <div class="p-4 rounded-md bg-brand/15 border border-brand text-brand-soft"><%= flash.now[:alert] %></div>
+    <% end %>
+
+    <%# Los parámetros de negocio, antes de la transcripción: el precio no lo calcula ningún
+        agente, sale de estas dos cifras por las horas que el grafo fundamente. %>
+    <div class="rounded-md border border-white/10 bg-ink/30 p-4">
+      <div class="text-sm font-bold text-white/90 mb-1">Parámetros de la estimación</div>
+      <p class="text-white/50 text-xs mb-3">
+        Con esto se calcula el precio al final. La contingencia es el colchón para lo que el
+        corpus histórico no cubre — el informe de fiabilidad te dirá cuánto es eso.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <div>
+          <%= f.label :rate_eur_per_hour, "Tarifa", class: "block text-xs font-bold text-white/70 mb-1" %>
+          <div class="flex items-center gap-2">
+            <%= f.number_field :rate_eur_per_hour, value: @run.rate_eur_per_hour, min: 0, max: 1000, step: 1,
+                  class: "w-28 border border-white/20 rounded-md p-2 text-right text-white bg-ink/40 tabular-nums focus:outline-none focus:border-brand" %>
+            <span class="text-white/50 text-sm">€/h</span>
+          </div>
+        </div>
+        <div>
+          <%= f.label :contingency_pct, "Contingencia", class: "block text-xs font-bold text-white/70 mb-1" %>
+          <div class="flex items-center gap-2">
+            <%= f.number_field :contingency_pct, value: @run.contingency_pct, min: 0, max: 100, step: 1,
+                  class: "w-28 border border-white/20 rounded-md p-2 text-right text-white bg-ink/40 tabular-nums focus:outline-none focus:border-brand" %>
+            <span class="text-white/50 text-sm">%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex items-center justify-between mb-1">
+        <%= f.label :transcript, "Transcripción", class: "block text-sm font-bold text-white/90" %>
+        <label class="text-xs font-bold tracking-tight text-brand hover:text-brand-soft cursor-pointer">
+          Subir .txt
+          <input type="file" accept=".txt,text/plain" class="hidden"
+                 data-action="change->transcription-upload#load"
+                 data-transcription-upload-target="fileInput">
+        </label>
+      </div>
+      <%= f.text_area :transcript, rows: 14,
+            class: "w-full border border-white/20 rounded-md p-3 text-white bg-ink/40 placeholder:text-white/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand",
+            placeholder: "Pega aquí la transcripción de la discovery call (mín. ~100 caracteres).",
+            data: { transcription_upload_target: "textarea" } %>
+    </div>
+
+    <div class="pt-2">
+      <button type="submit" data-form-loading-target="submit" data-disable-with="false"
+              class="inline-flex items-center px-6 py-3 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors">
+        <span data-form-loading-target="label">Arrancar el grafo →</span>
+        <svg data-form-loading-target="spinner" class="hidden ml-2 h-5 w-5 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+        </svg>
+      </button>
+      <span class="ml-3 text-xs text-white/50">Clasifica + estructura, y se pausa en la puerta humana 1.</span>
+    </div>
+  <% end %>
+</div>

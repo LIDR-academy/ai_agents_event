@@ -1,0 +1,54 @@
+<% view = run.reformulation_view %>
+
+<h2 class="text-lg font-bold tracking-tight text-white mb-1">1 · Reformulación de la query</h2>
+<p class="text-white/50 text-sm mb-5">
+  La transcripción cruda no es una query. El servicio extrae un brief estructurado y compone un texto
+  de búsqueda corto, en inglés técnico, alineado al corpus — eso es lo que se embebe.
+</p>
+
+<%= render "step_agent", keys: [ "classifier" ], note: "reformulación (determinista)" %>
+
+<% if view.nil? %>
+  <div class="p-4 rounded-md bg-brand/15 border border-brand text-brand-soft">
+    Aún no se ha reformulado. <%= button_to "Reformular ahora", reformulate_rag_estimation_run_path(run),
+      method: :post, class: "underline font-bold" %>
+  </div>
+<% else %>
+  <div class="grid md:grid-cols-2 gap-4">
+    <div class="p-4 rounded-md bg-ink/30 border border-white/10">
+      <div class="text-xs uppercase tracking-tight text-white/50 font-bold mb-3">Brief estructurado</div>
+      <dl class="space-y-2 text-sm">
+        <div><dt class="text-white/50 inline">function:</dt> <dd class="inline text-white"><%= view.query.function %></dd></div>
+        <div><dt class="text-white/50 inline">sector:</dt> <dd class="inline text-white"><%= view.query.sector.presence || "—" %></dd></div>
+        <div><dt class="text-white/50 inline">scale:</dt> <dd class="inline text-white"><%= view.query.scale %></dd></div>
+        <div><dt class="text-white/50 inline">country:</dt> <dd class="inline text-white"><%= view.query.country.presence || "—" %></dd></div>
+        <div><dt class="text-white/50 inline">technologies:</dt>
+          <dd class="inline">
+            <% view.query.technologies.each do |tech| %>
+              <span class="inline-block bg-ink/60 text-white/80 rounded px-1.5 py-0.5 text-xs mr-1"><%= tech %></span>
+            <% end %>
+            <% if view.query.technologies.empty? %><span class="text-white/40">—</span><% end %>
+          </dd>
+        </div>
+        <div><dt class="text-white/50 inline">regulations:</dt> <dd class="inline text-white/80"><%= view.query.regulations.join(", ").presence || "—" %></dd></div>
+        <div><dt class="text-white/50 inline">constraints:</dt> <dd class="inline text-white/80"><%= view.query.constraints.join(", ").presence || "—" %></dd></div>
+      </dl>
+    </div>
+
+    <div class="p-4 rounded-md bg-ink/30 border border-white/10">
+      <div class="text-xs uppercase tracking-tight text-white/50 font-bold mb-3">Texto de búsqueda (lo que se embebe)</div>
+      <p class="text-brand-soft text-sm bg-ink/50 rounded-md p-3 leading-relaxed"><%= view.search_text %></p>
+      <p class="text-white/40 text-xs mt-3">
+        Compáralo con los ~<%= number_with_delimiter(run.transcript.length) %> caracteres de la
+        transcripción original: corto, denso, sin divagación.
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center gap-3">
+    <%= link_to "Continuar → Generar estructura", rag_estimation_run_path(run, step: "generation"),
+          class: "inline-flex items-center px-5 py-2.5 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+    <%= button_to "Re-ejecutar reformulación", reformulate_rag_estimation_run_path(run), method: :post,
+          class: "text-white/60 font-bold hover:text-white tracking-tight text-sm bg-transparent border-0 cursor-pointer" %>
+  </div>
+<% end %>

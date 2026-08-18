@@ -1,0 +1,18 @@
+Reunión de descubrimiento — Proyecto "NIEBLA"
+Cliente: dirección de una cooperativa agrícola
+Consultor: equipo de estimación
+
+[00:00] Cliente: Queremos "algo de software" para gestionar la cooperativa. Todavía no
+sabemos muy bien qué. Nos han dicho que la IA lo hace todo, así que igual con eso vale.
+
+[00:40] Consultor: ¿Qué procesos os gustaría cubrir?
+[00:48] Cliente: Pues... los socios, las facturas, quizá el riego, no sé. Depende de lo
+que veamos. Cambiará seguro. Y el presupuesto tampoco lo tenemos cerrado.
+
+[01:30] Consultor: ¿Tenéis sistemas actuales de los que partir?
+[01:35] Cliente: Hojas de cálculo, sobre todo. Y una aplicación vieja que nadie sabe cómo
+funciona ni quién la hizo. No tenemos documentación de nada.
+
+[02:10] Consultor: ¿Prioridades para una primera fase?
+[02:15] Cliente: Todas iguales, la verdad. Lo queremos todo, pero flexible, y que se pueda
+cambiar en cualquier momento. Danos una cifra orientativa y ya la afinamos.

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Estimator · LIDR Academy" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#232A31">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="<%= asset_path('lidr/favicon.png') %>" type="image/png">
+    <link rel="apple-touch-icon" href="<%= asset_path('lidr/favicon.png') %>">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="font-sans antialiased text-white bg-ink-dark min-h-screen flex flex-col">
+    <header class="border-b border-white/10">
+      <div class="max-w-5xl mx-auto px-4 py-5 flex items-center gap-6">
+        <%= link_to root_path, class: "flex items-center" do %>
+          <%= image_tag "lidr/imagotipo_horizontal_negativo_blanco.svg",
+                alt: "LIDR Academy",
+                class: "h-7 w-auto" %>
+        <% end %>
+        <span class="text-white font-bold tracking-tight text-lg">Estimator</span>
+        <nav class="ml-auto flex items-center gap-4 text-sm">
+          <%# One link per context; the active one in brand. On the demo screens this
+              collapses to just Grafo + Agentes (see ApplicationHelper::DEMO_NAV_KEYS). %>
+          <% nav_items.each do |item| %>
+            <%= link_to item[:label], public_send(item[:path]), class: nav_link_classes(item) %>
+          <% end %>
+          <%# Active primary model, always visible during live sessions. Hidden when the service is down. %>
+          <% if (active_model = current_primary_model) %>
+            <span class="px-2 py-0.5 rounded bg-brand/20 text-brand text-xs font-bold tracking-tight font-mono"
+                  title="Modelo primario activo del servicio IA">
+              <%= active_model %>
+            </span>
+          <% end %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-1">
+      <%= yield %>
+    </main>
+
+    <footer class="border-t border-white/10">
+      <div class="max-w-5xl mx-auto px-4 py-4 text-sm text-white/50 text-center">
+        © <%= Date.current.year %> LIDR Academy · Estimator demo
+      </div>
+    </footer>
+  </body>
+</html>

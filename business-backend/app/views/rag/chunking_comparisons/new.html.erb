@@ -1,0 +1,21 @@
+<% content_for :title, "Chunking Lab · Estimator" %>
+
+<div class="max-w-5xl mx-auto px-4 py-8">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold tracking-tighter text-white">Chunking Lab</h1>
+    <p class="text-white/60 mt-1 text-sm max-w-3xl">
+      Compara las estrategias de chunking sobre el corpus de
+      <span class="text-white font-bold"><%= EstimatorAi::BudgetCorpus.budgets.size %> presupuestos históricos</span>.
+      Las estadísticas salen del servicio IA (<code class="font-mono text-xs">POST /embeddings/compare</code>);
+      cada run se guarda para revisitarlo sin re-pagar las estrategias LLM.
+    </p>
+  </div>
+
+  <% if flash.now[:alert] || flash[:alert] %>
+    <div class="mb-6 p-4 rounded-md bg-brand/15 border border-brand text-brand-soft">
+      <p class="font-bold text-white"><%= flash.now[:alert] || flash[:alert] %></p>
+    </div>
+  <% end %>
+
+  <%= render "form" %>
+</div>

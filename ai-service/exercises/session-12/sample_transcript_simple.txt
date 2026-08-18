@@ -1,0 +1,27 @@
+Reunión de descubrimiento — Proyecto "Backend de autenticación"
+Cliente: Marta Ledesma (CTO, NeoPagos)
+Consultor: equipo de estimación
+Fecha: reunión inicial
+
+[00:00:10] Consultor: Gracias por el tiempo, Marta. Cuéntanos qué necesitáis y para cuándo.
+
+[00:00:22] Marta: Vamos al grano. Somos una fintech y necesitamos construir el backend de
+autenticación de nuestra plataforma. Es una sola pieza, pero tiene que estar impecable porque nos
+la juega el regulador.
+
+[00:00:48] Consultor: Perfecto. ¿Qué alcance tiene esa autenticación?
+
+[00:00:55] Marta: OAuth 2.0 bien hecho: authorization code flow y refresh tokens, con sesiones
+gestionadas por JWT. Somos multi-tenant, así que el aislamiento de tokens por cliente es crítico,
+y queremos rate limiting por cliente desde el día uno.
+
+[00:01:40] Consultor: ¿Tecnología en casa?
+
+[00:01:45] Marta: El equipo es de Ruby on Rails sobre PostgreSQL, y Redis para cachés y colas.
+Preferimos seguir con eso.
+
+[00:02:10] Consultor: Entendido. Un único componente: el backend de autenticación OAuth 2.0 con
+JWT, multi-tenant y rate limiting, sobre Rails y Postgres.
+
+[00:02:20] Marta: Exacto. No hay más piezas en esta fase. Si me pasáis una estimación de esfuerzo
+esta semana, arrancamos. Gracias.

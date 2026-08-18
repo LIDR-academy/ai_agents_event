@@ -1,0 +1,58 @@
+<div class="max-w-4xl mx-auto py-12 px-4">
+
+  <div class="flex items-center justify-between mb-8">
+    <h1 class="text-3xl font-bold tracking-tighter text-white">Estimaciones</h1>
+    <%= link_to "Nueva estimación", new_estimation_path,
+          class: "inline-flex items-center px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors" %>
+  </div>
+
+  <% if @estimations.empty? %>
+    <div class="p-6 rounded-md bg-ink/30 border border-white/10 text-white/70">
+      Aún no hay estimaciones. Crea la primera con
+      <%= link_to "Nueva estimación", new_estimation_path, class: "text-brand font-bold hover:text-brand-soft" %>.
+    </div>
+  <% else %>
+    <div class="rounded-md border border-white/10 overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-ink/40 text-white/70">
+          <tr>
+            <th class="text-left p-3 font-bold tracking-tight">Fecha</th>
+            <th class="text-left p-3 font-bold tracking-tight">Tipo</th>
+            <th class="text-left p-3 font-bold tracking-tight">Descripción</th>
+            <th class="text-left p-3 font-bold tracking-tight">Prompt</th>
+            <th class="text-right p-3 font-bold tracking-tight"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-white/10">
+          <% @estimations.each do |estimation| %>
+            <tr>
+              <td class="p-3 align-top text-white/70 tabular-nums whitespace-nowrap">
+                <%= l estimation.created_at, format: :short %>
+              </td>
+              <td class="p-3 align-top text-white/90 whitespace-nowrap">
+                <%= estimation.project_type.humanize %>
+              </td>
+              <td class="p-3 align-top text-white/90">
+                <%= estimation.description_preview %>
+              </td>
+              <td class="p-3 align-top whitespace-nowrap">
+                <span class="text-xs font-bold tracking-tight uppercase bg-brand text-ink-dark px-2 py-1 rounded">
+                  <%= estimation.prompt_version %>
+                </span>
+                <% if estimation.cached %>
+                  <span class="ml-1 text-xs font-bold tracking-tight uppercase bg-success-light text-ink-dark px-2 py-1 rounded">
+                    cached
+                  </span>
+                <% end %>
+              </td>
+              <td class="p-3 align-top text-right whitespace-nowrap">
+                <%= link_to "Ver →", estimation_path(estimation),
+                      class: "text-brand font-bold hover:text-brand-soft tracking-tight" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>

@@ -1,0 +1,112 @@
+<%# Editable knobs for a hand-written-agent profile. Blank knob = "use the AI
+    service default" (config_payload compacts blanks). Model list comes from the
+    live AI catalog (@available_models). %>
+<%# scope: :profile — la clase namespaced Agents::Profile daría param_key
+    "agents_profile"; forzamos "profile" para que name/persona (form builder)
+    coincidan con los inputs de config/is_default (hardcodeados a profile[...]) y
+    con params.require(:profile) del controlador. %>
+<%= form_with model: profile, url: url, method: method, scope: :profile, local: true, class: "space-y-6" do |f| %>
+  <% if profile.errors.any? %>
+    <div class="p-4 rounded-md bg-brand/15 border border-brand text-brand-soft">
+      <p class="font-bold text-white mb-1"><%= pluralize(profile.errors.count, "error") %> impiden guardar:</p>
+      <ul class="list-disc list-inside text-sm">
+        <% profile.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="rounded-md border border-white/10 p-4 space-y-4">
+    <div>
+      <label class="block text-sm font-bold text-white mb-1">Nombre</label>
+      <%= f.text_field :name,
+            class: "w-full max-w-md border border-white/20 rounded-md p-2.5 text-sm text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand",
+            placeholder: "p. ej. Exhaustivo" %>
+    </div>
+
+    <div>
+      <label class="block text-sm font-bold text-white mb-1">Imagen de perfil</label>
+      <div class="flex items-center gap-4">
+        <% if profile.avatar.attached? %>
+          <%= image_tag profile.avatar,
+                class: "h-16 w-16 rounded-full object-cover border border-white/20 shrink-0",
+                alt: "Avatar actual" %>
+        <% else %>
+          <div class="h-16 w-16 rounded-full bg-ink/60 border border-white/10 flex items-center justify-center text-white/40 text-xl shrink-0">
+            <%= profile.name.to_s.first&.upcase.presence || "?" %>
+          </div>
+        <% end %>
+        <div>
+          <%= f.file_field :avatar, accept: "image/*",
+                class: "block text-sm text-white/70 file:mr-3 file:rounded-md file:border-0 file:bg-brand file:text-ink-dark file:font-bold file:px-3 file:py-1.5 file:cursor-pointer" %>
+          <p class="text-white/40 text-xs mt-1">PNG, JPEG, GIF o WEBP. Se guarda en local. Editar sin subir una nueva conserva la actual.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-bold text-white mb-1">Modelo</label>
+      <%= select_tag "profile[config][model]",
+            options_for_select(
+              [ [ "Por defecto del servicio", "" ] ] + @available_models.map { |m| [ m, m ] },
+              profile.model
+            ),
+            class: "w-full max-w-xs border border-white/20 rounded-md p-2.5 text-sm text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand [&>option]:bg-ink-dark [&>option]:text-white" %>
+      <p class="text-white/40 text-xs mt-1">Orquestador del bucle. Barato para depurar: <code class="font-mono">gpt-5-mini</code>.</p>
+    </div>
+
+    <div>
+      <label class="block text-sm font-bold text-white mb-1">Reasoning effort</label>
+      <%= select_tag "profile[config][reasoning_effort]",
+            options_for_select(
+              [ [ "Por defecto del servicio", "" ] ] + Agents::Profile::EFFORTS.map { |e| [ e, e ] },
+              profile.reasoning_effort
+            ),
+            class: "w-full max-w-xs border border-white/20 rounded-md p-2.5 text-sm text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand [&>option]:bg-ink-dark [&>option]:text-white" %>
+      <p class="text-white/40 text-xs mt-1">Más effort = más razonamiento por vuelta (y más coste).</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div>
+        <label class="block text-sm font-bold text-white mb-1">Máx. iteraciones</label>
+        <%= number_field_tag "profile[config][max_iterations]", profile.max_iterations, min: 1, max: 20,
+              class: "w-full border border-white/20 rounded-md p-2.5 text-sm text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand",
+              placeholder: "def. 10" %>
+        <p class="text-white/40 text-xs mt-1">Salvaguarda del bucle.</p>
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-white mb-1">Vecinos por búsqueda</label>
+        <%= number_field_tag "profile[config][search_top_k]", profile.search_top_k, min: 1, max: 30,
+              class: "w-full border border-white/20 rounded-md p-2.5 text-sm text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand",
+              placeholder: "def. 5" %>
+        <p class="text-white/40 text-xs mt-1"><code class="font-mono">search_top_k</code>.</p>
+      </div>
+      <div>
+        <label class="block text-sm font-bold text-white mb-1">Umbral distancia</label>
+        <%= number_field_tag "profile[config][search_distance_threshold]", profile.search_distance_threshold,
+              min: 0, max: 2, step: 0.05,
+              class: "w-full border border-white/20 rounded-md p-2.5 text-sm text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand",
+              placeholder: "def. 0.6" %>
+        <p class="text-white/40 text-xs mt-1">Coseno; menor = más estricto.</p>
+      </div>
+    </div>
+
+    <div>
+      <label class="block text-sm font-bold text-white mb-1">Persona / instrucciones</label>
+      <%= f.text_area :persona, rows: 4, maxlength: 2000,
+            class: "w-full border border-white/20 rounded-md p-2.5 text-sm text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand",
+            placeholder: "p. ej. Sé conservador; ante ambigüedad, sobreestima y explícalo." %>
+      <p class="text-white/40 text-xs mt-1">Se añade al <span class="text-white/70">system prompt</span> del agente en cada run de este perfil.</p>
+    </div>
+
+    <label class="flex items-center gap-2 text-sm text-white/80">
+      <%= check_box_tag "profile[is_default]", "1", profile.is_default, class: "accent-brand" %>
+      Perfil por defecto (se preselecciona al lanzar el agente)
+    </label>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <%= f.submit submit_label,
+          class: "inline-flex items-center px-6 py-3 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors" %>
+    <%= link_to "Cancelar", agents_profiles_path, class: "text-white/60 font-bold hover:text-white text-sm" %>
+  </div>
+<% end %>

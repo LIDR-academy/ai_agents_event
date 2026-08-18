@@ -1,0 +1,20 @@
+Reunión de descubrimiento — Proyecto "PÉNDULO"
+Cliente: laboratorio de metrología cuántica
+Consultor: equipo de estimación
+
+[00:00] Cliente: Lo que necesitamos no creo que lo hayáis hecho antes. Ni vosotros ni nadie.
+
+[00:18] Cliente: Operamos un patrón de frecuencia con relojes ópticos de estroncio.
+Queremos software que discipline la red de relojes por comparación interferométrica y
+corrija la deriva relativista según la altitud de cada estación. En tiempo real.
+
+[01:00] Consultor: ¿Hay algún sistema comparable del que partir?
+[01:06] Cliente: No. El protocolo de sincronización es nuestro, sin publicar. La interfaz
+con los relojes es un bus propietario del fabricante, del que no hay dos instalaciones
+iguales en el mundo.
+
+[01:50] Cliente: Y encima tiene que integrarse con un colisionador para marcar eventos con
+resolución de attosegundos. Esa parte tampoco tiene precedente conocido.
+
+[02:30] Consultor: Entendido: no vamos a encontrar presupuestos históricos análogos.
+[02:36] Cliente: Me temo que no. Aun así necesitamos una horquilla para el comité.

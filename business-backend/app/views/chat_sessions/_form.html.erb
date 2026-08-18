@@ -1,0 +1,151 @@
+<%# Conversational form: transcript + multiple attachments. Posts as multipart. %>
+<%= form_with model: request, scope: :conversation_request,
+      url: chat_session_path(chat_session), method: :post, local: true,
+      multipart: true,
+      class: "space-y-5",
+      data: {
+        controller: "transcription-upload form-loading",
+        action: "submit->form-loading#start"
+      } do |f| %>
+
+  <% if request.errors.any? %>
+    <div class="p-4 rounded-md bg-brand/15 border border-brand text-brand-soft">
+      <p class="font-bold mb-1 text-white">Please fix the following:</p>
+      <ul class="list-disc list-inside text-sm">
+        <% request.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <div class="flex items-center justify-between mb-1">
+      <%= f.label :transcript, "Transcription / message", class: "block text-sm font-bold text-white/90" %>
+      <label class="text-xs font-bold tracking-tight text-brand hover:text-brand-soft cursor-pointer">
+        Upload .txt
+        <input type="file"
+               accept=".txt,text/plain"
+               class="hidden"
+               data-action="change->transcription-upload#load"
+               data-transcription-upload-target="fileInput">
+      </label>
+    </div>
+    <%= f.text_area :transcript, rows: 10,
+          class: "w-full border border-white/20 rounded-md p-3 text-white bg-ink/40 placeholder:text-white/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand",
+          placeholder: "Paste the latest user turn — refinements, new scope, follow-up questions…",
+          data: { transcription_upload_target: "textarea" } %>
+    <div class="flex items-center justify-between mt-1">
+      <p class="text-xs text-white/50">Between 20 and 80,000 characters.</p>
+      <span class="text-xs text-white/70 data-[kind=error]:text-brand data-[kind=ok]:text-brand"
+            data-transcription-upload-target="status"></span>
+    </div>
+  </div>
+
+  <div>
+    <%= label_tag :attachments, "Attachments (PDF or DOCX)", class: "block text-sm font-bold mb-1 text-white/90" %>
+    <input type="file"
+           name="attachments[]"
+           id="attachments"
+           multiple
+           accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+           class="w-full text-white/90 text-sm file:mr-3 file:px-3 file:py-2 file:rounded-md file:border-0 file:bg-brand file:text-ink-dark file:font-bold file:cursor-pointer file:hover:bg-brand-strong">
+    <p class="text-xs text-white/50 mt-1">Spec docs, prior proposals, architecture diagrams. Text is extracted locally.</p>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div>
+      <%= f.label :project_type, class: "block text-sm font-bold mb-1 text-white/90" %>
+      <%= f.select :project_type,
+            Conversation::Request::PROJECT_TYPES.map { |v| [ v.humanize, v ] },
+            { include_blank: "Select…" },
+            class: "w-full border border-white/20 rounded-md p-3 text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand [&>option]:bg-ink-dark [&>option]:text-white" %>
+    </div>
+
+    <div>
+      <%= f.label :detail_level, class: "block text-sm font-bold mb-1 text-white/90" %>
+      <%= f.select :detail_level,
+            Conversation::Request::DETAIL_LEVELS.map { |v| [ v.humanize, v ] },
+            {},
+            class: "w-full border border-white/20 rounded-md p-3 text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand [&>option]:bg-ink-dark [&>option]:text-white" %>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+    <div>
+      <%= f.label :output_format, class: "block text-sm font-bold mb-1 text-white/90" %>
+      <%= f.select :output_format,
+            Conversation::Request::OUTPUT_FORMATS.map { |v| [ v.humanize, v ] },
+            {},
+            class: "w-full border border-white/20 rounded-md p-3 text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand [&>option]:bg-ink-dark [&>option]:text-white" %>
+    </div>
+
+    <div>
+      <%= label_tag :tier, "Audience tier", class: "block text-sm font-bold mb-1 text-white/90" %>
+      <%= select_tag :tier,
+            options_for_select([
+              [ "Auto (resolve from context)", "auto" ],
+              [ "Executive", "executive" ],
+              [ "Project Manager", "pm" ],
+              [ "Developer", "developer" ],
+              [ "Default", "default" ]
+            ], "auto"),
+            class: "w-full border border-white/20 rounded-md p-3 text-white bg-ink/40 focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand [&>option]:bg-ink-dark [&>option]:text-white" %>
+      <p class="text-xs text-white/50 mt-1">Auto detects NDA / compliance / team size and adapts the prompt.</p>
+    </div>
+  </div>
+
+  <fieldset class="border border-white/10 rounded-md p-4">
+    <legend class="text-xs uppercase tracking-tight text-white/50 font-bold px-2">Estimation mode</legend>
+    <div class="flex gap-6 mt-1">
+      <label class="flex items-center gap-2 text-sm text-white/90 cursor-pointer">
+        <%= radio_button_tag :mode, "actor", true,
+              class: "accent-brand" %>
+        Actor only
+        <span class="text-xs text-white/50">(1 LLM call)</span>
+      </label>
+      <label class="flex items-center gap-2 text-sm text-white/90 cursor-pointer">
+        <%= radio_button_tag :mode, "acb",
+              class: "accent-brand" %>
+        Actor-Critic-Boss
+        <span class="text-xs text-white/50">(2–5 LLM calls, audited)</span>
+      </label>
+    </div>
+  </fieldset>
+
+  <div class="pt-2 flex items-center gap-4">
+    <button type="submit"
+            data-form-loading-target="submit"
+            data-disable-with="false"
+            class="inline-flex items-center px-6 py-3 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong cursor-pointer transition-colors disabled:cursor-not-allowed">
+      <span data-form-loading-target="label">Send turn</span>
+      <svg data-form-loading-target="spinner"
+           class="hidden ml-2 h-5 w-5 animate-spin"
+           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+           aria-hidden="true">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+    </button>
+
+    <%= link_to "New conversation", chat_session_path(chat_session),
+          data: { turbo_method: :delete,
+                  turbo_confirm: "Discard the current conversation and start a new one?" },
+          class: "text-sm font-bold tracking-tight text-white/70 hover:text-white" %>
+
+    <div data-form-loading-target="statusPanel"
+         class="hidden p-3 rounded-md bg-ink/30 border border-white/10 flex items-center gap-3"
+         role="status" aria-live="polite">
+      <svg class="h-5 w-5 animate-spin text-brand shrink-0"
+           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+           aria-hidden="true">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+      </svg>
+      <div class="text-sm">
+        <span class="text-white/90" data-form-loading-target="phaseText">Conectando con el servicio IA…</span>
+        <span class="ml-2 font-mono text-xs text-white/50" data-form-loading-target="timer">00:00</span>
+      </div>
+    </div>
+  </div>
+<% end %>

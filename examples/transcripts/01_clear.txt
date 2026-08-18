@@ -1,0 +1,34 @@
+Reunión de descubrimiento — Proyecto "App de banca móvil"
+Cliente: Marta Ledesma (CTO, NeoPagos)
+Consultor: equipo de estimación
+Fecha: reunión inicial
+
+[00:00:12] Consultor: Gracias por el tiempo, Marta. Cuéntanos qué tenéis en mente y para cuándo.
+
+[00:00:25] Marta: Sí, vamos al grano que tengo otra a y media. Somos una fintech, NeoPagos. Lo que
+queremos construir es el backend de una aplicación de banca móvil. El foco para esta primera fase
+es la autenticación y el cumplimiento normativo, que es lo que nos está bloqueando con el regulador.
+
+[00:01:03] Consultor: Perfecto. Cuando dices autenticación, ¿a qué nivel?
+
+[00:01:10] Marta: Necesitamos OAuth 2.0 hecho bien. Authorization code flow y refresh tokens, con
+sesiones gestionadas por JWT. Somos multi-tenant, así que el aislamiento de tokens por cliente es
+crítico, y queremos rate limiting por cliente desde el día uno. No es negociable.
+
+[00:01:48] Consultor: Entendido. ¿Y la parte de cumplimiento?
+
+[00:01:55] Marta: PSD2. Open banking. Necesitamos los endpoints de información de cuenta y de
+iniciación de pagos conformes con PSD2 y con el estándar del Berlin Group. Eso incluye SCA,
+autenticación reforzada de cliente, y un módulo de gestión de consentimientos. Sin esto no salimos.
+
+[00:02:40] Consultor: ¿Qué tecnología tenéis en casa? Para no ir contracorriente.
+
+[00:02:47] Marta: El equipo es de Ruby on Rails, base de datos PostgreSQL, y Redis para cachés y
+colas. Preferimos seguir con eso. Más adelante habrá un libro mayor de transacciones con escritura
+idempotente y conciliación diaria, pero eso es fase dos; ahora céntrate en autenticación y PSD2.
+
+[00:03:30] Consultor: Clarísimo. Sector financiero, Rails sobre Postgres y Redis, OAuth 2.0 con JWT
+y PSD2 con SCA y consentimientos como alcance de la fase uno.
+
+[00:03:42] Marta: Exacto. Si me pasáis una estimación con fases y coste de aquí a una semana,
+podemos arrancar a final de mes. Cualquier duda me escribís. Me tengo que ir, gracias.

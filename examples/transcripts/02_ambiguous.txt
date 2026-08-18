@@ -1,0 +1,44 @@
+Reunión exploratoria — sin título claro todavía
+Cliente: Rubén Castaño (gerente, Casa Castaño — tienda de productos gourmet)
+Consultor: equipo de estimación
+Fecha: primera toma de contacto
+
+[00:00:08] Consultor: Buenas, Rubén. Cuéntame, ¿qué os ronda por la cabeza?
+
+[00:00:15] Rubén: Pues mira, es que llevamos dándole vueltas un tiempo y no sé muy bien por dónde
+empezar, por eso os hemos llamado. Tenemos la tienda física de toda la vida, la de mi padre, llevamos
+con ella desde el noventa y dos. Conservas, vinos, aceite, esas cosas. Y claro, vemos que el mundo va
+por otro lado y que hay que dar el salto, pero no tenemos ni idea de tecnología, ¿eh?, te lo digo ya.
+
+[00:01:02] Consultor: Sin problema, para eso estamos. ¿Qué te gustaría conseguir?
+
+[00:01:09] Rubén: A ver, lo ideal sería vender por internet, eso seguro. Que la gente entre, vea los
+productos y compre, ¿no? Pero también... mira, mi sobrina, que de esto sabe más que yo, me dice que
+lo importante hoy es fidelizar. Que un cliente que repite vale más que diez que vienen una vez. Y yo
+pienso, pues igual algo de puntos, o un club, no sé, que la gente acumule y luego canjee. Eso me
+gustaría. Aunque tampoco quiero liarlo mucho al principio, ¿eh?
+
+[00:02:05] Consultor: Vale. ¿Y cómo te imaginas el día a día gestionándolo?
+
+[00:02:12] Rubén: Pues eso es lo otro. Yo necesito ver qué se vende. Un panel, algo donde yo entre
+por la mañana con el café y vea los pedidos del día, lo que más se mueve, el stock... que ahora lo
+llevo en un cuaderno, te lo juro. Mi mujer me dice que parezco del siglo pasado. Algo visual, con sus
+gráficas, para tomar decisiones. Eso lo veo clarísimo, lo del panel de control.
+
+[00:03:01] Rubén: Ah, y oye, una cosa importante: que la gente pueda pagar con tarjeta, claro. Eso es
+fundamental, que el pago sea fácil y seguro, que no se me vayan en el último paso. He oído que mucha
+gente llena el carrito y luego no paga, y eso no puede ser.
+
+[00:03:40] Consultor: Totalmente. ¿Tenéis volumen previsto, mercados, algo de eso?
+
+[00:03:47] Rubén: Uf, pues no sabría decirte. España de momento, supongo. Aunque un primo en Francia
+me dice que allí los productos españoles se venden solos, así que quién sabe, igual más adelante.
+Pero no me hagas mucho caso con eso. Y mira, también pensaba... no sé si es mucho pedir, pero estaría
+bien mandar un correo cuando alguien compra, para que sepa que va su pedido. Detalles, ¿sabes? Que el
+cliente se sienta atendido como en la tienda de siempre.
+
+[00:04:35] Rubén: En fin, que tampoco quiero marearos. Que sé que esto es un mundo. Lo que necesito
+es que me digáis vosotros, que sois los que sabéis, qué se puede hacer y más o menos cuánto cuesta.
+Yo de presupuestos de software ni idea, ¿eh? Decidme un número y vemos.
+
+[00:05:02] Consultor: Tranquilo, Rubén, lo recogemos y te volvemos con una propuesta. Gracias.

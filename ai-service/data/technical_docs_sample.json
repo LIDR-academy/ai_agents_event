@@ -1,0 +1,74 @@
+[
+  {
+    "doc_id": "DOC-PAYMENTS-API",
+    "title": "Payments Integration Guide",
+    "component": "payments",
+    "version": "v3.2",
+    "sections": [
+      {
+        "section_id": "SEC1",
+        "heading": "Stripe Connect onboarding",
+        "text": "This section describes how to onboard marketplace sellers with Stripe Connect, including KYC collection, split payments and vendor payouts. Use Express accounts for the fastest onboarding and store the connected account id against the seller record."
+      },
+      {
+        "section_id": "SEC2",
+        "heading": "Webhooks and idempotency",
+        "text": "All Stripe webhooks must be verified with the signing secret and processed idempotently using the event id. Reconciliation jobs compare Stripe balance transactions against the internal double-entry ledger nightly."
+      },
+      {
+        "section_id": "SEC3",
+        "heading": "Refunds and disputes",
+        "text": "Refunds are issued against the original payment intent. Disputes (chargebacks) open a case that must be answered within the processor deadline; the runbook covers evidence submission."
+      }
+    ]
+  },
+  {
+    "doc_id": "DOC-AUTH-RUNBOOK",
+    "title": "Authentication Runbook",
+    "component": "auth",
+    "version": "v2.1",
+    "sections": [
+      {
+        "section_id": "SEC1",
+        "heading": "OAuth 2.0 flows",
+        "text": "Reference for the OAuth 2.0 authorization-code flow with PKCE used by mobile clients. Covers token issuance, refresh-token rotation and revocation on logout."
+      },
+      {
+        "section_id": "SEC2",
+        "heading": "PSD2 strong customer authentication",
+        "text": "How to implement PSD2 SCA for payment initiation: dynamic linking, two-factor challenges and exemptions. Required for regulated banking apps in the EU."
+      }
+    ]
+  },
+  {
+    "doc_id": "DOC-SAP-INTEGRATION",
+    "title": "SAP Integration Specification",
+    "component": "integration",
+    "version": "v1.4",
+    "sections": [
+      {
+        "section_id": "SEC1",
+        "heading": "IDoc and BAPI interfaces",
+        "text": "Specification for integrating with SAP over IDoc and BAPI. Describes the message schemas for creating maintenance work orders from predictive-maintenance alerts coming out of the IoT platform."
+      },
+      {
+        "section_id": "SEC2",
+        "heading": "Sensor telemetry ingestion",
+        "text": "Pattern for ingesting high-frequency sensor telemetry into a time-series store before aggregation and forwarding to SAP. Covers backpressure and dead-letter handling."
+      }
+    ]
+  },
+  {
+    "doc_id": "DOC-FRONTEND-GUIDE",
+    "title": "Frontend Engineering Guide",
+    "component": "frontend",
+    "version": "v4.0",
+    "sections": [
+      {
+        "section_id": "SEC1",
+        "heading": "Component standards",
+        "text": "Standards for building React storefront components: state management, accessibility and testing. New projects must not start on AngularJS; existing AngularJS apps are migrated incrementally."
+      }
+    ]
+  }
+]

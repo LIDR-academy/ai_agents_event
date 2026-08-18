@@ -1,0 +1,10 @@
+<% content_for :title, "Nuevo perfil de agente · Estimator" %>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold tracking-tighter text-white">Nuevo perfil — Agente hecho a mano</h1>
+    <p class="text-white/60 mt-1 text-sm">Nombra y personaliza una variante del agente hecho a mano.</p>
+  </div>
+
+  <%= render "form", profile: @profile, url: agents_profiles_path, method: :post, submit_label: "Crear perfil" %>
+</div>

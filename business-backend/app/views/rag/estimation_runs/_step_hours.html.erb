@@ -1,0 +1,102 @@
+<% hours = run.task_hours_view %>
+<% modules = run.adjusted_modules %>
+
+<h2 class="text-lg font-bold tracking-tight text-white mb-1">4 · Horas por tarea (búsqueda semántica)</h2>
+<p class="text-white/50 text-sm mb-5">
+  Cada tarea se buscó contra el corpus histórico (<code>historical_task</code>). Las horas son un
+  <span class="text-white/80">consenso ponderado</span> de las tareas similares y llevan un score de
+  fiabilidad; las tareas <span class="text-danger font-bold">sin análogo</span> quedan
+  <span class="text-danger font-bold">marcadas en rojo</span>, sin horas, para que las completes tú.
+</p>
+
+<%= render "step_agent", keys: [ "hours", "recover" ], note: "búsqueda determinista + recuperación agéntica" %>
+
+<% if hours.nil? || modules.empty? %>
+  <div class="p-4 rounded-md bg-brand/15 border border-brand text-brand-soft">
+    Aún no hay horas estimadas. Vuelve a
+    <%= link_to "Revisión", rag_estimation_run_path(run, step: "review"), class: "underline font-bold" %>.
+  </div>
+<% else %>
+  <div class="flex flex-wrap gap-3 mb-5 text-sm">
+    <span class="px-3 py-1.5 rounded-md bg-success/15 border border-success/40 text-success-light font-bold">
+      <%= hours.matched_count %> con dato histórico
+    </span>
+    <% if hours.flagged_count.positive? %>
+      <span class="px-3 py-1.5 rounded-md bg-danger/15 border border-danger/50 text-danger font-bold">
+        🔴 <%= hours.flagged_count %> sin dato
+      </span>
+    <% end %>
+    <% if hours.contradicted_count.positive? %>
+      <span class="px-3 py-1.5 rounded-md bg-amber-400/15 border border-amber-400/50 text-amber-300 font-bold">
+        ⚠ <%= hours.contradicted_count %> con fuentes en conflicto
+      </span>
+    <% end %>
+    <span class="px-3 py-1.5 rounded-md bg-ink/40 border border-white/10 text-white/60">
+      <%= hours.total_count %> tareas
+    </span>
+  </div>
+
+  <%# Session 12 · the agent's recovery trace: it re-searched only the tasks the
+      deterministic pass could not ground. Empty steps = nothing needed recovery. %>
+  <% if (trace = run.hours_agent_trace) %>
+    <%= render "agent_trace", trace: trace,
+          title: "Traza del agente · recuperación de tareas sin dato",
+          empty_message: "El pase determinista encontró análogo para cada tarea — el agente no tuvo que recuperar ninguna." %>
+  <% end %>
+
+  <% modules.each do |mod| %>
+    <div class="rounded-md border border-white/10 overflow-hidden mb-4">
+      <div class="flex items-center justify-between bg-ink/40 px-3 py-2">
+        <span class="font-bold text-white"><%= mod.name %></span>
+        <span class="text-white/80 tabular-nums text-sm shrink-0"><%= format_hours(mod.subtotal_hours) %> <span class="text-white/40">h</span></span>
+      </div>
+      <table class="w-full text-sm">
+        <tbody class="divide-y divide-white/10">
+          <% mod.tasks.each do |task| %>
+            <tr class="<%= "bg-danger/10" if task.flagged? %>">
+              <td class="p-3 align-top">
+                <div class="text-white/90"><%= task.name %></div>
+                <% if task.description.present? %>
+                  <div class="text-white/50 text-xs mt-0.5"><%= task.description %></div>
+                <% end %>
+              </td>
+              <td class="p-3 text-right align-top tabular-nums w-40">
+                <% if task.flagged? %>
+                  <span class="text-danger font-bold">🔴 —</span>
+                <% elsif task.contradicted? %>
+                  <%# Session 11: sources disagreed → show the range, not a false point. %>
+                  <span class="text-amber-300 font-bold" title="<%= task.hours_range.reason %>">
+                    ⚠ <%= task.hours_range.label %>
+                  </span>
+                  <div class="text-white/40 text-[11px] font-normal normal-case mt-0.5 max-w-48 ml-auto leading-tight">
+                    consenso <%= format_hours(task.estimated_hours) %> h · <%= task.hours_range.reason %>
+                  </div>
+                <% else %>
+                  <span class="text-white font-bold"><%= format_hours(task.estimated_hours) %></span> <span class="text-white/40 text-xs">h</span>
+                <% end %>
+              </td>
+              <td class="p-3 text-right align-top w-24">
+                <% if task.flagged? %>
+                  <span class="text-danger text-xs font-bold">sin dato</span>
+                <% elsif task.reliability_pct %>
+                  <% band = task.reliability_band %>
+                  <span class="inline-block text-xs font-bold px-1.5 py-0.5 rounded
+                        <%= band == :green ? "bg-success/20 text-success-light" : "bg-brand/20 text-brand-soft" %>">
+                    <%= task.reliability_pct %>% fiab.
+                  </span>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <div class="flex items-center gap-4 mt-6">
+    <%= link_to "Continuar → Validar horas y tarifas", rag_estimation_run_path(run, step: "verification"),
+          class: "inline-flex items-center px-5 py-2.5 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+    <%= link_to "← Volver a la estructura", rag_estimation_run_path(run, step: "review"),
+          class: "text-white/60 font-bold hover:text-white tracking-tight text-sm" %>
+  </div>
+<% end %>

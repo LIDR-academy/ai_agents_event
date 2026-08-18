@@ -1,0 +1,15 @@
+{
+  "budget_id": "BUDGET-2024-0004",
+  "client_name": "Cooperativa Levante",
+  "client_code": "CLI-0211",
+  "currency": "EUR",
+  "total_amount": -50000,
+  "signed_at": "2024-06-21",
+  "phases": [
+    {"name": "Refactor crédito", "weeks": 5, "amount": -30000},
+    {"name": "Reporting regulatorio", "weeks": 4, "amount": -20000}
+  ],
+  "contact": "Pilar Alonso",
+  "contact_email": "pilar.alonso@cooplevante.coop",
+  "notes": "Carga inversa por nota de abono. Importes negativos deliberados."
+}

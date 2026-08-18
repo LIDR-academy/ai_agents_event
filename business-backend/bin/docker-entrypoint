@@ -1,0 +1,24 @@
+#!/bin/bash -e
+# =============================================================================
+# Entrypoint for the business backend (Session 15)
+# =============================================================================
+# Prepares the database, then execs the CMD.
+#
+# `db:prepare` is idempotent: it creates the database if missing, otherwise just
+# applies pending migrations. It replaces what used to live in the compose
+# `command:`, so the image behaves the same under `docker run`, compose, or a
+# cloud runtime.
+
+# A container that was killed (not stopped) leaves a stale PID file behind and
+# Puma refuses to boot. Harmless to remove — nothing else can hold it here.
+rm -f /rails/tmp/pids/server.pid
+
+if [ "${RUN_MIGRATIONS:-true}" = "true" ]; then
+    echo "[entrypoint] preparing database..."
+    ./bin/rails db:prepare
+    echo "[entrypoint] database ready."
+else
+    echo "[entrypoint] RUN_MIGRATIONS=false — skipping db:prepare."
+fi
+
+exec "$@"

@@ -1,0 +1,20 @@
+Reunión de descubrimiento — Proyecto "TITÁN"
+Cliente: operador de pagos
+Consultor: equipo de estimación
+
+[00:00] Cliente: Necesitamos cosas estándar, pero a una escala poco estándar.
+
+[00:20] Cliente: Lo primero, una pantalla de login. Normal. Pero tiene que sostener diez
+millones de sesiones concurrentes en el pico de nómina, con criptografía propia porque no
+nos fiamos de las librerías estándar, y auditoría a nivel de cada pulsación de tecla.
+
+[01:05] Consultor: Una pantalla de login que aguante diez millones de sesiones y con cripto
+propia no es "normal".
+[01:12] Cliente: Ya, pero conceptualmente es un login. Y luego un panel de administración,
+también "sencillo", que renderice en tiempo real cuatro mil paneles simultáneos por usuario.
+
+[02:00] Cliente: El resto es lo típico: gestión de usuarios, roles, un informe. Eso sí,
+cada informe consolida quinientos orígenes de datos en menos de un segundo.
+
+[02:40] Consultor: Entiendo. Cada pieza "típica" viene con un requisito que la saca de rango.
+[02:46] Cliente: Exacto. Pero seguid tratándolas como piezas típicas para el presupuesto.

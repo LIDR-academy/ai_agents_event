@@ -1,0 +1,57 @@
+<% content_for :title, "Perfil #{@profile.name} · Estimator" %>
+
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <div class="mb-6 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <% if @profile.avatar.attached? %>
+        <%= image_tag @profile.avatar,
+              class: "h-14 w-14 rounded-full object-cover border border-white/20 shrink-0", alt: @profile.name %>
+      <% else %>
+        <div class="h-14 w-14 rounded-full bg-ink/60 border border-white/10 flex items-center justify-center text-white/40 text-xl shrink-0">
+          <%= @profile.name.to_s.first&.upcase.presence || "?" %>
+        </div>
+      <% end %>
+      <div>
+        <h1 class="text-2xl font-bold tracking-tighter text-white">
+          <%= @profile.name %>
+          <% if @profile.is_default? %>
+            <span class="ml-2 text-xs font-bold uppercase bg-brand/20 text-brand px-2 py-0.5 rounded align-middle">default</span>
+          <% end %>
+        </h1>
+        <p class="text-white/60 mt-1 text-sm">Perfil del agente hecho a mano.</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <%= link_to "Editar", edit_agents_profile_path(@profile),
+            class: "inline-flex items-center px-4 py-2 bg-brand text-ink-dark font-bold tracking-tight rounded-md hover:bg-brand-strong transition-colors text-sm" %>
+      <%= link_to "Probar", new_rag_estimation_run_path,
+            class: "inline-flex items-center px-4 py-2 bg-white/10 text-white font-bold rounded-md hover:bg-white/20 transition-colors text-sm" %>
+    </div>
+  </div>
+
+  <div class="rounded-md border border-white/10 overflow-hidden mb-5">
+    <table class="w-full text-sm">
+      <tbody class="divide-y divide-white/10">
+        <% {
+             "Modelo" => @profile.model || "Por defecto del servicio",
+             "Reasoning effort" => @profile.reasoning_effort || "Por defecto del servicio",
+             "Máx. iteraciones" => @profile.max_iterations || "Por defecto (10)",
+             "Vecinos por búsqueda (top_k)" => @profile.search_top_k || "Por defecto (5)",
+             "Umbral de distancia" => @profile.search_distance_threshold || "Por defecto (0.6)"
+           }.each do |label, value| %>
+          <tr>
+            <td class="p-3 text-white/60 w-1/2"><%= label %></td>
+            <td class="p-3 text-white font-mono"><%= value %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="rounded-md border border-white/10 p-4 mb-6">
+    <div class="text-xs uppercase tracking-tight text-white/50 font-bold mb-2">Persona (añadida al system prompt)</div>
+    <p class="text-white/80 text-sm whitespace-pre-wrap"><%= @profile.persona.presence || "— (sin persona)" %></p>
+  </div>
+
+  <%= link_to "← Volver a Agentes", agents_profiles_path, class: "text-brand font-bold hover:text-brand-soft text-sm" %>
+</div>

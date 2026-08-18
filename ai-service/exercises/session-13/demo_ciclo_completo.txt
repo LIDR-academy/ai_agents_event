@@ -1,0 +1,40 @@
+Reunión de descubrimiento — Proyecto "Plataforma de energía NÓVA"
+Cliente: Marta Colomer (Directora de Transformación Digital) y Diego Ferrán (Responsable de Sistemas), Comercializadora ENERVOLT
+Consultor: equipo de estimación
+Fecha: reunión inicial de alcance
+
+[00:00:06] Consultor: Gracias por el tiempo. Contadnos la foto completa y luego bajamos pieza a pieza; al final os preparamos una estimación de esfuerzo por componente y un total para llevar a comité.
+
+[00:00:22] Marta: Perfecto, porque esto es un proyecto grande y con piezas que no tienen nada que ver entre sí. Somos una comercializadora de electricidad y gas. Queremos una plataforma nueva, NÓVA, que sustituya un batiburrillo de sistemas viejos. Os aviso de que hay partes muy estándar y otras que son un mundo aparte.
+
+[00:00:58] Consultor: Vamos al corazón primero.
+
+[00:01:05] Diego: La primera pieza es el backend de negocio: gestión de contratos, facturación de suministros, cálculo de consumos y un maestro de clientes. Es el núcleo y tiene que exponer una API para todo lo demás. Hoy lo llevamos con un ERP antiguo y muchísimo Excel, así que esto es prácticamente de cero.
+
+[00:02:20] Marta: Y aquí no os relajéis con la facturación: el sector eléctrico tiene reglas de peajes y cargos regulados que cambian cada año, con tramos horarios. No es "precio por kWh y ya".
+
+[00:02:48] Consultor: Anotado, backend de negocio con API y motor de facturación regulada. ¿Qué más?
+
+[00:02:55] Diego: La segunda pieza es la que me quita el sueño: la integración con los contadores inteligentes. Tenemos miles de contadores de varios fabricantes. Hay que ingerir sus lecturas casi en tiempo real. Unos hablan por MQTT, otros por Modbus, y los puntos de recarga de vehículo eléctrico por OCPP. Hay que montar una capa que normalice todo eso, gestione reintentos y ordene lecturas que llegan desordenadas. Es telemetría industrial pura y dura, nada de CRUD.
+
+[00:04:30] Consultor: Entendido, ingesta de telemetría multiprotocolo como componente propio. Sigamos.
+
+[00:04:38] Marta: La tercera pieza es el portal de autoservicio del cliente. Web. Que el cliente vea sus facturas, su consumo con gráficas, cambie de tarifa, domicilie pagos y ponga incidencias. Esto es más convencional pero tiene que quedar muy pulido, es la cara al público.
+
+[00:05:55] Diego: La cuarta es una app móvil para los técnicos de campo. Android e iOS. Reciben las órdenes de trabajo del día, hacen inspecciones de instalaciones, confirman con firma y foto, y —clave— tiene que funcionar sin cobertura, modo offline y sincronizar cuando vuelve la conexión. Muchas instalaciones están en sótanos o zonas rurales sin señal.
+
+[00:07:20] Marta: La quinta es la que más ilusión le hace a dirección: un motor de tarifas dinámicas. Queremos precios que se ajusten a la demanda prevista y al precio del mercado mayorista, y de paso una previsión de consumo por cliente para anticipar picos. Sí, eso lleva algo de machine learning, y sí, sabemos que es lo más incierto de todo.
+
+[00:08:45] Diego: Y la sexta, que no es opcional aunque lo parezca: un módulo de cumplimiento regulatorio. Tenemos que generar los reportes periódicos a la CNMC y a la distribuidora con un formato muy concreto, y guardar trazabilidad de todo para auditoría. Si esto falla, nos multan.
+
+[00:10:00] Consultor: Recapitulo: seis componentes diferenciados — backend de negocio con facturación regulada y API, ingesta de telemetría multiprotocolo (MQTT/Modbus/OCPP), portal de autoservicio web, app móvil de campo con modo offline, motor de tarifas dinámicas con ML de previsión, y módulo de cumplimiento y reporte regulatorio. ¿Prioridades?
+
+[00:10:35] Marta: El backend y la ingesta de telemetría son lo primero, sin datos no hay nada. El portal y la app pueden ir después. El motor de tarifas y el cumplimiento los queremos dentro del alcance de la estimación aunque se hagan en una segunda fase.
+
+[00:11:10] Diego: Sobre tecnología no os casamos con nada, pero el equipo interno se maneja con Python en el back y React en el front. La app, nativa o híbrida, lo que salga mejor. Base de datos, la que propongáis; para la telemetría intuyo que hará falta algo de series temporales.
+
+[00:11:48] Marta: Lo importante para el comité es ver el esfuerzo por componente, dónde están los riesgos y un total defendible, apoyado en tarifas de proyectos parecidos que hayáis hecho. Y necesitaremos una propuesta comercial para presentarla a dirección.
+
+[00:12:20] Consultor: Clarísimo. Preparamos la estimación por componente con su fiabilidad, marcamos las piezas de más incertidumbre y os montamos la propuesta. Gracias por el detalle.
+
+[00:12:35] Marta: A vosotros. Esto es justo lo que necesito para defenderlo arriba.
