@@ -218,3 +218,11 @@ Para desarrollo, un override publica los puertos internos y activa la recarga en
 ```bash
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
+
+Copyright (c) 2025 LIDR.co Licensed under the MIT License
+
+English:
+The content of this repository is part of the AI Engineering program by LIDR.co. If you want to learn to code AI products like a pro and get more templates and resources like these, you can find all the information on the official website: https://lidr.co/ia-devs
+
+Español:
+El contenido de este repositorio es parte del programa AI Engineering de LIDR.co. Si quieres aprender a programar productos con IA como un pro, y obtener más plantillas y recursos como estos, puedes encontrar toda la información en la página oficial: https://lidr.co/ia-devs
